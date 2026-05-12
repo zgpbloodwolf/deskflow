@@ -9,12 +9,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Network Performance (核心优先级)
 
-- [ ] **NET-01**: 鼠标移动在网络波动时保持流畅，不出现持续卡顿或掉帧
-- [ ] **NET-02**: 键盘事件可靠送达，不丢失按键事件
-- [ ] **NET-03**: 网络断开时自动释放所有按键（防卡键）
-- [ ] **NET-04**: 鼠标移动事件合并发送（1000Hz 输入 → 200Hz 发送，只发最新位置）
-- [ ] **NET-05**: 输入处理线程不被网络 I/O 阻塞（解耦架构）
-- [ ] **NET-06**: 端到端延迟降至 15ms 以下（当前约 45ms）
+- [x] **NET-01**: 鼠标移动在网络波动时保持流畅，不出现持续卡顿或掉帧
+- [x] **NET-02**: 键盘事件可靠送达，不丢失按键事件
+- [x] **NET-03**: 网络断开时自动释放所有按键（防卡键）
+- [x] **NET-04**: 鼠标移动事件合并发送（1000Hz 输入 → 200Hz 发送，只发最新位置）
+- [x] **NET-05**: 输入处理线程不被网络 I/O 阻塞（解耦架构）
+- [x] **NET-06**: 端到端延迟降至 15ms 以下（当前约 45ms）
 
 ### Codebase Cleanup (代码精简)
 
@@ -70,12 +70,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NET-01 | Phase 1: Network Pipeline Rewrite | In Progress |
-| NET-02 | Phase 1: Network Pipeline Rewrite | Pending |
-| NET-03 | Phase 1: Network Pipeline Rewrite | Pending |
-| NET-04 | Phase 1: Network Pipeline Rewrite | Pending |
-| NET-05 | Phase 1: Network Pipeline Rewrite | In Progress |
-| NET-06 | Phase 1: Network Pipeline Rewrite | In Progress |
+| NET-01 | Phase 1: Network Pipeline Rewrite | Complete |
+| NET-02 | Phase 1: Network Pipeline Rewrite | Complete |
+| NET-03 | Phase 1: Network Pipeline Rewrite | Complete |
+| NET-04 | Phase 1: Network Pipeline Rewrite | Complete |
+| NET-05 | Phase 1: Network Pipeline Rewrite | Complete |
+| NET-06 | Phase 1: Network Pipeline Rewrite | Complete |
 | CLEAN-01 | Phase 2: TLS/Encryption Removal | Pending |
 | CLEAN-02 | Phase 3: Platform & Feature Cleanup | Pending |
 | CLEAN-03 | Phase 3: Platform & Feature Cleanup | Pending |
@@ -98,4 +98,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-05-12*
-*Last updated: 2026-05-12 after plan 01-01 completion*
+*Last updated: 2026-05-12 after Phase 1 completion (plan 01-03)*

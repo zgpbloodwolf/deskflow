@@ -12,7 +12,7 @@ Fix the core stuttering problem by rewriting the network pipeline, then systemat
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Network Pipeline Rewrite** - Replace blocking SocketMultiplexer with pipelined architecture using lock-free buffers
+- [x] **Phase 1: Network Pipeline Rewrite** - Replace blocking SocketMultiplexer with pipelined architecture using lock-free buffers
 - [ ] **Phase 2: TLS/Encryption Removal** - Remove entire TLS layer and all SecurityLevel dispatch code
 - [ ] **Phase 3: Platform & Feature Cleanup** - Remove Linux support, screensaver sync, and residual dead code
 - [ ] **Phase 4: C++ Modernization** - Replace raw new/delete, custom Thread, reinterpret_cast patterns with safe idioms
@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [x] 01-01: Create Asio socket infrastructure (AsioTCPSocket, AsioTCPListenSocket, AsioTCPSocketFactory) and integrate Asio into build
 - [x] 01-02: Implement lock-free SPSC event buffers with mouse move coalescing and keyboard FIFO queue, integrated into AsioTCPSocket
-- [ ] 01-03: Connect upper-layer ClientProxy to SPSC pipeline, add disconnect/reconnect handling, wire AsioTCPSocketFactory into ServerApp/ClientApp
+- [x] 01-03: Connect upper-layer ClientProxy to SPSC pipeline, add disconnect/reconnect handling, wire AsioTCPSocketFactory into ServerApp/ClientApp
 
 ### Phase 2: TLS/Encryption Removal
 **Goal**: The TLS/SSL encryption layer is completely gone with no remnant dispatch code, and all connections use plain-text mode without any configuration option for encryption
@@ -115,7 +115,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Network Pipeline Rewrite | 2/3 | In Progress | - |
+| 1. Network Pipeline Rewrite | 3/3 | Complete | 2026-05-12 |
 | 2. TLS/Encryption Removal | 0/3 | Not started | - |
 | 3. Platform & Feature Cleanup | 0/3 | Not started | - |
 | 4. C++ Modernization | 0/4 | Not started | - |
