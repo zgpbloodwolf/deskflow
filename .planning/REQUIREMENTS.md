@@ -70,32 +70,32 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NET-01 | — | Pending |
-| NET-02 | — | Pending |
-| NET-03 | — | Pending |
-| NET-04 | — | Pending |
-| NET-05 | — | Pending |
-| NET-06 | — | Pending |
-| CLEAN-01 | — | Pending |
-| CLEAN-02 | — | Pending |
-| CLEAN-03 | — | Pending |
-| CLEAN-04 | — | Pending |
-| CLEAN-05 | — | Pending |
-| MOD-01 | — | Pending |
-| MOD-02 | — | Pending |
-| MOD-03 | — | Pending |
-| MOD-04 | — | Pending |
-| BQ-01 | — | Pending |
-| BQ-02 | — | Pending |
-| BQ-03 | — | Pending |
-| BQ-04 | — | Pending |
-| BQ-05 | — | Pending |
+| NET-01 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-02 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-03 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-04 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-05 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-06 | Phase 1: Network Pipeline Rewrite | Pending |
+| CLEAN-01 | Phase 2: TLS/Encryption Removal | Pending |
+| CLEAN-02 | Phase 3: Platform & Feature Cleanup | Pending |
+| CLEAN-03 | Phase 3: Platform & Feature Cleanup | Pending |
+| CLEAN-04 | Phase 3: Platform & Feature Cleanup | Pending |
+| CLEAN-05 | Phase 3: Platform & Feature Cleanup | Pending |
+| MOD-01 | Phase 4: C++ Modernization | Pending |
+| MOD-02 | Phase 4: C++ Modernization | Pending |
+| MOD-03 | Phase 4: C++ Modernization | Pending |
+| MOD-04 | Phase 4: C++ Modernization | Pending |
+| BQ-01 | Phase 5: Build Validation & Regression | Pending |
+| BQ-02 | Phase 5: Build Validation & Regression | Pending |
+| BQ-03 | Phase 5: Build Validation & Regression | Pending |
+| BQ-04 | Phase 5: Build Validation & Regression | Pending |
+| BQ-05 | Phase 5: Build Validation & Regression | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total
-- Mapped to phases: 0
-- Unmapped: 20
+- Mapped to phases: 20
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-12*
-*Last updated: 2026-05-12 after initial definition*
+*Last updated: 2026-05-12 after roadmap creation*
