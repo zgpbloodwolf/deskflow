@@ -622,27 +622,27 @@ void AsioTCPSocket::doReconnect()
 | A3 | TCPListenSocket 也需要 Asio 化（当前使用 ARCH->acceptSocket + SocketMultiplexer） | Architecture | listen socket 是独立组件，可能影响 ClientListener 集成 |
 | A4 | SecureSocket（TLS 层）在 Phase 2 移除，Phase 1 不需要适配 | Architecture | 如果 SecureSocket 继承链与新的 AsioTCPSocket 冲突，需要临时适配 |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **TCPListenSocket 的 Asio 化范围**
    - What we know: `TCPListenSocket` 依赖 `SocketMultiplexer` 注册监听 job。`ClientListener` 通过 `TCPListenSocket::accept()` 创建新 socket。
    - What's unclear: Asio 的 `async_accept` 需要在 accept 时创建 `asio::ip::tcp::socket`（需要 io_context），但当前 `accept()` 返回 `std::unique_ptr<IDataSocket>`。Asio 的 acceptor 和新 socket 必须共享同一个 io_context。
-   - Recommendation: `AsioTCPListenSocket` 拥有自己的 `io_context`（用于 acceptor），accept 后创建 `AsioTCPSocket`（拥有独立的 io_context）。
+   - Recommendation (RESOLVED): `AsioTCPListenSocket` 拥有自己的 `io_context`（用于 acceptor），accept 后创建 `AsioTCPSocket`（拥有独立的 io_context）。
 
 2. **SecureSocket 继承链在 Phase 1 的处理**
    - What we know: `SecureSocket` 继承 `TCPSocket`，Phase 2 会移除 TLS。当前 `TCPSocketFactory` 根据 `SecurityLevel` 选择创建 `TCPSocket` 或 `SecureSocket`。
    - What's unclear: Phase 1 是否需要保留 `SecureSocket` 的编译？如果 `TCPSocketFactory` 仍然存在（为 SecureSocket 服务），新的 `AsioTCPSocketFactory` 如何与之共存？
-   - Recommendation: Phase 1 保留 `TCPSocketFactory` + `SecureSocket` 不变，新增 `AsioTCPSocketFactory` 仅创建 `AsioTCPSocket`。上层代码切换到使用新工厂。
+   - Recommendation (RESOLVED): Phase 1 保留 `TCPSocketFactory` + `SecureSocket` 不变，新增 `AsioTCPSocketFactory` 仅创建 `AsioTCPSocket`。上层代码切换到使用新工厂。
 
 3. **IStream::flush() 语义在异步模型中的实现**
    - What we know: 当前 `flush()` 使用 `CondVar<bool>` 阻塞等待所有输出缓冲区数据写完。上层代码（`ClientProxy::close()`）调用 `getStream()->flush()`。
    - What's unclear: 异步模型中 `flush()` 无法真正阻塞等待 async_write 完成（会阻塞 Asio 线程）。需要一个同步等待机制。
-   - Recommendation: `flush()` 使用 `std::promise` / `std::future` 模式：post 一个 flush 任务到 io_context，等待 future 完成。
+   - Recommendation (RESOLVED): `flush()` 使用 `std::promise` / `std::future` 模式：post 一个 flush 任务到 io_context，等待 future 完成。
 
 4. **App 类中 SocketMultiplexer 的过渡期处理**
    - What we know: `App` 基类持有 `std::unique_ptr<SocketMultiplexer> m_socketMultiplexer`。`ClientApp` 和 `ServerApp` 在初始化时创建它。
    - What's unclear: 过渡期是否需要同时存在 SocketMultiplexer 和 Asio 初始化？
-   - Recommendation: 新增 `AsioContext` 或类似类，在 App 初始化时创建。SocketMultiplexer 暂保留（SecureSocket 可能需要），Phase 2 后移除。
+   - Recommendation (RESOLVED): 新增 `AsioContext` 或类似类，在 App 初始化时创建。SocketMultiplexer 暂保留（SecureSocket 可能需要），Phase 2 后移除。
 
 ## Environment Availability
 

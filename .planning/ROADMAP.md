@@ -34,9 +34,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Replace SocketMultiplexer with pipelined send/receive threads using non-blocking I/O with bounded poll timeout
-- [ ] 01-02: Implement lock-free SPSC event buffers with mouse move coalescing (atomic latest-position slot) and keyboard FIFO queue
-- [ ] 01-03: Add disconnect handler with releaseAllKeys() and key-state tracking to prevent stuck keys
+- [ ] 01-01: Create Asio socket infrastructure (AsioTCPSocket, AsioTCPListenSocket, AsioTCPSocketFactory) and integrate Asio into build
+- [ ] 01-02: Implement lock-free SPSC event buffers with mouse move coalescing and keyboard FIFO queue, integrated into AsioTCPSocket
+- [ ] 01-03: Connect upper-layer ClientProxy to SPSC pipeline, add disconnect/reconnect handling, wire AsioTCPSocketFactory into ServerApp/ClientApp
 
 ### Phase 2: TLS/Encryption Removal
 **Goal**: The TLS/SSL encryption layer is completely gone with no remnant dispatch code, and all connections use plain-text mode without any configuration option for encryption
