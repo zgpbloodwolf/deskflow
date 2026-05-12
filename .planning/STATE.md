@@ -68,5 +68,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-05-12
-Stopped at: Roadmap created, ready for Phase 1 planning
-Resume file: None
+Stopped at: Phase 1 context gathered
+Resume file: .planning/phases/01-network-pipeline-rewrite/01-CONTEXT.md
