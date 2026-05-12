@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include "base/Event.h"
 #include "io/StreamBuffer.h"
 #include "net/IDataSocket.h"
 #include "net/NetworkAddress.h"
