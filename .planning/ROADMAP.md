@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. When network connection drops, all pressed keys and mouse buttons are immediately released on the client (no stuck keys)
   4. Mouse move events are coalesced before sending -- at 1000Hz input rate, the network sends at most the latest position at 200Hz
   5. End-to-end mouse latency is 15ms or less under normal LAN conditions (no jitter)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
 - [ ] 01-01: Replace SocketMultiplexer with pipelined send/receive threads using non-blocking I/O with bounded poll timeout
@@ -48,7 +48,7 @@ Plans:
   2. Client and server connect successfully in plain-text mode with no encryption handshake
   3. GUI no longer shows any encryption or security level options
   4. Build succeeds without OpenSSL as a dependency
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
 - [ ] 02-01: Trace and remove all SecurityLevel dispatch paths across client, server, GUI, and factory code
@@ -65,7 +65,7 @@ Plans:
   2. No `#ifdef` guards for Linux-specific code paths remain in shared code
   3. Screensaver sync feature is completely removed with no residual references
   4. All CMakeLists.txt files compile only macOS and Windows modules, with no Linux dependencies (libei, libportal, xkbcommon)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
 - [ ] 03-01: Remove all Linux platform files (X11, Wayland, EI) and update CMakeLists.txt
@@ -82,7 +82,7 @@ Plans:
   2. All custom `Thread` class usage replaced with `std::jthread` + `std::stop_token` for cooperative cancellation
   3. No `reinterpret_cast` cursor-mark sentinel patterns remain -- replaced with type-safe iteration
   4. No `exit(0)` calls remain anywhere in the codebase -- all replaced with graceful event queue shutdown
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
 - [ ] 04-01: Replace SocketMultiplexer cursor-mark sentinel pattern with type-safe iteration, then migrate to smart pointers
@@ -101,7 +101,7 @@ Plans:
   3. GUI configuration界面 opens, displays correct settings, and can configure client/server mode
   4. Clipboard text and image sharing works between macOS and Windows
   5. File drag-and-drop transfer works between macOS and Windows
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
 - [ ] 05-01: Fix build errors and warnings on macOS and Windows
