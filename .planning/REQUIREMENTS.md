@@ -70,12 +70,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| NET-01 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-01 | Phase 1: Network Pipeline Rewrite | In Progress |
 | NET-02 | Phase 1: Network Pipeline Rewrite | Pending |
 | NET-03 | Phase 1: Network Pipeline Rewrite | Pending |
 | NET-04 | Phase 1: Network Pipeline Rewrite | Pending |
-| NET-05 | Phase 1: Network Pipeline Rewrite | Pending |
-| NET-06 | Phase 1: Network Pipeline Rewrite | Pending |
+| NET-05 | Phase 1: Network Pipeline Rewrite | In Progress |
+| NET-06 | Phase 1: Network Pipeline Rewrite | In Progress |
 | CLEAN-01 | Phase 2: TLS/Encryption Removal | Pending |
 | CLEAN-02 | Phase 3: Platform & Feature Cleanup | Pending |
 | CLEAN-03 | Phase 3: Platform & Feature Cleanup | Pending |
@@ -98,4 +98,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-05-12*
-*Last updated: 2026-05-12 after roadmap creation*
+*Last updated: 2026-05-12 after plan 01-01 completion*

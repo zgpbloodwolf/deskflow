@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Create Asio socket infrastructure (AsioTCPSocket, AsioTCPListenSocket, AsioTCPSocketFactory) and integrate Asio into build
+- [x] 01-01: Create Asio socket infrastructure (AsioTCPSocket, AsioTCPListenSocket, AsioTCPSocketFactory) and integrate Asio into build
 - [ ] 01-02: Implement lock-free SPSC event buffers with mouse move coalescing and keyboard FIFO queue, integrated into AsioTCPSocket
 - [ ] 01-03: Connect upper-layer ClientProxy to SPSC pipeline, add disconnect/reconnect handling, wire AsioTCPSocketFactory into ServerApp/ClientApp
 
@@ -115,7 +115,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Network Pipeline Rewrite | 0/3 | Not started | - |
+| 1. Network Pipeline Rewrite | 1/3 | In Progress | - |
 | 2. TLS/Encryption Removal | 0/3 | Not started | - |
 | 3. Platform & Feature Cleanup | 0/3 | Not started | - |
 | 4. C++ Modernization | 0/4 | Not started | - |
