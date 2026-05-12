@@ -60,8 +60,8 @@ add_library(net STATIC
 
 target_link_libraries(
   net
-  PUBLIC OpenSSL::SSL OpenSSL::Crypto Qt6::Network common
-  PRIVATE mt io asio)
+  PUBLIC OpenSSL::SSL OpenSSL::Crypto Qt6::Network common asio
+  PRIVATE mt io)
 
 if(WIN32)
   target_link_libraries(
