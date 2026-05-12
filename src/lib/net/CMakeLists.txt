@@ -20,6 +20,10 @@ add_library(net STATIC
   AsioTCPListenSocket.h
   AsioTCPSocketFactory.cpp
   AsioTCPSocketFactory.h
+  InputEventBuffer.cpp
+  InputEventBuffer.h
+  KeyStateTable.cpp
+  KeyStateTable.h
   Fingerprint.cpp
   Fingerprint.h
   FingerprintDatabase.cpp
