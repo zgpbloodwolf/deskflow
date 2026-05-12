@@ -8,6 +8,8 @@
 
 #include "base/IEventQueue.h"
 #include "base/Log.h"
+#include "deskflow/ProtocolTypes.h"
+#include "deskflow/ProtocolUtil.h"
 #include "net/NetworkAddress.h"
 #include "net/SocketException.h"
 
@@ -27,6 +29,8 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events)
       m_socket(m_ioContext),
       m_strand(asio::make_strand(m_ioContext)),
       m_workGuard(m_ioContext.get_executor()),
+      m_mouseTimer(m_ioContext),
+      m_keyboardPollTimer(m_ioContext),
       m_events(events)
 {
   LOG_DEBUG("创建 Asio TCP socket (新连接)");
@@ -37,6 +41,8 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket)
       m_socket(std::move(socket)),
       m_strand(asio::make_strand(m_ioContext)),
       m_workGuard(m_ioContext.get_executor()),
+      m_mouseTimer(m_ioContext),
+      m_keyboardPollTimer(m_ioContext),
       m_events(events)
 {
   // 已接受的连接，socket 已经从 acceptor 转移过来
@@ -78,6 +84,10 @@ void AsioTCPSocket::close()
   if (m_connected.exchange(false)) {
     sendEvent(EventTypes::SocketDisconnected);
   }
+
+  // 取消定时器（停止鼠标和键盘定时器循环）
+  m_mouseTimer.cancel();
+  m_keyboardPollTimer.cancel();
 
   std::error_code ec;
   m_socket.close(ec);
@@ -245,6 +255,11 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
 
                       // 开始异步读取循环
                       startAsyncRead();
+
+                      // 启动 200Hz 鼠标位置发送定时器 (D-08)
+                      startMouseSendTimer();
+                      // 启动键盘 FIFO 排空循环 (D-05)
+                      drainKeyboardFifo();
                     }
                 )
             );
@@ -276,6 +291,15 @@ void AsioTCPSocket::onReadComplete(const std::error_code &ec, size_t bytesTransf
     } else {
       LOG_WARN("Asio socket 读取错误: %s", ec.message().c_str());
     }
+
+    // 断连时释放所有按键 (D-10)
+    auto releases = m_keyState.releaseAll();
+    for (const auto &r : releases) {
+      ProtocolUtil::writef(
+          static_cast<deskflow::IStream *>(this), kMsgDKeyUp1_0, r.key, r.mask
+      );
+    }
+
     sendEvent(EventTypes::SocketDisconnected);
     m_connected = false;
     return;
@@ -358,4 +382,78 @@ void AsioTCPSocket::onWriteComplete(const std::error_code &ec, size_t bytesTrans
 void AsioTCPSocket::sendEvent(EventTypes type)
 {
   m_events->addEvent(Event(type, getEventTarget()));
+}
+
+//
+// SPSC 缓冲区集成方法 (D-05/D-08/D-10)
+//
+
+void AsioTCPSocket::startMouseSendTimer()
+{
+  // 200Hz = 5ms 间隔 (D-08)
+  m_mouseTimer.expires_after(std::chrono::milliseconds(5));
+  m_mouseTimer.async_wait(asio::bind_executor(
+      m_strand, [this, self = shared_from_this()](const std::error_code &ec) { onMouseTimer(ec); }
+  ));
+}
+
+void AsioTCPSocket::onMouseTimer(const std::error_code &ec)
+{
+  if (ec) {
+    // 定时器被取消（正常关闭）
+    return;
+  }
+
+  int32_t x, y;
+  if (m_eventBuffer.loadMousePosition(x, y)) {
+    // 有新的鼠标位置，通过 ProtocolUtil 发送 DMMV (D-08)
+    ProtocolUtil::writef(static_cast<deskflow::IStream *>(this), kMsgDMouseMove, x, y);
+  }
+
+  // 重新调度定时器
+  startMouseSendTimer();
+}
+
+void AsioTCPSocket::drainKeyboardFifo()
+{
+  // 在 io_context 线程上运行（strand 保护）
+  KeyboardEvent evt;
+  while (m_eventBuffer.popKeyboardEvent(evt)) {
+    sendKeyboardEvent(evt);
+  }
+
+  // 通过短超时定时器调度下一次检查（1ms），避免忙等
+  m_keyboardPollTimer.expires_after(std::chrono::milliseconds(1));
+  m_keyboardPollTimer.async_wait(asio::bind_executor(
+      m_strand, [this, self = shared_from_this()](const std::error_code &ec) {
+        if (!ec) {
+          drainKeyboardFifo();
+        }
+      }
+  ));
+}
+
+void AsioTCPSocket::sendKeyboardEvent(const KeyboardEvent &evt)
+{
+  switch (evt.type) {
+  case KeyboardEvent::Type::Down:
+    m_keyState.recordKeyDown(evt.key, evt.mask, evt.button);
+    ProtocolUtil::writef(
+        static_cast<deskflow::IStream *>(this), kMsgDKeyDownLang, evt.key, evt.mask, evt.button,
+        &evt.language
+    );
+    break;
+  case KeyboardEvent::Type::Up:
+    m_keyState.recordKeyUp(evt.key);
+    ProtocolUtil::writef(
+        static_cast<deskflow::IStream *>(this), kMsgDKeyUp1_0, evt.key, evt.mask
+    );
+    break;
+  case KeyboardEvent::Type::Repeat:
+    ProtocolUtil::writef(
+        static_cast<deskflow::IStream *>(this), kMsgDKeyRepeat1_0, evt.key, evt.mask,
+        static_cast<int16_t>(1)
+    );
+    break;
+  }
 }

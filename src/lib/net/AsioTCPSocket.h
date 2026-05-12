@@ -9,6 +9,8 @@
 #include "base/Event.h"
 #include "io/StreamBuffer.h"
 #include "net/IDataSocket.h"
+#include "net/InputEventBuffer.h"
+#include "net/KeyStateTable.h"
 #include "net/NetworkAddress.h"
 
 #include <asio.hpp>
@@ -62,6 +64,12 @@ private:
   void startAsyncWrite();
   void sendEvent(EventTypes type);
 
+  // SPSC 缓冲区相关方法 (D-05/D-08/D-10)
+  void startMouseSendTimer();                                  // 200Hz 定时读取最新鼠标位置
+  void onMouseTimer(const std::error_code &ec);                // 200Hz 定时器回调
+  void drainKeyboardFifo();                                    // 排空键盘 FIFO 并发送
+  void sendKeyboardEvent(const KeyboardEvent &evt);            // 序列化单个键盘事件
+
   asio::io_context m_ioContext;
   asio::ip::tcp::socket m_socket;
   asio::strand<asio::io_context::executor_type> m_strand;
@@ -73,6 +81,11 @@ private:
 
   StreamBuffer m_inputBuffer;
   StreamBuffer m_outputBuffer;
+
+  InputEventBuffer m_eventBuffer;      // SPSC 事件缓冲区 (D-05)
+  KeyStateTable m_keyState;            // 按键状态追踪表 (D-10)
+  asio::steady_timer m_mouseTimer;     // 200Hz 鼠标发送定时器 (D-08)
+  asio::steady_timer m_keyboardPollTimer; // 键盘 FIFO 轮询定时器
 
   std::array<char, 4096> m_readBuffer{};
   std::atomic<bool> m_connected{false};
