@@ -31,6 +31,7 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events)
       m_workGuard(m_ioContext.get_executor()),
       m_mouseTimer(m_ioContext),
       m_keyboardPollTimer(m_ioContext),
+      m_reconnectTimer(m_ioContext),
       m_events(events)
 {
   LOG_DEBUG("创建 Asio TCP socket (新连接)");
@@ -43,6 +44,7 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket)
       m_workGuard(m_ioContext.get_executor()),
       m_mouseTimer(m_ioContext),
       m_keyboardPollTimer(m_ioContext),
+      m_reconnectTimer(m_ioContext),
       m_events(events)
 {
   // 已接受的连接，socket 已经从 acceptor 转移过来
@@ -201,6 +203,10 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
     return;
   }
 
+  // 保存目标地址用于重连 (D-11)，重置退避延迟
+  m_targetAddress = addr;
+  m_reconnectDelay = std::chrono::seconds(0);
+
   LOG_DEBUG("Asio socket 正在连接 %s:%d", addr.getHostname().c_str(), addr.getPort());
 
   // 启动 io_context 线程（如果尚未启动）
@@ -222,6 +228,11 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
               m_events->addEvent(Event(
                   EventTypes::DataSocketConnectionFailed, getEventTarget(), info, Event::EventFlags::DontFreeData
               ));
+              // 自动重连模式下，连接失败后调度重连 (D-11)
+              if (m_autoReconnect) {
+                m_reconnectDelay = std::chrono::seconds(1);
+                scheduleReconnect();
+              }
               return;
             }
 
@@ -238,6 +249,11 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
                             EventTypes::DataSocketConnectionFailed, getEventTarget(), info,
                             Event::EventFlags::DontFreeData
                         ));
+                        // 自动重连模式下，连接失败后调度重连 (D-11)
+                        if (m_autoReconnect) {
+                          m_reconnectDelay = std::chrono::seconds(1);
+                          scheduleReconnect();
+                        }
                         return;
                       }
 
@@ -249,17 +265,19 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
                       // 启用 TCP keep-alive
                       m_socket.set_option(asio::socket_base::keep_alive(true));
 
-                      m_connected = true;
+                      bool wasReconnect = m_connected.exchange(true);
                       m_writable = true;
                       sendEvent(EventTypes::DataSocketConnected);
 
-                      // 开始异步读取循环
-                      startAsyncRead();
-
-                      // 启动 200Hz 鼠标位置发送定时器 (D-08)
-                      startMouseSendTimer();
-                      // 启动键盘 FIFO 排空循环 (D-05)
-                      drainKeyboardFifo();
+                      if (wasReconnect) {
+                        // 重连成功，恢复输入流 (D-11)
+                        onReconnectSuccess();
+                      } else {
+                        // 首次连接
+                        startAsyncRead();
+                        startMouseSendTimer();
+                        drainKeyboardFifo();
+                      }
                     }
                 )
             );
@@ -285,23 +303,8 @@ void AsioTCPSocket::startAsyncRead()
 void AsioTCPSocket::onReadComplete(const std::error_code &ec, size_t bytesTransferred)
 {
   if (ec) {
-    if (ec == asio::error::eof || ec == asio::error::connection_reset) {
-      // 远端断连
-      LOG_DEBUG("Asio socket 远端断连 (EOF/connection_reset)");
-    } else {
-      LOG_WARN("Asio socket 读取错误: %s", ec.message().c_str());
-    }
-
-    // 断连时释放所有按键 (D-10)
-    auto releases = m_keyState.releaseAll();
-    for (const auto &r : releases) {
-      ProtocolUtil::writef(
-          static_cast<deskflow::IStream *>(this), kMsgDKeyUp1_0, r.key, r.mask
-      );
-    }
-
-    sendEvent(EventTypes::SocketDisconnected);
-    m_connected = false;
+    // 统一断连处理 (D-09/D-10/D-11)
+    handleDisconnect(ec);
     return;
   }
 
@@ -456,4 +459,92 @@ void AsioTCPSocket::sendKeyboardEvent(const KeyboardEvent &evt)
     );
     break;
   }
+}
+
+//
+// 断连处理和自动重连 (D-09/D-10/D-11)
+//
+
+void AsioTCPSocket::handleDisconnect(const std::error_code &ec)
+{
+  // 主动关闭不处理重连
+  if (ec == asio::error::operation_aborted) {
+    return;
+  }
+
+  if (ec == asio::error::eof || ec == asio::error::connection_reset) {
+    LOG_DEBUG("Asio socket 远端断连 (EOF/connection_reset)");
+  } else {
+    LOG_WARN("Asio socket 连接断开: %s", ec.message().c_str());
+  }
+
+  // 1. 释放所有按下的键和鼠标按钮 (D-10)
+  releaseAllKeys();
+
+  // 2. 取消所有定时器
+  m_mouseTimer.cancel();
+  m_keyboardPollTimer.cancel();
+
+  // 3. 通知上层断连 (D-06 桥接)
+  m_connected.store(false, std::memory_order_release);
+  m_writable.store(false, std::memory_order_release);
+  sendEvent(EventTypes::SocketDisconnected);
+
+  // 4. 自动重连（客户端模式，D-11）
+  if (m_autoReconnect) {
+    scheduleReconnect();
+  }
+}
+
+void AsioTCPSocket::releaseAllKeys()
+{
+  auto releases = m_keyState.releaseAll();
+  for (const auto &r : releases) {
+    LOG_DEBUG("断连释放按键: key=%d, mask=0x%04x, button=0x%04x", r.key, r.mask, r.button);
+    // 注意：此时 socket 可能已断开，writef 可能失败，这是预期行为
+    // 重点是清空 KeyStateTable 状态
+    ProtocolUtil::writef(static_cast<deskflow::IStream *>(this), kMsgDKeyUp1_0, r.key, r.mask);
+  }
+}
+
+void AsioTCPSocket::scheduleReconnect()
+{
+  if (m_reconnectDelay == std::chrono::seconds(0)) {
+    // 首次立即重试 (D-11)
+    LOG_DEBUG("立即尝试重连");
+    doReconnect();
+    return;
+  }
+
+  LOG_DEBUG("计划 %lld 秒后重连", static_cast<long long>(m_reconnectDelay.count()));
+  m_reconnectTimer.expires_after(m_reconnectDelay);
+  m_reconnectTimer.async_wait(asio::bind_executor(
+      m_strand, [this, self = shared_from_this()](const std::error_code &ec) {
+        if (ec) {
+          return; // 定时器被取消
+        }
+        doReconnect();
+      }
+  ));
+
+  // 指数退避：1s -> 2s -> 4s -> ... -> 最大 30s (D-11)
+  m_reconnectDelay = std::min(m_reconnectDelay * 2, std::chrono::seconds(30));
+}
+
+void AsioTCPSocket::doReconnect()
+{
+  m_reconnectDelay = std::chrono::seconds(1); // 首次失败后 1 秒
+  std::error_code ignored_ec;
+  m_socket.close(ignored_ec);
+  connect(m_targetAddress);
+}
+
+void AsioTCPSocket::onReconnectSuccess()
+{
+  LOG_INFO("重连成功，恢复输入流");
+  m_reconnectDelay = std::chrono::seconds(0); // 重置退避延迟
+  // 重新启动 200Hz 鼠标定时器和键盘 FIFO 消费
+  startAsyncRead();
+  startMouseSendTimer();
+  drainKeyboardFifo();
 }

@@ -18,7 +18,7 @@ class IEventQueue;
 class AsioTCPSocketFactory : public ISocketFactory
 {
 public:
-  explicit AsioTCPSocketFactory(IEventQueue *events);
+  explicit AsioTCPSocketFactory(IEventQueue *events, bool autoReconnect = false);
   ~AsioTCPSocketFactory() override = default;
 
   // ISocketFactory 接口实现
@@ -33,4 +33,5 @@ public:
 
 private:
   IEventQueue *m_events;
+  bool m_autoReconnect; // 客户端启用自动重连，服务端不启用 (D-11)
 };

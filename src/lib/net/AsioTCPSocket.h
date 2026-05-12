@@ -70,6 +70,13 @@ private:
   void drainKeyboardFifo();                                    // 排空键盘 FIFO 并发送
   void sendKeyboardEvent(const KeyboardEvent &evt);            // 序列化单个键盘事件
 
+  // 断连处理和自动重连 (D-09/D-10/D-11)
+  void handleDisconnect(const std::error_code &ec);            // 统一断连处理入口
+  void releaseAllKeys();                                       // 释放所有按下的键和鼠标按钮
+  void scheduleReconnect();                                    // 指数退避重连调度
+  void doReconnect();                                          // 执行重连
+  void onReconnectSuccess();                                   // 重连成功后恢复输入流
+
   asio::io_context m_ioContext;
   asio::ip::tcp::socket m_socket;
   asio::strand<asio::io_context::executor_type> m_strand;
@@ -87,6 +94,12 @@ private:
   asio::steady_timer m_mouseTimer;     // 200Hz 鼠标发送定时器 (D-08)
   asio::steady_timer m_keyboardPollTimer; // 键盘 FIFO 轮询定时器
 
+  // 自动重连相关成员 (D-11)
+  asio::steady_timer m_reconnectTimer;                    // 重连退避定时器
+  std::chrono::seconds m_reconnectDelay{0};               // 当前退避延迟 (0=首次立即重试)
+  NetworkAddress m_targetAddress;                         // 重连目标地址
+  bool m_autoReconnect{false};                            // 是否启用自动重连（客户端模式）
+
   std::array<char, 4096> m_readBuffer{};
   std::atomic<bool> m_connected{false};
   std::atomic<bool> m_writable{false};
@@ -95,4 +108,11 @@ private:
   std::mutex m_flushMutex;
   std::condition_variable m_flushCV;
   std::atomic<bool> m_flushed{true};
+
+public:
+  //! 获取 SPSC 事件缓冲区引用，供上层路由输入事件
+  InputEventBuffer &eventBuffer() { return m_eventBuffer; }
+
+  //! 设置是否启用自动重连（客户端模式启用，服务端不启用）
+  void setAutoReconnect(bool enabled) { m_autoReconnect = enabled; }
 };
