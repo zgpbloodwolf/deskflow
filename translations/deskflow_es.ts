@@ -194,39 +194,39 @@ p, li { white-space: pre-wrap; }
     <name>FingerprintDialog</name>
     <message>
         <source>Local Fingerprints</source>
-        <translation type="unfinished">Huellas dactilares locales</translation>
+        <translation type="obsolete">Huellas dactilares locales</translation>
     </message>
     <message>
         <source>Local computer&apos;s fingerprint</source>
-        <translation type="unfinished">Huella digital de la computadora local</translation>
+        <translation type="obsolete">Huella digital de la computadora local</translation>
     </message>
     <message>
         <source>Compare the fingerprints in this dialog to those on the %1.
 Only connect if they match!</source>
-        <translation type="unfinished">Compara las huellas dactilares de este diálogo con las de %1.
+        <translation type="obsolete">Compara las huellas dactilares de este diálogo con las de %1.
 ¡Conéctate solo si coinciden!</translation>
     </message>
     <message>
         <source>New client connecting</source>
-        <translation type="unfinished">Nuevo cliente conectándose</translation>
+        <translation type="obsolete">Nuevo cliente conectándose</translation>
     </message>
     <message>
         <source>client</source>
-        <translation type="unfinished">cliente</translation>
+        <translation type="obsolete">cliente</translation>
     </message>
     <message>
         <source>Connecting to a new server</source>
-        <translation type="unfinished">Conectarse a un nuevo servidor</translation>
+        <translation type="obsolete">Conectarse a un nuevo servidor</translation>
     </message>
     <message>
         <source>server</source>
-        <translation type="unfinished">servidor</translation>
+        <translation type="obsolete">servidor</translation>
     </message>
     <message>
         <source>
 Trust client and allow connection?
 </source>
-        <translation type="unfinished">
+        <translation type="obsolete">
 ¿Confiar en el cliente y permitir la conexión?
 </translation>
     </message>
@@ -234,40 +234,40 @@ Trust client and allow connection?
         <source>
 Do you want to connect to the server?
 </source>
-        <translation type="unfinished">
+        <translation type="obsolete">
 ¿Quieres conectarte al servidor?
 </translation>
     </message>
     <message>
         <source>Server Fingerprint</source>
-        <translation type="unfinished">Huella del servidor</translation>
+        <translation type="obsolete">Huella del servidor</translation>
     </message>
     <message>
         <source>Client Fingerprint</source>
-        <translation type="unfinished">Huella digital del cliente</translation>
+        <translation type="obsolete">Huella digital del cliente</translation>
     </message>
     <message>
         <source>Show image</source>
-        <translation type="unfinished">Mostrar imagen</translation>
+        <translation type="obsolete">Mostrar imagen</translation>
     </message>
     <message>
         <source>Show hash</source>
-        <translation type="unfinished">Mostrar hash</translation>
+        <translation type="obsolete">Mostrar hash</translation>
     </message>
     <message>
         <source>Display the fingerprint as an image</source>
-        <translation type="unfinished">Mostrar la huella digital como una imagen</translation>
+        <translation type="obsolete">Mostrar la huella digital como una imagen</translation>
     </message>
     <message>
         <source>Display the fingerprint as a hash</source>
-        <translation type="unfinished">Mostrar la huella digital como un hash</translation>
+        <translation type="obsolete">Mostrar la huella digital como un hash</translation>
     </message>
 </context>
 <context>
     <name>FingerprintPreview</name>
     <message>
         <source>Invalid hash format</source>
-        <translation type="unfinished">Formato hash no válido</translation>
+        <translation type="obsolete">Formato hash no válido</translation>
     </message>
 </context>
 <context>
@@ -396,7 +396,7 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
-        <translation type="unfinished">Su clave TLS actual es más pequeña que el tamaño mínimo permitido. Se generará una nueva clave de 2048 bits.</translation>
+        <translation type="obsolete">Su clave TLS actual es más pequeña que el tamaño mínimo permitido. Se generará una nueva clave de 2048 bits.</translation>
     </message>
     <message>
         <source>Address missing</source>
@@ -490,7 +490,7 @@ La dirección IP asignada ahora no es válida; es posible que deba reiniciar el 
     </message>
     <message>
         <source>invalid certificate, generating a new one</source>
-        <translation type="unfinished">certificado no válido, generando uno nuevo</translation>
+        <translation type="obsolete">certificado no válido, generando uno nuevo</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -612,7 +612,7 @@ Además, verifique que puede %1 el archivo de configuración del servidor: %2</t
     </message>
     <message>
         <source>&lt;p&gt;On Linux systems using GNOME 3, the notification area might be disabled. You may need to &lt;a href=&quot;%1&quot;&gt;enable an extension&lt;/a&gt; to see the %2 tray icon.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;En sistemas Linux que usan GNOME 3, el área de notificaciones podría estar deshabilitada. Quizás necesite &lt;a href=&quot;%1&quot;&gt;habilitar una extensión&lt;/a&gt; para ver el icono de la bandeja %2.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;En sistemas Linux que usan GNOME 3, el área de notificaciones podría estar deshabilitada. Quizás necesite &lt;a href=&quot;%1&quot;&gt;habilitar una extensión&lt;/a&gt; para ver el icono de la bandeja %2.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Server</source>
@@ -648,11 +648,11 @@ Además, verifique que puede %1 el archivo de configuración del servidor: %2</t
     </message>
     <message>
         <source>%1 - New Client</source>
-        <translation type="unfinished">%1 - Nuevo cliente</translation>
+        <translation type="obsolete">%1 - Nuevo cliente</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; has been accepted. You&apos;ll need to add it to your server&apos;s screen layout.</source>
-        <translation type="unfinished">Se ha aceptado un nuevo cliente llamado &apos;%1&apos;. Deberá agregarlo al diseño de pantalla de su servidor.</translation>
+        <translation type="obsolete">Se ha aceptado un nuevo cliente llamado &apos;%1&apos;. Deberá agregarlo al diseño de pantalla de su servidor.</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -713,21 +713,21 @@ Además, verifique que puede %1 el archivo de configuración del servidor: %2</t
     <message>
         <source>failed to read key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">No se pudo leer la clave del archivo de certificado: %1</translation>
+        <translation type="obsolete">No se pudo leer la clave del archivo de certificado: %1</translation>
     </message>
     <message>
         <source>failed to parse certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">Error al analizar el archivo de certificado: %1</translation>
+        <translation type="obsolete">Error al analizar el archivo de certificado: %1</translation>
     </message>
     <message>
         <source>key detected is the incorrect size</source>
-        <translation type="unfinished">La clave detectada es de tamaño incorrecto</translation>
+        <translation type="obsolete">La clave detectada es de tamaño incorrecto</translation>
     </message>
     <message>
         <source>failed to read RSA key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">No se pudo leer la clave RSA del archivo de certificado: %1</translation>
+        <translation type="obsolete">No se pudo leer la clave RSA del archivo de certificado: %1</translation>
     </message>
     <message>
         <source>%1 is already running</source>
@@ -1115,23 +1115,23 @@ Al habilitar esta opción, se deshabilitará la interfaz gráfica de usuario (GU
     </message>
     <message>
         <source>Enable TLS Encryption</source>
-        <translation type="unfinished">Habilitar el cifrado TLS</translation>
+        <translation type="obsolete">Habilitar el cifrado TLS</translation>
     </message>
     <message>
         <source>Certificate</source>
-        <translation type="unfinished">Certificado</translation>
+        <translation type="obsolete">Certificado</translation>
     </message>
     <message>
         <source>Key length</source>
-        <translation type="unfinished">Longitud de la clave</translation>
+        <translation type="obsolete">Longitud de la clave</translation>
     </message>
     <message>
         <source>Regenerate certificate</source>
-        <translation type="unfinished">Regenerar certificado</translation>
+        <translation type="obsolete">Regenerar certificado</translation>
     </message>
     <message>
         <source>Require client certificates</source>
-        <translation type="unfinished">Requerir certificados de cliente</translation>
+        <translation type="obsolete">Requerir certificados de cliente</translation>
     </message>
     <message>
         <source>&amp;Advanced</source>
@@ -1247,15 +1247,15 @@ Al habilitar esta opción, se deshabilitará la interfaz gráfica de usuario (GU
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
-        <translation type="unfinished">Certificado TLS regenerado</translation>
+        <translation type="obsolete">Certificado TLS regenerado</translation>
     </message>
     <message>
         <source>TLS certificate regenerated successfully.</source>
-        <translation type="unfinished">Certificado TLS regenerado exitosamente.</translation>
+        <translation type="obsolete">Certificado TLS regenerado exitosamente.</translation>
     </message>
     <message>
         <source>Select a TLS certificate to use...</source>
-        <translation type="unfinished">Seleccione un certificado TLS para utilizar...</translation>
+        <translation type="obsolete">Seleccione un certificado TLS para utilizar...</translation>
     </message>
     <message>
         <source>Save log file to...</source>
@@ -1271,11 +1271,11 @@ Al habilitar esta opción, se deshabilitará la interfaz gráfica de usuario (GU
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
-        <translation type="unfinished">Habilitar la compatibilidad con wl-clipboard</translation>
+        <translation type="obsolete">Habilitar la compatibilidad con wl-clipboard</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requires the wl-clipboard package&lt;/p&gt;&lt;p&gt;When using wl-clipboard v2.2.1, there is a focus stealing bug that may make Deskflow harder to use. This has been fixed when using the wl-clipboard master branch, unless your Compositor lacks wlroots-data-control protocol support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requiere el paquete wl-clipboard&lt;/p&gt;&lt;p&gt;Al usar wl-clipboard v2.2.1, existe un error que provoca la pérdida del foco y que puede dificultar el uso de Deskflow. Este error se ha corregido al usar la rama principal de wl-clipboard, a menos que su Compositor no sea compatible con el protocolo wlroots-data-control.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requiere el paquete wl-clipboard&lt;/p&gt;&lt;p&gt;Al usar wl-clipboard v2.2.1, existe un error que provoca la pérdida del foco y que puede dificultar el uso de Deskflow. Este error se ha corregido al usar la rama principal de wl-clipboard, a menos que su Compositor no sea compatible con el protocolo wlroots-data-control.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -1384,7 +1384,7 @@ Al habilitar esta opción, se deshabilitará la interfaz gráfica de usuario (GU
     </message>
     <message>
         <source>View local fingerprint</source>
-        <translation type="unfinished">Ver huella digital local</translation>
+        <translation type="obsolete">Ver huella digital local</translation>
     </message>
     <message>
         <source>Update available</source>
@@ -1400,11 +1400,11 @@ Al habilitar esta opción, se deshabilitará la interfaz gráfica de usuario (GU
     </message>
     <message>
         <source>%1 Encryption Enabled</source>
-        <translation type="unfinished">%1 Cifrado habilitado</translation>
+        <translation type="obsolete">%1 Cifrado habilitado</translation>
     </message>
     <message>
         <source>Encryption Disabled</source>
-        <translation type="unfinished">Cifrado deshabilitado</translation>
+        <translation type="obsolete">Cifrado deshabilitado</translation>
     </message>
 </context>
 <context>

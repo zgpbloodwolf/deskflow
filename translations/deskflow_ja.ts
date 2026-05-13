@@ -194,80 +194,80 @@ p, li { white-space: pre-wrap; }
     <name>FingerprintDialog</name>
     <message>
         <source>Local Fingerprints</source>
-        <translation>自分の指紋</translation>
+        <translation type="vanished">自分の指紋</translation>
     </message>
     <message>
         <source>Local computer&apos;s fingerprint</source>
-        <translation>このコンピューターの指紋</translation>
+        <translation type="vanished">このコンピューターの指紋</translation>
     </message>
     <message>
         <source>Compare the fingerprints in this dialog to those on the %1.
 Only connect if they match!</source>
-        <translation>このダイアログの指紋を %1 の指紋と比較してください。
+        <translation type="vanished">このダイアログの指紋を %1 の指紋と比較してください。
 両者が一致する場合にのみ接続してください！</translation>
     </message>
     <message>
         <source>New client connecting</source>
-        <translation>新しいクライアントの接続</translation>
+        <translation type="vanished">新しいクライアントの接続</translation>
     </message>
     <message>
         <source>client</source>
-        <translation>クライアント</translation>
+        <translation type="vanished">クライアント</translation>
     </message>
     <message>
         <source>
 Trust client and allow connection?
 </source>
-        <translation>
+        <translation type="vanished">
 クライアントを信頼し接続を許可しますか？
 </translation>
     </message>
     <message>
         <source>Connecting to a new server</source>
-        <translation>新しいサーバーに接続</translation>
+        <translation type="vanished">新しいサーバーに接続</translation>
     </message>
     <message>
         <source>server</source>
-        <translation>サーバー</translation>
+        <translation type="vanished">サーバー</translation>
     </message>
     <message>
         <source>
 Do you want to connect to the server?
 </source>
-        <translation>
+        <translation type="vanished">
 このサーバーに接続しますか？
 </translation>
     </message>
     <message>
         <source>Server Fingerprint</source>
-        <translation>サーバーの指紋</translation>
+        <translation type="vanished">サーバーの指紋</translation>
     </message>
     <message>
         <source>Client Fingerprint</source>
-        <translation>クライアントの指紋</translation>
+        <translation type="vanished">クライアントの指紋</translation>
     </message>
     <message>
         <source>Show image</source>
-        <translation>図を表示</translation>
+        <translation type="vanished">図を表示</translation>
     </message>
     <message>
         <source>Show hash</source>
-        <translation>ハッシュを表示</translation>
+        <translation type="vanished">ハッシュを表示</translation>
     </message>
     <message>
         <source>Display the fingerprint as an image</source>
-        <translation>指紋を図で表示</translation>
+        <translation type="vanished">指紋を図で表示</translation>
     </message>
     <message>
         <source>Display the fingerprint as a hash</source>
-        <translation>指紋をハッシュで表示</translation>
+        <translation type="vanished">指紋をハッシュで表示</translation>
     </message>
 </context>
 <context>
     <name>FingerprintPreview</name>
     <message>
         <source>Invalid hash format</source>
-        <translation>不正なハッシュ形式</translation>
+        <translation type="vanished">不正なハッシュ形式</translation>
     </message>
 </context>
 <context>
@@ -348,11 +348,11 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
-        <translation>現在のTLS鍵長が許容される長さより小さいため、新しい2048ビット長の鍵を生成します。</translation>
+        <translation type="vanished">現在のTLS鍵長が許容される長さより小さいため、新しい2048ビット長の鍵を生成します。</translation>
     </message>
     <message>
         <source>invalid certificate, generating a new one</source>
-        <translation>無効な証明書、新しい証明書を生成しています</translation>
+        <translation type="vanished">無効な証明書、新しい証明書を生成しています</translation>
     </message>
     <message>
         <source>Address missing</source>
@@ -614,7 +614,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&lt;p&gt;On Linux systems using GNOME 3, the notification area might be disabled. You may need to &lt;a href=&quot;%1&quot;&gt;enable an extension&lt;/a&gt; to see the %2 tray icon.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;GNOME 3 を使用している Linux システムでは、通知領域が無効化されていることがあります。その場合は %2 トレイアイコンを表示するために&lt;a href=&quot;%1&quot;&gt;拡張機能の有効化&lt;/a&gt;が必要かもしれません。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;GNOME 3 を使用している Linux システムでは、通知領域が無効化されていることがあります。その場合は %2 トレイアイコンを表示するために&lt;a href=&quot;%1&quot;&gt;拡張機能の有効化&lt;/a&gt;が必要かもしれません。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Server</source>
@@ -650,11 +650,11 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>%1 - New Client</source>
-        <translation>%1 - 新しいクライアント</translation>
+        <translation type="vanished">%1 - 新しいクライアント</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; has been accepted. You&apos;ll need to add it to your server&apos;s screen layout.</source>
-        <translation>新しいクライアント &apos;%1&apos; が接続許可されました。サーバーのコンピューター配置に追加してください。</translation>
+        <translation type="vanished">新しいクライアント &apos;%1&apos; が接続許可されました。サーバーのコンピューター配置に追加してください。</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -715,21 +715,21 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <message>
         <source>failed to read key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation>証明書ファイルからキーを読み取ることができませんでした: %1</translation>
+        <translation type="vanished">証明書ファイルからキーを読み取ることができませんでした: %1</translation>
     </message>
     <message>
         <source>failed to parse certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation>証明書ファイルの解析に失敗しました: %1</translation>
+        <translation type="vanished">証明書ファイルの解析に失敗しました: %1</translation>
     </message>
     <message>
         <source>key detected is the incorrect size</source>
-        <translation>検出されたキーのサイズが正しくありません</translation>
+        <translation type="vanished">検出されたキーのサイズが正しくありません</translation>
     </message>
     <message>
         <source>failed to read RSA key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation>証明書ファイルから RSA キーを読み取ることができませんでした: %1</translation>
+        <translation type="vanished">証明書ファイルから RSA キーを読み取ることができませんでした: %1</translation>
     </message>
     <message>
         <source>%1 is already running</source>
@@ -1117,23 +1117,23 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable TLS Encryption</source>
-        <translation>TLS 暗号化を有効にする</translation>
+        <translation type="vanished">TLS 暗号化を有効にする</translation>
     </message>
     <message>
         <source>Certificate</source>
-        <translation>証明書</translation>
+        <translation type="vanished">証明書</translation>
     </message>
     <message>
         <source>Key length</source>
-        <translation>鍵長</translation>
+        <translation type="vanished">鍵長</translation>
     </message>
     <message>
         <source>Regenerate certificate</source>
-        <translation>証明書を再生成</translation>
+        <translation type="vanished">証明書を再生成</translation>
     </message>
     <message>
         <source>Require client certificates</source>
-        <translation>クライアント証明書を要求する</translation>
+        <translation type="vanished">クライアント証明書を要求する</translation>
     </message>
     <message>
         <source>&amp;Advanced</source>
@@ -1209,15 +1209,15 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
-        <translation>TLS 証明書再生成</translation>
+        <translation type="vanished">TLS 証明書再生成</translation>
     </message>
     <message>
         <source>TLS certificate regenerated successfully.</source>
-        <translation>TLS 証明書が再生成されました。</translation>
+        <translation type="vanished">TLS 証明書が再生成されました。</translation>
     </message>
     <message>
         <source>Select a TLS certificate to use...</source>
-        <translation>使用する TLS 証明書を選択…</translation>
+        <translation type="vanished">使用する TLS 証明書を選択…</translation>
     </message>
     <message>
         <source>Save log file to...</source>
@@ -1273,11 +1273,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
-        <translation>wl-clipboard によるクリップボード対応を有効にする</translation>
+        <translation type="vanished">wl-clipboard によるクリップボード対応を有効にする</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requires the wl-clipboard package&lt;/p&gt;&lt;p&gt;When using wl-clipboard v2.2.1, there is a focus stealing bug that may make Deskflow harder to use. This has been fixed when using the wl-clipboard master branch, unless your Compositor lacks wlroots-data-control protocol support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;wl-clipboard パッケージが必要です。&lt;/p&gt;&lt;p&gt;wl-clipboard v2.2.1 を使用すると、フォーカス盗用のバグにより Deskflow の使い勝手が悪くなる可能性があります。この問題は wl-clipboard のマスターブランチで修正されていますが、使用しているコンポジターが wlroots-data-control プロトコルに対応している必要があります。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;wl-clipboard パッケージが必要です。&lt;/p&gt;&lt;p&gt;wl-clipboard v2.2.1 を使用すると、フォーカス盗用のバグにより Deskflow の使い勝手が悪くなる可能性があります。この問題は wl-clipboard のマスターブランチで修正されていますが、使用しているコンポジターが wlroots-data-control プロトコルに対応している必要があります。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -1385,7 +1385,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>View local fingerprint</source>
-        <translation>自分の指紋を表示</translation>
+        <translation type="vanished">自分の指紋を表示</translation>
     </message>
     <message>
         <source>Update available</source>
@@ -1401,11 +1401,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>%1 Encryption Enabled</source>
-        <translation>%1 暗号化有効</translation>
+        <translation type="vanished">%1 暗号化有効</translation>
     </message>
     <message>
         <source>Encryption Disabled</source>
-        <translation>暗号化無効</translation>
+        <translation type="vanished">暗号化無効</translation>
     </message>
 </context>
 <context>

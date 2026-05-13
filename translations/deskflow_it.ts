@@ -194,39 +194,39 @@ p, li { white-space: pre-wrap; }
     <name>FingerprintDialog</name>
     <message>
         <source>Local Fingerprints</source>
-        <translation>Impronte digitali locali</translation>
+        <translation type="vanished">Impronte digitali locali</translation>
     </message>
     <message>
         <source>Local computer&apos;s fingerprint</source>
-        <translation>Impronta digitale del computer locale</translation>
+        <translation type="vanished">Impronta digitale del computer locale</translation>
     </message>
     <message>
         <source>New client connecting</source>
-        <translation>Nuovo client in connessione</translation>
+        <translation type="vanished">Nuovo client in connessione</translation>
     </message>
     <message>
         <source>client</source>
-        <translation>client</translation>
+        <translation type="vanished">client</translation>
     </message>
     <message>
         <source>Connecting to a new server</source>
-        <translation>Connessione a un nuovo server</translation>
+        <translation type="vanished">Connessione a un nuovo server</translation>
     </message>
     <message>
         <source>server</source>
-        <translation>server</translation>
+        <translation type="vanished">server</translation>
     </message>
     <message>
         <source>Compare the fingerprints in this dialog to those on the %1.
 Only connect if they match!</source>
-        <translation>Confronta le impronte digitali in questa finestra di dialogo con quelle su %1.  
+        <translation type="vanished">Confronta le impronte digitali in questa finestra di dialogo con quelle su %1.  
 Connettiti solo se corrispondono!</translation>
     </message>
     <message>
         <source>
 Trust client and allow connection?
 </source>
-        <translation>
+        <translation type="vanished">
 Fidarsi del client e consentire la connessione?
 </translation>
     </message>
@@ -234,40 +234,40 @@ Fidarsi del client e consentire la connessione?
         <source>
 Do you want to connect to the server?
 </source>
-        <translation>
+        <translation type="vanished">
 Vuoi connetterti al server?
 </translation>
     </message>
     <message>
         <source>Server Fingerprint</source>
-        <translation>Impronta digitale del server</translation>
+        <translation type="vanished">Impronta digitale del server</translation>
     </message>
     <message>
         <source>Client Fingerprint</source>
-        <translation>Impronta digitale del client</translation>
+        <translation type="vanished">Impronta digitale del client</translation>
     </message>
     <message>
         <source>Show image</source>
-        <translation>Mostra immagine</translation>
+        <translation type="vanished">Mostra immagine</translation>
     </message>
     <message>
         <source>Show hash</source>
-        <translation>Mostra hash</translation>
+        <translation type="vanished">Mostra hash</translation>
     </message>
     <message>
         <source>Display the fingerprint as an image</source>
-        <translation>Visualizza l&apos;impronta digitale come immagine</translation>
+        <translation type="vanished">Visualizza l&apos;impronta digitale come immagine</translation>
     </message>
     <message>
         <source>Display the fingerprint as a hash</source>
-        <translation>Visualizza l&apos;impronta digitale come hash</translation>
+        <translation type="vanished">Visualizza l&apos;impronta digitale come hash</translation>
     </message>
 </context>
 <context>
     <name>FingerprintPreview</name>
     <message>
         <source>Invalid hash format</source>
-        <translation>Formato hash non valido</translation>
+        <translation type="vanished">Formato hash non valido</translation>
     </message>
 </context>
 <context>
@@ -384,7 +384,7 @@ Vuoi connetterti al server?
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
-        <translation>La tua chiave TLS attuale è più piccola della dimensione minima consentita. Verrà generata una nuova chiave a 2048 bit.</translation>
+        <translation type="vanished">La tua chiave TLS attuale è più piccola della dimensione minima consentita. Verrà generata una nuova chiave a 2048 bit.</translation>
     </message>
     <message>
         <source>Address missing</source>
@@ -492,7 +492,7 @@ Nomi validi:
     </message>
     <message>
         <source>invalid certificate, generating a new one</source>
-        <translation type="unfinished">certificato non valido, ne viene generato uno nuovo</translation>
+        <translation type="obsolete">certificato non valido, ne viene generato uno nuovo</translation>
     </message>
     <message>
         <source>Ctrl+Q</source>
@@ -612,7 +612,7 @@ Inoltre, verifica di poter %1 il file di configurazione del server: %2</translat
     </message>
     <message>
         <source>&lt;p&gt;On Linux systems using GNOME 3, the notification area might be disabled. You may need to &lt;a href=&quot;%1&quot;&gt;enable an extension&lt;/a&gt; to see the %2 tray icon.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Sui sistemi Linux che utilizzano GNOME 3, l&apos;area di notifica potrebbe essere disabilitata. Potrebbe essere necessario &lt;a href=&quot;%1&quot;&gt;abilitare un&apos;estensione&lt;/a&gt; per visualizzare l&apos;icona del vassoio %2.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Sui sistemi Linux che utilizzano GNOME 3, l&apos;area di notifica potrebbe essere disabilitata. Potrebbe essere necessario &lt;a href=&quot;%1&quot;&gt;abilitare un&apos;estensione&lt;/a&gt; per visualizzare l&apos;icona del vassoio %2.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Server</source>
@@ -648,11 +648,11 @@ Inoltre, verifica di poter %1 il file di configurazione del server: %2</translat
     </message>
     <message>
         <source>%1 - New Client</source>
-        <translation>%1 - Nuovo Client</translation>
+        <translation type="vanished">%1 - Nuovo Client</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; has been accepted. You&apos;ll need to add it to your server&apos;s screen layout.</source>
-        <translation>Un nuovo client chiamato &quot;%1&quot; è stato accettato. Dovrai aggiungerlo al layout dello schermo del tuo server.</translation>
+        <translation type="vanished">Un nuovo client chiamato &quot;%1&quot; è stato accettato. Dovrai aggiungerlo al layout dello schermo del tuo server.</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -713,21 +713,21 @@ Inoltre, verifica di poter %1 il file di configurazione del server: %2</translat
     <message>
         <source>failed to read key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">impossibile leggere la chiave dal file del certificato: %1</translation>
+        <translation type="obsolete">impossibile leggere la chiave dal file del certificato: %1</translation>
     </message>
     <message>
         <source>failed to parse certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">impossibile analizzare il file del certificato: %1</translation>
+        <translation type="obsolete">impossibile analizzare il file del certificato: %1</translation>
     </message>
     <message>
         <source>key detected is the incorrect size</source>
-        <translation type="unfinished">la chiave rilevata ha una dimensione errata</translation>
+        <translation type="obsolete">la chiave rilevata ha una dimensione errata</translation>
     </message>
     <message>
         <source>failed to read RSA key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">impossibile leggere la chiave RSA dal file del certificato: %1</translation>
+        <translation type="obsolete">impossibile leggere la chiave RSA dal file del certificato: %1</translation>
     </message>
     <message>
         <source>%1 is already running</source>
@@ -1115,23 +1115,23 @@ L&apos;abilitazione di questa impostazione disabiliterà l&apos;interfaccia graf
     </message>
     <message>
         <source>Enable TLS Encryption</source>
-        <translation>Abilita la crittografia TLS</translation>
+        <translation type="vanished">Abilita la crittografia TLS</translation>
     </message>
     <message>
         <source>Certificate</source>
-        <translation>Certificato</translation>
+        <translation type="vanished">Certificato</translation>
     </message>
     <message>
         <source>Key length</source>
-        <translation>Lunghezza chiave</translation>
+        <translation type="vanished">Lunghezza chiave</translation>
     </message>
     <message>
         <source>Regenerate certificate</source>
-        <translation>Rigenera certificato</translation>
+        <translation type="vanished">Rigenera certificato</translation>
     </message>
     <message>
         <source>Require client certificates</source>
-        <translation>Richiedi certificati client</translation>
+        <translation type="vanished">Richiedi certificati client</translation>
     </message>
     <message>
         <source>&amp;Advanced</source>
@@ -1247,15 +1247,15 @@ L&apos;abilitazione di questa impostazione disabiliterà l&apos;interfaccia graf
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
-        <translation>Certificato TLS rigenerato</translation>
+        <translation type="vanished">Certificato TLS rigenerato</translation>
     </message>
     <message>
         <source>TLS certificate regenerated successfully.</source>
-        <translation>Certificato TLS rigenerato correttamente.</translation>
+        <translation type="vanished">Certificato TLS rigenerato correttamente.</translation>
     </message>
     <message>
         <source>Select a TLS certificate to use...</source>
-        <translation>Seleziona un certificato TLS da utilizzare...</translation>
+        <translation type="vanished">Seleziona un certificato TLS da utilizzare...</translation>
     </message>
     <message>
         <source>Save log file to...</source>
@@ -1271,11 +1271,11 @@ L&apos;abilitazione di questa impostazione disabiliterà l&apos;interfaccia graf
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
-        <translation>Abilita il supporto wl-clipboard</translation>
+        <translation type="vanished">Abilita il supporto wl-clipboard</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requires the wl-clipboard package&lt;/p&gt;&lt;p&gt;When using wl-clipboard v2.2.1, there is a focus stealing bug that may make Deskflow harder to use. This has been fixed when using the wl-clipboard master branch, unless your Compositor lacks wlroots-data-control protocol support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Richiede il pacchetto wl-clipboard&lt;/p&gt;&lt;p&gt;Quando si utilizza wl-clipboard v2.2.1, si verifica un bug di furto del focus che potrebbe rendere Deskflow più difficile da usare. Questo problema è stato risolto quando si utilizza il ramo master di wl-clipboard, a meno che il proprio compositore non supporti il ​​protocollo wlroots-data-control.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Richiede il pacchetto wl-clipboard&lt;/p&gt;&lt;p&gt;Quando si utilizza wl-clipboard v2.2.1, si verifica un bug di furto del focus che potrebbe rendere Deskflow più difficile da usare. Questo problema è stato risolto quando si utilizza il ramo master di wl-clipboard, a meno che il proprio compositore non supporti il ​​protocollo wlroots-data-control.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -1384,7 +1384,7 @@ L&apos;abilitazione di questa impostazione disabiliterà l&apos;interfaccia graf
     </message>
     <message>
         <source>View local fingerprint</source>
-        <translation>Visualizza impronta digitale locale</translation>
+        <translation type="vanished">Visualizza impronta digitale locale</translation>
     </message>
     <message>
         <source>Update available</source>
@@ -1400,11 +1400,11 @@ L&apos;abilitazione di questa impostazione disabiliterà l&apos;interfaccia graf
     </message>
     <message>
         <source>%1 Encryption Enabled</source>
-        <translation>%1 Crittografia abilitata</translation>
+        <translation type="vanished">%1 Crittografia abilitata</translation>
     </message>
     <message>
         <source>Encryption Disabled</source>
-        <translation>Crittografia disabilitata</translation>
+        <translation type="vanished">Crittografia disabilitata</translation>
     </message>
 </context>
 <context>

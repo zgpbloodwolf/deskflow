@@ -194,80 +194,80 @@ p, li { white-space: pre-wrap; }
     <name>FingerprintDialog</name>
     <message>
         <source>Local Fingerprints</source>
-        <translation>Локальные отпечатки</translation>
+        <translation type="vanished">Локальные отпечатки</translation>
     </message>
     <message>
         <source>Local computer&apos;s fingerprint</source>
-        <translation>Отпечаток локального компьютера</translation>
+        <translation type="vanished">Отпечаток локального компьютера</translation>
     </message>
     <message>
         <source>Compare the fingerprints in this dialog to those on the %1.
 Only connect if they match!</source>
-        <translation>Сравните отпечатки в этом окне с отпечатками на %1. 
+        <translation type="vanished">Сравните отпечатки в этом окне с отпечатками на %1. 
 Подключайтесь только в случае их совпадения!</translation>
     </message>
     <message>
         <source>New client connecting</source>
-        <translation>Подключение нового клиента</translation>
+        <translation type="vanished">Подключение нового клиента</translation>
     </message>
     <message>
         <source>client</source>
-        <translation>клиент</translation>
+        <translation type="vanished">клиент</translation>
     </message>
     <message>
         <source>
 Trust client and allow connection?
 </source>
-        <translation>
+        <translation type="vanished">
 Доверять клиенту и разрешить подключение?
 </translation>
     </message>
     <message>
         <source>Connecting to a new server</source>
-        <translation>Подключение к новому серверу</translation>
+        <translation type="vanished">Подключение к новому серверу</translation>
     </message>
     <message>
         <source>server</source>
-        <translation>сервер</translation>
+        <translation type="vanished">сервер</translation>
     </message>
     <message>
         <source>
 Do you want to connect to the server?
 </source>
-        <translation>
+        <translation type="vanished">
 Вы хотите подключиться к серверу?
 </translation>
     </message>
     <message>
         <source>Server Fingerprint</source>
-        <translation>Отпечаток сервера</translation>
+        <translation type="vanished">Отпечаток сервера</translation>
     </message>
     <message>
         <source>Client Fingerprint</source>
-        <translation>Отпечаток клиента</translation>
+        <translation type="vanished">Отпечаток клиента</translation>
     </message>
     <message>
         <source>Show image</source>
-        <translation>Показать изображение</translation>
+        <translation type="vanished">Показать изображение</translation>
     </message>
     <message>
         <source>Show hash</source>
-        <translation>Показать хэш</translation>
+        <translation type="vanished">Показать хэш</translation>
     </message>
     <message>
         <source>Display the fingerprint as an image</source>
-        <translation>Показать отпечаток как изображение</translation>
+        <translation type="vanished">Показать отпечаток как изображение</translation>
     </message>
     <message>
         <source>Display the fingerprint as a hash</source>
-        <translation>Показать отпечаток как хэш</translation>
+        <translation type="vanished">Показать отпечаток как хэш</translation>
     </message>
 </context>
 <context>
     <name>FingerprintPreview</name>
     <message>
         <source>Invalid hash format</source>
-        <translation>Неверный формат хэша</translation>
+        <translation type="vanished">Неверный формат хэша</translation>
     </message>
 </context>
 <context>
@@ -348,11 +348,11 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
-        <translation>Текущий ключ TLS меньше минимально допустимого размера. Будет создан новый 2048-битный ключ.</translation>
+        <translation type="vanished">Текущий ключ TLS меньше минимально допустимого размера. Будет создан новый 2048-битный ключ.</translation>
     </message>
     <message>
         <source>invalid certificate, generating a new one</source>
-        <translation>недействительный сертификат, создание нового</translation>
+        <translation type="vanished">недействительный сертификат, создание нового</translation>
     </message>
     <message>
         <source>Address missing</source>
@@ -612,7 +612,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&lt;p&gt;On Linux systems using GNOME 3, the notification area might be disabled. You may need to &lt;a href=&quot;%1&quot;&gt;enable an extension&lt;/a&gt; to see the %2 tray icon.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;В системах Linux с GNOME 3 область уведомлений может быть отключена. Возможно, потребуется &lt;a href=&quot;%1&quot;&gt;включить расширение&lt;/a&gt;, чтобы видеть иконку %2.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;В системах Linux с GNOME 3 область уведомлений может быть отключена. Возможно, потребуется &lt;a href=&quot;%1&quot;&gt;включить расширение&lt;/a&gt;, чтобы видеть иконку %2.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Server</source>
@@ -648,11 +648,11 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>%1 - New Client</source>
-        <translation>%1 - Новый клиент</translation>
+        <translation type="vanished">%1 - Новый клиент</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; has been accepted. You&apos;ll need to add it to your server&apos;s screen layout.</source>
-        <translation>Новый клиент «%1» принят. Вам необходимо добавить его на макет экранов сервера.</translation>
+        <translation type="vanished">Новый клиент «%1» принят. Вам необходимо добавить его на макет экранов сервера.</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -713,21 +713,21 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <message>
         <source>failed to read key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation>не удалось прочитать ключ из файла сертификата: %1</translation>
+        <translation type="vanished">не удалось прочитать ключ из файла сертификата: %1</translation>
     </message>
     <message>
         <source>failed to parse certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation>не удалось разобрать файл сертификата: %1</translation>
+        <translation type="vanished">не удалось разобрать файл сертификата: %1</translation>
     </message>
     <message>
         <source>key detected is the incorrect size</source>
-        <translation>обнаружен ключ неверного размера</translation>
+        <translation type="vanished">обнаружен ключ неверного размера</translation>
     </message>
     <message>
         <source>failed to read RSA key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation>не удалось прочитать RSA-ключ из файла сертификата: %1</translation>
+        <translation type="vanished">не удалось прочитать RSA-ключ из файла сертификата: %1</translation>
     </message>
     <message>
         <source>%1 is already running</source>
@@ -1113,23 +1113,23 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable TLS Encryption</source>
-        <translation>Включить шифрование TLS</translation>
+        <translation type="vanished">Включить шифрование TLS</translation>
     </message>
     <message>
         <source>Certificate</source>
-        <translation>Сертификат</translation>
+        <translation type="vanished">Сертификат</translation>
     </message>
     <message>
         <source>Key length</source>
-        <translation>Длина ключа</translation>
+        <translation type="vanished">Длина ключа</translation>
     </message>
     <message>
         <source>Regenerate certificate</source>
-        <translation>Перевыпустить сертификат</translation>
+        <translation type="vanished">Перевыпустить сертификат</translation>
     </message>
     <message>
         <source>Require client certificates</source>
-        <translation>Требовать сертификаты клиентов</translation>
+        <translation type="vanished">Требовать сертификаты клиентов</translation>
     </message>
     <message>
         <source>&amp;Advanced</source>
@@ -1205,19 +1205,19 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
-        <translation>Включить поддержку wl-clipboard</translation>
+        <translation type="vanished">Включить поддержку wl-clipboard</translation>
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
-        <translation>Сертификат TLS перевыпущен</translation>
+        <translation type="vanished">Сертификат TLS перевыпущен</translation>
     </message>
     <message>
         <source>TLS certificate regenerated successfully.</source>
-        <translation>Сертификат TLS успешно перевыпущен.</translation>
+        <translation type="vanished">Сертификат TLS успешно перевыпущен.</translation>
     </message>
     <message>
         <source>Select a TLS certificate to use...</source>
-        <translation>Выберите сертификат TLS...</translation>
+        <translation type="vanished">Выберите сертификат TLS...</translation>
     </message>
     <message>
         <source>Save log file to...</source>
@@ -1273,7 +1273,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requires the wl-clipboard package&lt;/p&gt;&lt;p&gt;When using wl-clipboard v2.2.1, there is a focus stealing bug that may make Deskflow harder to use. This has been fixed when using the wl-clipboard master branch, unless your Compositor lacks wlroots-data-control protocol support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Требуется пакет wl-clipboard. В версии 2.2.1 есть ошибка перехвата фокуса.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Требуется пакет wl-clipboard. В версии 2.2.1 есть ошибка перехвата фокуса.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -1383,7 +1383,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>View local fingerprint</source>
-        <translation>Показать локальный отпечаток</translation>
+        <translation type="vanished">Показать локальный отпечаток</translation>
     </message>
     <message>
         <source>Update available</source>
@@ -1399,11 +1399,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>%1 Encryption Enabled</source>
-        <translation>Шифрование %1 включено</translation>
+        <translation type="vanished">Шифрование %1 включено</translation>
     </message>
     <message>
         <source>Encryption Disabled</source>
-        <translation>Шифрование отключено</translation>
+        <translation type="vanished">Шифрование отключено</translation>
     </message>
 </context>
 <context>

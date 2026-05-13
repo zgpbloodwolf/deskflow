@@ -194,80 +194,80 @@ p, li { white-space: pre-wrap; }
     <name>FingerprintDialog</name>
     <message>
         <source>Local Fingerprints</source>
-        <translation>本地指纹</translation>
+        <translation type="vanished">本地指纹</translation>
     </message>
     <message>
         <source>Local computer&apos;s fingerprint</source>
-        <translation>本地计算机的指纹</translation>
+        <translation type="vanished">本地计算机的指纹</translation>
     </message>
     <message>
         <source>Compare the fingerprints in this dialog to those on the %1.
 Only connect if they match!</source>
-        <translation>请将此对话框中的指纹与 %1 上的指纹进行比对。
+        <translation type="vanished">请将此对话框中的指纹与 %1 上的指纹进行比对。
 只有两者匹配时才进行连接！</translation>
     </message>
     <message>
         <source>New client connecting</source>
-        <translation>新客户端正在连接</translation>
+        <translation type="vanished">新客户端正在连接</translation>
     </message>
     <message>
         <source>client</source>
-        <translation>客户端</translation>
+        <translation type="vanished">客户端</translation>
     </message>
     <message>
         <source>
 Trust client and allow connection?
 </source>
-        <translation>
+        <translation type="vanished">
 信任此客户端并允许连接吗？
 </translation>
     </message>
     <message>
         <source>Connecting to a new server</source>
-        <translation>正在连接到新服务器</translation>
+        <translation type="vanished">正在连接到新服务器</translation>
     </message>
     <message>
         <source>server</source>
-        <translation>服务器</translation>
+        <translation type="vanished">服务器</translation>
     </message>
     <message>
         <source>
 Do you want to connect to the server?
 </source>
-        <translation>
+        <translation type="vanished">
 您想连接到此服务器吗？
 </translation>
     </message>
     <message>
         <source>Server Fingerprint</source>
-        <translation>服务器指纹</translation>
+        <translation type="vanished">服务器指纹</translation>
     </message>
     <message>
         <source>Client Fingerprint</source>
-        <translation>客户端指纹</translation>
+        <translation type="vanished">客户端指纹</translation>
     </message>
     <message>
         <source>Show image</source>
-        <translation>显示图像</translation>
+        <translation type="vanished">显示图像</translation>
     </message>
     <message>
         <source>Show hash</source>
-        <translation>显示哈希值</translation>
+        <translation type="vanished">显示哈希值</translation>
     </message>
     <message>
         <source>Display the fingerprint as an image</source>
-        <translation>以图像形式显示指纹</translation>
+        <translation type="vanished">以图像形式显示指纹</translation>
     </message>
     <message>
         <source>Display the fingerprint as a hash</source>
-        <translation>以哈希值形式显示指纹</translation>
+        <translation type="vanished">以哈希值形式显示指纹</translation>
     </message>
 </context>
 <context>
     <name>FingerprintPreview</name>
     <message>
         <source>Invalid hash format</source>
-        <translation>无效的哈希格式</translation>
+        <translation type="vanished">无效的哈希格式</translation>
     </message>
 </context>
 <context>
@@ -348,11 +348,11 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
-        <translation>您当前的 TLS 密钥长度小于允许的最小值，将生成一个新的 2048 位密钥。</translation>
+        <translation type="vanished">您当前的 TLS 密钥长度小于允许的最小值，将生成一个新的 2048 位密钥。</translation>
     </message>
     <message>
         <source>invalid certificate, generating a new one</source>
-        <translation type="unfinished">证书无效，正在生成新证书</translation>
+        <translation type="obsolete">证书无效，正在生成新证书</translation>
     </message>
     <message>
         <source>Address missing</source>
@@ -614,7 +614,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&lt;p&gt;On Linux systems using GNOME 3, the notification area might be disabled. You may need to &lt;a href=&quot;%1&quot;&gt;enable an extension&lt;/a&gt; to see the %2 tray icon.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;在使用 GNOME 3 的 Linux 系统上，通知区域可能被禁用。您可能需要 &lt;a href=&quot;%1&quot;&gt;启用扩展&lt;/a&gt; 才能看到 %2 托盘图标。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;在使用 GNOME 3 的 Linux 系统上，通知区域可能被禁用。您可能需要 &lt;a href=&quot;%1&quot;&gt;启用扩展&lt;/a&gt; 才能看到 %2 托盘图标。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Server</source>
@@ -650,11 +650,11 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>%1 - New Client</source>
-        <translation>%1 - 新客户端</translation>
+        <translation type="vanished">%1 - 新客户端</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; has been accepted. You&apos;ll need to add it to your server&apos;s screen layout.</source>
-        <translation type="unfinished">已接受名为“%1”的新客户端。您需要将其添加到服务器的屏幕布局中。</translation>
+        <translation type="obsolete">已接受名为“%1”的新客户端。您需要将其添加到服务器的屏幕布局中。</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -715,21 +715,21 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <message>
         <source>failed to read key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">无法从证书文件中读取密钥：%1</translation>
+        <translation type="obsolete">无法从证书文件中读取密钥：%1</translation>
     </message>
     <message>
         <source>failed to parse certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">解析证书文件失败：%1</translation>
+        <translation type="obsolete">解析证书文件失败：%1</translation>
     </message>
     <message>
         <source>key detected is the incorrect size</source>
-        <translation type="unfinished">检测到的密钥大小不正确</translation>
+        <translation type="obsolete">检测到的密钥大小不正确</translation>
     </message>
     <message>
         <source>failed to read RSA key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">无法从证书文件中读取 RSA 密钥：%1</translation>
+        <translation type="obsolete">无法从证书文件中读取 RSA 密钥：%1</translation>
     </message>
     <message>
         <source>%1 is already running</source>
@@ -1117,23 +1117,23 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable TLS Encryption</source>
-        <translation>启用 TLS 加密</translation>
+        <translation type="vanished">启用 TLS 加密</translation>
     </message>
     <message>
         <source>Certificate</source>
-        <translation>证书</translation>
+        <translation type="vanished">证书</translation>
     </message>
     <message>
         <source>Key length</source>
-        <translation>密钥长度</translation>
+        <translation type="vanished">密钥长度</translation>
     </message>
     <message>
         <source>Regenerate certificate</source>
-        <translation>重新生成证书</translation>
+        <translation type="vanished">重新生成证书</translation>
     </message>
     <message>
         <source>Require client certificates</source>
-        <translation>需要客户端证书</translation>
+        <translation type="vanished">需要客户端证书</translation>
     </message>
     <message>
         <source>&amp;Advanced</source>
@@ -1209,15 +1209,15 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
-        <translation>TLS 证书已重新生成</translation>
+        <translation type="vanished">TLS 证书已重新生成</translation>
     </message>
     <message>
         <source>TLS certificate regenerated successfully.</source>
-        <translation>TLS 证书重新生成成功。</translation>
+        <translation type="vanished">TLS 证书重新生成成功。</translation>
     </message>
     <message>
         <source>Select a TLS certificate to use...</source>
-        <translation>选择要使用的 TLS 证书...</translation>
+        <translation type="vanished">选择要使用的 TLS 证书...</translation>
     </message>
     <message>
         <source>Save log file to...</source>
@@ -1273,11 +1273,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
-        <translation>启用 wl-clipboard 支持</translation>
+        <translation type="vanished">启用 wl-clipboard 支持</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requires the wl-clipboard package&lt;/p&gt;&lt;p&gt;When using wl-clipboard v2.2.1, there is a focus stealing bug that may make Deskflow harder to use. This has been fixed when using the wl-clipboard master branch, unless your Compositor lacks wlroots-data-control protocol support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;需要 wl-clipboard 包&lt;/p&gt;&lt;p&gt;使用 wl-clipboard v2.2.1 时存在一个焦点抢夺 Bug，可能导致 Deskflow 使用不便。该问题已在 wl-clipboard 的 master 分支中修复，除非您的合成器不支持 wlroots-data-control 协议。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;需要 wl-clipboard 包&lt;/p&gt;&lt;p&gt;使用 wl-clipboard v2.2.1 时存在一个焦点抢夺 Bug，可能导致 Deskflow 使用不便。该问题已在 wl-clipboard 的 master 分支中修复，除非您的合成器不支持 wlroots-data-control 协议。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -1385,7 +1385,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>View local fingerprint</source>
-        <translation>查看本地指纹</translation>
+        <translation type="vanished">查看本地指纹</translation>
     </message>
     <message>
         <source>Update available</source>
@@ -1401,11 +1401,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>%1 Encryption Enabled</source>
-        <translation>%1 加密已启用</translation>
+        <translation type="vanished">%1 加密已启用</translation>
     </message>
     <message>
         <source>Encryption Disabled</source>
-        <translation>加密已禁用</translation>
+        <translation type="vanished">加密已禁用</translation>
     </message>
 </context>
 <context>

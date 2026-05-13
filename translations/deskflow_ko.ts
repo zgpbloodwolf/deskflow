@@ -194,80 +194,80 @@ p, li { white-space: pre-wrap; }
     <name>FingerprintDialog</name>
     <message>
         <source>Local Fingerprints</source>
-        <translation>로컬 핑거프린팅</translation>
+        <translation type="vanished">로컬 핑거프린팅</translation>
     </message>
     <message>
         <source>Local computer&apos;s fingerprint</source>
-        <translation>이 컴퓨터의 핑거프린팅</translation>
+        <translation type="vanished">이 컴퓨터의 핑거프린팅</translation>
     </message>
     <message>
         <source>Compare the fingerprints in this dialog to those on the %1.
 Only connect if they match!</source>
-        <translation>이 대화상자에 표시된 핑거프린팅을 %1의 핑거프린팅과 비교하세요.
+        <translation type="vanished">이 대화상자에 표시된 핑거프린팅을 %1의 핑거프린팅과 비교하세요.
 일치할 때만 연결하세요!</translation>
     </message>
     <message>
         <source>New client connecting</source>
-        <translation>새 클라이언트 연결</translation>
+        <translation type="vanished">새 클라이언트 연결</translation>
     </message>
     <message>
         <source>client</source>
-        <translation>클라이언트</translation>
+        <translation type="vanished">클라이언트</translation>
     </message>
     <message>
         <source>
 Trust client and allow connection?
 </source>
-        <translation>
+        <translation type="vanished">
 클라이언트를 신뢰하고 연결을 허용할까요?
 </translation>
     </message>
     <message>
         <source>Connecting to a new server</source>
-        <translation>새 서버에 연결 중</translation>
+        <translation type="vanished">새 서버에 연결 중</translation>
     </message>
     <message>
         <source>server</source>
-        <translation>서버</translation>
+        <translation type="vanished">서버</translation>
     </message>
     <message>
         <source>
 Do you want to connect to the server?
 </source>
-        <translation>
+        <translation type="vanished">
 이 서버에 연결할까요?
 </translation>
     </message>
     <message>
         <source>Server Fingerprint</source>
-        <translation>서버 핑거프린팅</translation>
+        <translation type="vanished">서버 핑거프린팅</translation>
     </message>
     <message>
         <source>Client Fingerprint</source>
-        <translation>클라이언트 핑거프린팅</translation>
+        <translation type="vanished">클라이언트 핑거프린팅</translation>
     </message>
     <message>
         <source>Show image</source>
-        <translation>이미지로 보기</translation>
+        <translation type="vanished">이미지로 보기</translation>
     </message>
     <message>
         <source>Show hash</source>
-        <translation>해시로 보기</translation>
+        <translation type="vanished">해시로 보기</translation>
     </message>
     <message>
         <source>Display the fingerprint as an image</source>
-        <translation>핑거프린팅을 이미지로 표시</translation>
+        <translation type="vanished">핑거프린팅을 이미지로 표시</translation>
     </message>
     <message>
         <source>Display the fingerprint as a hash</source>
-        <translation>핑거프린팅을 해시로 표시</translation>
+        <translation type="vanished">핑거프린팅을 해시로 표시</translation>
     </message>
 </context>
 <context>
     <name>FingerprintPreview</name>
     <message>
         <source>Invalid hash format</source>
-        <translation>잘못된 해시 형식</translation>
+        <translation type="vanished">잘못된 해시 형식</translation>
     </message>
 </context>
 <context>
@@ -348,11 +348,11 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
-        <translation>현재 TLS 키 길이가 허용되는 최소 길이보다 짧습니다. 새 2048비트 키를 생성합니다.</translation>
+        <translation type="vanished">현재 TLS 키 길이가 허용되는 최소 길이보다 짧습니다. 새 2048비트 키를 생성합니다.</translation>
     </message>
     <message>
         <source>invalid certificate, generating a new one</source>
-        <translation type="unfinished">유효하지 않은 인증서입니다. 새 인증서를 생성하는 중입니다</translation>
+        <translation type="obsolete">유효하지 않은 인증서입니다. 새 인증서를 생성하는 중입니다</translation>
     </message>
     <message>
         <source>Address missing</source>
@@ -612,7 +612,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&lt;p&gt;On Linux systems using GNOME 3, the notification area might be disabled. You may need to &lt;a href=&quot;%1&quot;&gt;enable an extension&lt;/a&gt; to see the %2 tray icon.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;GNOME 3을 사용하는 Linux 시스템에서는 알림 영역이 비활성화되어 있을 수 있습니다. %2 트레이 아이콘을 보려면 &lt;a href=&quot;%1&quot;&gt;확장 기능을 활성화&lt;/a&gt;해야 합니다.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;GNOME 3을 사용하는 Linux 시스템에서는 알림 영역이 비활성화되어 있을 수 있습니다. %2 트레이 아이콘을 보려면 &lt;a href=&quot;%1&quot;&gt;확장 기능을 활성화&lt;/a&gt;해야 합니다.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Server</source>
@@ -648,11 +648,11 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>%1 - New Client</source>
-        <translation>%1 - 새 클라이언트</translation>
+        <translation type="vanished">%1 - 새 클라이언트</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; has been accepted. You&apos;ll need to add it to your server&apos;s screen layout.</source>
-        <translation>새 클라이언트 &apos;%1&apos;이(가) 허용되었습니다. 서버의 화면 배치에 추가해 주세요.</translation>
+        <translation type="vanished">새 클라이언트 &apos;%1&apos;이(가) 허용되었습니다. 서버의 화면 배치에 추가해 주세요.</translation>
     </message>
     <message>
         <source>Ignore</source>
@@ -713,21 +713,21 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <message>
         <source>failed to read key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">인증서 파일에서 키를 읽지 못했습니다: %1</translation>
+        <translation type="obsolete">인증서 파일에서 키를 읽지 못했습니다: %1</translation>
     </message>
     <message>
         <source>failed to parse certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">인증서 파일을 파싱하지 못했습니다: %1</translation>
+        <translation type="obsolete">인증서 파일을 파싱하지 못했습니다: %1</translation>
     </message>
     <message>
         <source>key detected is the incorrect size</source>
-        <translation type="unfinished">감지된 키의 크기가 올바르지 않습니다</translation>
+        <translation type="obsolete">감지된 키의 크기가 올바르지 않습니다</translation>
     </message>
     <message>
         <source>failed to read RSA key from certificate file: %1</source>
         <extracomment>%1 will be replaced by the certificate path</extracomment>
-        <translation type="unfinished">인증서 파일에서 RSA 키를 읽지 못했습니다: %1</translation>
+        <translation type="obsolete">인증서 파일에서 RSA 키를 읽지 못했습니다: %1</translation>
     </message>
     <message>
         <source>%1 is already running</source>
@@ -1115,23 +1115,23 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable TLS Encryption</source>
-        <translation>TLS 암호화 사용</translation>
+        <translation type="vanished">TLS 암호화 사용</translation>
     </message>
     <message>
         <source>Certificate</source>
-        <translation>인증서</translation>
+        <translation type="vanished">인증서</translation>
     </message>
     <message>
         <source>Key length</source>
-        <translation>키 길이</translation>
+        <translation type="vanished">키 길이</translation>
     </message>
     <message>
         <source>Regenerate certificate</source>
-        <translation>인증서 재생성</translation>
+        <translation type="vanished">인증서 재생성</translation>
     </message>
     <message>
         <source>Require client certificates</source>
-        <translation>클라이언트 인증서 요구</translation>
+        <translation type="vanished">클라이언트 인증서 요구</translation>
     </message>
     <message>
         <source>&amp;Advanced</source>
@@ -1207,15 +1207,15 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
-        <translation>TLS 인증서 재생성됨</translation>
+        <translation type="vanished">TLS 인증서 재생성됨</translation>
     </message>
     <message>
         <source>TLS certificate regenerated successfully.</source>
-        <translation>TLS 인증서를 성공적으로 재생성했습니다.</translation>
+        <translation type="vanished">TLS 인증서를 성공적으로 재생성했습니다.</translation>
     </message>
     <message>
         <source>Select a TLS certificate to use...</source>
-        <translation>사용할 TLS 인증서 선택...</translation>
+        <translation type="vanished">사용할 TLS 인증서 선택...</translation>
     </message>
     <message>
         <source>Save log file to...</source>
@@ -1271,11 +1271,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
-        <translation>wl-clipboard 지원 사용</translation>
+        <translation type="vanished">wl-clipboard 지원 사용</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Requires the wl-clipboard package&lt;/p&gt;&lt;p&gt;When using wl-clipboard v2.2.1, there is a focus stealing bug that may make Deskflow harder to use. This has been fixed when using the wl-clipboard master branch, unless your Compositor lacks wlroots-data-control protocol support.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;wl-clipboard 패키지가 필요합니다.&lt;/p&gt;&lt;p&gt;wl-clipboard v2.2.1 사용 시 포커스 탈취 버그로 인해 Deskflow 사용이 어려워질 수 있습니다. 이 문제는 wl-clipboard master 브랜치를 사용하면 해결되지만, 사용 중인 컴포지터가 wlroots-data-control 프로토콜을 지원하지 않으면 해결이 안 될 수 있습니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;wl-clipboard 패키지가 필요합니다.&lt;/p&gt;&lt;p&gt;wl-clipboard v2.2.1 사용 시 포커스 탈취 버그로 인해 Deskflow 사용이 어려워질 수 있습니다. 이 문제는 wl-clipboard master 브랜치를 사용하면 해결되지만, 사용 중인 컴포지터가 wlroots-data-control 프로토콜을 지원하지 않으면 해결이 안 될 수 있습니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -1383,7 +1383,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>View local fingerprint</source>
-        <translation>로컬 핑거프린팅 보기</translation>
+        <translation type="vanished">로컬 핑거프린팅 보기</translation>
     </message>
     <message>
         <source>Update available</source>
@@ -1399,11 +1399,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>%1 Encryption Enabled</source>
-        <translation>%1 암호화 사용</translation>
+        <translation type="vanished">%1 암호화 사용</translation>
     </message>
     <message>
         <source>Encryption Disabled</source>
-        <translation>암호화 사용 안 함</translation>
+        <translation type="vanished">암호화 사용 안 함</translation>
     </message>
 </context>
 <context>
