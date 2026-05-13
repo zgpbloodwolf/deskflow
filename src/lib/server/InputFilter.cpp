@@ -8,13 +8,13 @@
 
 #include "server/InputFilter.h"
 #include "base/EventQueue.h"
+#include "base/EventTypes.h"
 #include "base/Log.h"
 #include "deskflow/KeyMap.h"
 #include "server/PrimaryClient.h"
 #include "server/Server.h"
 
 #include <cstdint>
-#include <cstdlib>
 #include <cstring>
 
 // -----------------------------------------------------------------------------
@@ -237,7 +237,8 @@ void InputFilter::LockCursorToScreenAction::perform(const Event &event)
   );
 }
 
-InputFilter::RestartServer::RestartServer(Mode mode) : m_mode(mode)
+InputFilter::RestartServer::RestartServer(IEventQueue *events, Mode mode)
+    : m_mode(mode), m_events(events)
 {
   // do nothing
 }
@@ -249,7 +250,7 @@ InputFilter::RestartServer::Mode InputFilter::RestartServer::getMode() const
 
 InputFilter::Action *InputFilter::RestartServer::clone() const
 {
-  return new RestartServer(*this);
+  return new RestartServer(m_events, m_mode);
 }
 
 std::string InputFilter::RestartServer::format() const
@@ -261,8 +262,8 @@ std::string InputFilter::RestartServer::format() const
 
 void InputFilter::RestartServer::perform(const Event &)
 {
-  // HACK Super hack we should gracefully exit
-  exit(0);
+  LOG_DEBUG("restart server via graceful quit event");
+  m_events->addEvent(Event(EventTypes::Quit));
 }
 
 InputFilter::SwitchToScreenAction::SwitchToScreenAction(IEventQueue *events, const std::string &screen)
