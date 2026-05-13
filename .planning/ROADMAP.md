@@ -78,17 +78,17 @@ Plans:
 **Depends on**: Phase 3 (architecture is stable, no more structural changes)
 **Requirements**: MOD-01, MOD-02, MOD-03, MOD-04
 **Success Criteria** (what must be TRUE):
-  1. No raw `new`/`delete` calls remain in the SocketMultiplexer and related network code -- all replaced with smart pointers
-  2. All custom `Thread` class usage replaced with `std::jthread` + `std::stop_token` for cooperative cancellation
-  3. No `reinterpret_cast` cursor-mark sentinel patterns remain -- replaced with type-safe iteration
-  4. No `exit(0)` calls remain anywhere in the codebase -- all replaced with graceful event queue shutdown
-**Plans**: 3 plans
+  1. No raw `new`/`delete` calls remain in the SocketMultiplexer and EventQueue -- all replaced with unique_ptr
+  2. All raw `new Thread` call sites use `unique_ptr<Thread>` (keeping custom Thread class per Apple Clang constraint)
+  3. No `reinterpret_cast` cursor-mark sentinel patterns remain -- replaced with type-safe CursorMarkSentinel
+  4. No `exit(0)` calls in InputFilter -- replaced with graceful EventTypes::Quit event (CoreArgParser and ArchMiscWindows exit() preserved)
+**Plans**: 4 plans
 
 Plans:
-- [ ] 04-01: Replace SocketMultiplexer cursor-mark sentinel pattern with type-safe iteration, then migrate to smart pointers
-- [ ] 04-02: Replace all Thread class usage with std::jthread and std::stop_token
-- [ ] 04-03: Replace all exit(0) calls with graceful event queue exit mechanism
-- [ ] 04-04: Replace remaining reinterpret_cast patterns with safe iteration across codebase
+- [ ] 04-01: Replace SocketMultiplexer 7 raw pointer members with unique_ptr and eliminate reinterpret_cast cursor-mark sentinel
+- [ ] 04-02: Replace all raw new Thread call sites (6 sites) with unique_ptr<Thread>
+- [ ] 04-03: Replace EventQueue m_readyMutex*/m_readyCondVar* raw pointers with unique_ptr
+- [ ] 04-04: Replace InputFilter::RestartServer exit(0) with EventTypes::Quit event
 
 ### Phase 5: Build Validation & Regression
 **Goal**: The application builds and runs correctly on both supported platforms with no regressions in existing functionality
