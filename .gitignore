@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: Copyright (C) 2024 Chris Rizzitello
+# SPDX-FileCopyrightText: Copyright (C) 2011 Symless Ltd.
+# SPDX-FileCopyrightText: Copyright (C) 2010 Jason Axelson
+# SPDX-License-Identifier: MIT
+
+# temp dirs created during build
+/build
+/dist
+/deps
+/tmp
+/vcpkg
+/vcpkg_installed
+/.cache
+/.venv
+aqtinstall.log
+Brewfile.lock.json
+
+# typical developer-created files
+deskflow-config.toml
+.vscode
+.DS_Store
+*.code-workspace
+.env*
+/*.user
+*.ui.autosave
+
+# Qt Creator
+/.qtcreator
+
+# generated vcpkg file
+vcpkg.json
+
+# Generic linux files
+*/*.directory
+
+# CMake ignores
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeUserPresets.json
+CMakeFiles/*
+
+# Planning directory
+/.planning
