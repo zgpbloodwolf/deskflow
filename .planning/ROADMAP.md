@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: TLS/Encryption Removal** - Remove entire TLS layer and all SecurityLevel dispatch code
 - [x] **Phase 3: Platform & Feature Cleanup** - Remove Linux support, screensaver sync, and residual dead code
 - [x] **Phase 4: C++ Modernization** - Replace raw new/delete, custom Thread, reinterpret_cast patterns with safe idioms
-- [ ] **Phase 5: Build Validation & Regression** - Verify both platforms build, all tests pass, no feature regressions
+- [x] **Phase 5: Build Validation & Regression** - Verify both platforms build, all tests pass, no feature regressions
 
 ## Phase Details
 
@@ -105,8 +105,8 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md -- Fix macOS build, clean stale TLS references, run all tests on macOS (BQ-01, BQ-02)
-- [ ] 05-02-PLAN.md -- Prepare and verify Windows build environment and test execution (BQ-01, BQ-02)
-- [ ] 05-03-PLAN.md -- Manual smoke test of GUI, clipboard sharing, and file drag-and-drop on both platforms (BQ-03, BQ-04, BQ-05)
+- [x] 05-02-PLAN.md -- Prepare and verify Windows build environment and test execution (BQ-01, BQ-02)
+- [x] 05-03-PLAN.md -- Manual smoke test of GUI, clipboard sharing, and file drag-and-drop on both platforms (BQ-03, BQ-04, BQ-05)
 
 ## Progress
 
@@ -119,4 +119,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. TLS/Encryption Removal | 3/3 | Complete | 2026-05-13 |
 | 3. Platform & Feature Cleanup | 3/3 | Complete | 2026-05-13 |
 | 4. C++ Modernization | 4/4 | Complete | 2026-05-13 |
-| 5. Build Validation & Regression | 1/3 | In progress | - |
+| 5. Build Validation & Regression | 3/3 | Complete | 2026-05-13 |

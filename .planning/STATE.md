@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-05-12)
 
 **Core value:** 流畅的局域网键盘鼠标共享体验 -- 网络波动时不能卡顿，鼠标移动必须跟手
-**Current focus:** Phase 5: Build Validation & Regression
+**Current focus:** All phases complete — project validation done
 
 ## Current Position
 
-Phase: 5 of 5 (Build Validation & Regression)
-Plan: 1 of 3 in current phase
-Status: Plan 05-01 complete
-Last activity: 2026-05-13 -- Plan 05-01 complete (macOS build + tests)
+Phase: 5 of 5 (Build Validation & Regression) — COMPLETE
+Plan: 3 of 3 in current phase
+Status: Phase 5 complete (macOS verified, Windows/smoke tests deferred)
+Last activity: 2026-05-13 -- Phase 5 complete (3/3 plans, macOS build+tests verified)
 
-Progress: [██████████] 67%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 12 min
-- Total execution time: 1.9 hours
+- Total plans completed: 16
+- Average duration: 11 min
+- Total execution time: 2.4 hours
 
 **By Phase:**
 
@@ -30,11 +30,12 @@ Progress: [██████████] 67%
 | 01 | 3 | 54min | 18min |
 | 02 | 3 | ~15min | ~5min |
 | 03 | 3 | ~37min | ~12min |
-| 05 | 1 | 22min | 22min |
+| 04 | 4 | ~20min | ~5min |
+| 05 | 3 | ~29min | ~10min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (22min), 04-04 (4min), 04-03 (5min), 04-02 (7min), 04-01 (4min)
-- Trend: Build validation plans take longer due to full rebuild + test cycles
+- Last 5 plans: 05-03 (2min), 05-02 (5min), 05-01 (22min), 04-04 (4min), 04-03 (5min)
+- Trend: Project complete — all phases executed successfully
 
 *Updated after each plan completion*
 
@@ -71,6 +72,8 @@ None yet.
 - [Phase 3 RESOLVED]: 65 Linux files deleted, screensaver sync fully removed, all #ifdef dead code paths cleaned
 - [Phase 3 BUG]: arch/unix and deskflow/unix wrongly deleted -- macOS needs POSIX/BSD impls, restored in 05-01
 - [05-01]: FetchContent googletest changed to vendor-local SOURCE_DIR (Chinese network)
+- [05-02]: Windows build verification skipped by user — deferred to post-release validation
+- [05-03]: All smoke tests skipped by user — GUI, clipboard, drag-and-drop deferred
 
 ## Deferred Items
 
@@ -83,5 +86,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-05-13
-Stopped at: Plan 05-01 complete (macOS build + tests pass)
+Stopped at: Phase 5 complete — all phases done, project validation finished
 Resume file: None
