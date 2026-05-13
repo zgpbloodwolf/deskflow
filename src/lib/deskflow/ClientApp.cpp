@@ -27,15 +27,7 @@
 #include "platform/MSWindowsScreen.h"
 #endif
 
-#include <QFileInfo> // Must include before XWindowsScreen to avoid conflicts with xlib.h
-
-#if WINAPI_XWINDOWS
-#include "platform/XWindowsScreen.h"
-#endif
-
-#if WINAPI_LIBEI
-#include "platform/EiScreen.h"
-#endif
+#include <QFileInfo>
 
 #if defined(Q_OS_MAC)
 #include "platform/OSXScreen.h"
@@ -113,22 +105,8 @@ deskflow::Screen *ClientApp::createScreen()
       new OSXScreen(getEvents(), false, Settings::value(Settings::Client::LanguageSync).toBool()), getEvents()
   );
 #else
-  if (deskflow::platform::isWayland()) {
-#if WINAPI_LIBEI
-    LOG_INFO("using ei screen for wayland");
-    return new deskflow::Screen(new deskflow::EiScreen(false, getEvents(), true), getEvents());
-#else
-    throw XNoEiSupport();
+#error "Unsupported platform"
 #endif
-  }
-#if WINAPI_XWINDOWS
-  LOG_INFO("using legacy x windows screen");
-  return new deskflow::Screen(
-      new XWindowsScreen(qPrintable(Settings::value(Settings::Core::Display).toString()), false, getEvents()),
-      getEvents()
-  );
-#endif
-#endif // end os check
 }
 
 deskflow::Screen *ClientApp::openClientScreen()

@@ -37,15 +37,6 @@ class SocketMultiplexer;
 class App : public QObject, private IApp
 {
 public:
-  class XNoEiSupport : public std::runtime_error
-  {
-  public:
-    XNoEiSupport() : std::runtime_error("libei is not supported")
-    {
-      // do nothing
-    }
-  };
-
   explicit App(IEventQueue *events, const QString &processName);
   App(App const &) = delete;
   App(App &&) = delete;
@@ -140,13 +131,3 @@ private:
   QString m_pname;
   int m_exitCode = s_exitSuccess;
 };
-
-#if !defined(WINAPI_LIBEI) && WINAPI_XWINDOWS
-constexpr static auto s_helpNoWayland = //
-    "\nYour Linux distribution does not support Wayland EI (emulated input)\n"
-    "which is required for Wayland support.  Please use a Linux distribution\n"
-    "that supports Wayland EI.\n";
-
-#else
-constexpr static auto s_helpNoWayland = "";
-#endif

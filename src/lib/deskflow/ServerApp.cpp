@@ -35,14 +35,6 @@
 #include "platform/MSWindowsScreen.h"
 #endif
 
-#if WINAPI_XWINDOWS
-#include "platform/XWindowsScreen.h"
-#endif
-
-#if WINAPI_LIBEI
-#include "platform/EiScreen.h"
-#endif
-
 #if defined(Q_OS_MAC)
 #include "platform/OSXScreen.h"
 #endif
@@ -396,22 +388,8 @@ deskflow::Screen *ServerApp::createScreen()
 #elif defined(Q_OS_MAC)
   return new deskflow::Screen(new OSXScreen(getEvents(), true), getEvents());
 #else
-  if (deskflow::platform::isWayland()) {
-#if WINAPI_LIBEI
-    LOG_INFO("using ei screen for wayland");
-    return new deskflow::Screen(new deskflow::EiScreen(true, getEvents(), true), getEvents());
-#else
-    throw XNoEiSupport();
+#error "Unsupported platform"
 #endif
-  }
-#if WINAPI_XWINDOWS
-  LOG_INFO("using legacy x windows screen");
-  return new deskflow::Screen(
-      new XWindowsScreen(qPrintable(Settings::value(Settings::Core::Display).toString()), true, getEvents()),
-      getEvents()
-  );
-#endif
-#endif // end os check
 }
 
 PrimaryClient *ServerApp::openPrimaryClient(const std::string &name, deskflow::Screen *screen)
