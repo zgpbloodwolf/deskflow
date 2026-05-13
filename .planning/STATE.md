@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-05-12)
 
 **Core value:** 流畅的局域网键盘鼠标共享体验 -- 网络波动时不能卡顿，鼠标移动必须跟手
-**Current focus:** Phase 4: C++ Modernization (Next)
+**Current focus:** Phase 5: Build Validation & Regression
 
 ## Current Position
 
-Phase: 4 of 5 (C++ Modernization)
-Plan: 0 of 4 in current phase
-Status: Ready to plan
-Last activity: 2026-05-13 -- Phase 3 complete (3/3 plans)
+Phase: 5 of 5 (Build Validation & Regression)
+Plan: 1 of 3 in current phase
+Status: Plan 05-01 complete
+Last activity: 2026-05-13 -- Plan 05-01 complete (macOS build + tests)
 
-Progress: [█████████░] 60%
+Progress: [██████████] 67%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 11 min
-- Total execution time: 1.6 hours
+- Total plans completed: 10
+- Average duration: 12 min
+- Total execution time: 1.9 hours
 
 **By Phase:**
 
@@ -30,10 +30,11 @@ Progress: [█████████░] 60%
 | 01 | 3 | 54min | 18min |
 | 02 | 3 | ~15min | ~5min |
 | 03 | 3 | ~37min | ~12min |
+| 05 | 1 | 22min | 22min |
 
 **Recent Trend:**
-- Last 5 plans: 03-03 (8min), 03-02 (23min), 03-01 (6min), 02-03 (5min), 02-02 (3min)
-- Trend: Stable (larger scope plans take longer as expected)
+- Last 5 plans: 05-01 (22min), 04-04 (4min), 04-03 (5min), 04-02 (7min), 04-01 (4min)
+- Trend: Build validation plans take longer due to full rebuild + test cycles
 
 *Updated after each plan completion*
 
@@ -68,6 +69,8 @@ None yet.
 - [Phase 1 RESOLVED]: SPSC queue implemented with alignas(64), MSVC validation pending integration testing
 - [Phase 2 RESOLVED]: SecurityLevel dispatch graph fully traced — 6+ dispatch points, 22 files deleted, 30+ call sites modified
 - [Phase 3 RESOLVED]: 65 Linux files deleted, screensaver sync fully removed, all #ifdef dead code paths cleaned
+- [Phase 3 BUG]: arch/unix and deskflow/unix wrongly deleted -- macOS needs POSIX/BSD impls, restored in 05-01
+- [05-01]: FetchContent googletest changed to vendor-local SOURCE_DIR (Chinese network)
 
 ## Deferred Items
 
@@ -80,5 +83,5 @@ Items acknowledged and carried forward from previous milestone close:
 ## Session Continuity
 
 Last session: 2026-05-13
-Stopped at: Phase 3 complete
+Stopped at: Plan 05-01 complete (macOS build + tests pass)
 Resume file: None

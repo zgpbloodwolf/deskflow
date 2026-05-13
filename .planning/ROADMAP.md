@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Network Pipeline Rewrite** - Replace blocking SocketMultiplexer with pipelined architecture using lock-free buffers
 - [x] **Phase 2: TLS/Encryption Removal** - Remove entire TLS layer and all SecurityLevel dispatch code
 - [x] **Phase 3: Platform & Feature Cleanup** - Remove Linux support, screensaver sync, and residual dead code
-- [ ] **Phase 4: C++ Modernization** - Replace raw new/delete, custom Thread, reinterpret_cast patterns with safe idioms
+- [x] **Phase 4: C++ Modernization** - Replace raw new/delete, custom Thread, reinterpret_cast patterns with safe idioms
 - [ ] **Phase 5: Build Validation & Regression** - Verify both platforms build, all tests pass, no feature regressions
 
 ## Phase Details
@@ -85,10 +85,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 04-01: Replace SocketMultiplexer 7 raw pointer members with unique_ptr and eliminate reinterpret_cast cursor-mark sentinel
-- [ ] 04-02: Replace all raw new Thread call sites (6 sites) with unique_ptr<Thread>
-- [ ] 04-03: Replace EventQueue m_readyMutex*/m_readyCondVar* raw pointers with unique_ptr
-- [ ] 04-04: Replace InputFilter::RestartServer exit(0) with EventTypes::Quit event
+- [x] 04-01: Replace SocketMultiplexer 7 raw pointer members with unique_ptr and eliminate reinterpret_cast cursor-mark sentinel
+- [x] 04-02: Replace all raw new Thread call sites (6 sites) with unique_ptr<Thread>
+- [x] 04-03: Replace EventQueue m_readyMutex*/m_readyCondVar* raw pointers with unique_ptr
+- [x] 04-04: Replace InputFilter::RestartServer exit(0) with EventTypes::Quit event
 
 ### Phase 5: Build Validation & Regression
 **Goal**: The application builds and runs correctly on both supported platforms with no regressions in existing functionality
@@ -104,7 +104,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md -- Fix macOS build, clean stale TLS references, run all tests on macOS (BQ-01, BQ-02)
+- [x] 05-01-PLAN.md -- Fix macOS build, clean stale TLS references, run all tests on macOS (BQ-01, BQ-02)
 - [ ] 05-02-PLAN.md -- Prepare and verify Windows build environment and test execution (BQ-01, BQ-02)
 - [ ] 05-03-PLAN.md -- Manual smoke test of GUI, clipboard sharing, and file drag-and-drop on both platforms (BQ-03, BQ-04, BQ-05)
 
@@ -118,5 +118,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Network Pipeline Rewrite | 3/3 | Complete | 2026-05-13 |
 | 2. TLS/Encryption Removal | 3/3 | Complete | 2026-05-13 |
 | 3. Platform & Feature Cleanup | 3/3 | Complete | 2026-05-13 |
-| 4. C++ Modernization | 0/4 | Not started | - |
-| 5. Build Validation & Regression | 0/3 | Planned | - |
+| 4. C++ Modernization | 4/4 | Complete | 2026-05-13 |
+| 5. Build Validation & Regression | 1/3 | In progress | - |

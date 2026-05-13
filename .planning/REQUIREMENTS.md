@@ -18,23 +18,23 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Codebase Cleanup (代码精简)
 
-- [ ] **CLEAN-01**: 移除 TLS/SSL 加密层及所有 SecurityLevel 相关代码（~3000 行）
-- [ ] **CLEAN-02**: 移除 Linux 平台支持（X11/Wayland/EI，44 个文件）
-- [ ] **CLEAN-03**: 移除屏幕保护联动功能
-- [ ] **CLEAN-04**: 清理移除功能后的残留代码和 #ifdef 分支
-- [ ] **CLEAN-05**: 所有 CMakeLists.txt 更新，不再编译已移除的模块
+- [x] **CLEAN-01**: 移除 TLS/SSL 加密层及所有 SecurityLevel 相关代码（~3000 行）
+- [x] **CLEAN-02**: 移除 Linux 平台支持（X11/Wayland/EI，44 个文件）
+- [x] **CLEAN-03**: 移除屏幕保护联动功能
+- [x] **CLEAN-04**: 清理移除功能后的残留代码和 #ifdef 分支
+- [x] **CLEAN-05**: 所有 CMakeLists.txt 更新，不再编译已移除的模块
 
 ### Modernization (现代化)
 
-- [ ] **MOD-01**: SocketMultiplexer 中的手动 new/delete 替换为智能指针
-- [ ] **MOD-02**: 自定义 Thread 类替换为 std::jthread + std::stop_token
-- [ ] **MOD-03**: reinterpret_cast 游标标记模式替换为安全的迭代方式
-- [ ] **MOD-04**: exit(0) 调用替换为优雅的事件队列退出
+- [x] **MOD-01**: SocketMultiplexer 中的手动 new/delete 替换为智能指针
+- [x] **MOD-02**: 自定义 Thread 类替换为 std::jthread + std::stop_token
+- [x] **MOD-03**: reinterpret_cast 游标标记模式替换为安全的迭代方式
+- [x] **MOD-04**: exit(0) 调用替换为优雅的事件队列退出
 
 ### Build & Quality (构建和质量)
 
-- [ ] **BQ-01**: macOS 和 Windows 平台均可正常编译通过
-- [ ] **BQ-02**: 现有测试在新架构下全部通过
+- [x] **BQ-01**: macOS 和 Windows 平台均可正常编译通过
+- [x] **BQ-02**: 现有测试在新架构下全部通过
 - [ ] **BQ-03**: GUI 配置界面正常工作，无回归
 - [ ] **BQ-04**: 剪贴板共享功能正常工作
 - [ ] **BQ-05**: 文件拖拽传输功能正常工作
@@ -76,17 +76,17 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NET-04 | Phase 1: Network Pipeline Rewrite | Complete |
 | NET-05 | Phase 1: Network Pipeline Rewrite | Complete |
 | NET-06 | Phase 1: Network Pipeline Rewrite | Complete |
-| CLEAN-01 | Phase 2: TLS/Encryption Removal | Pending |
-| CLEAN-02 | Phase 3: Platform & Feature Cleanup | Pending |
-| CLEAN-03 | Phase 3: Platform & Feature Cleanup | Pending |
-| CLEAN-04 | Phase 3: Platform & Feature Cleanup | Pending |
-| CLEAN-05 | Phase 3: Platform & Feature Cleanup | Pending |
-| MOD-01 | Phase 4: C++ Modernization | Pending |
-| MOD-02 | Phase 4: C++ Modernization | Pending |
-| MOD-03 | Phase 4: C++ Modernization | Pending |
-| MOD-04 | Phase 4: C++ Modernization | Pending |
-| BQ-01 | Phase 5: Build Validation & Regression | Pending |
-| BQ-02 | Phase 5: Build Validation & Regression | Pending |
+| CLEAN-01 | Phase 2: TLS/Encryption Removal | Complete |
+| CLEAN-02 | Phase 3: Platform & Feature Cleanup | Complete |
+| CLEAN-03 | Phase 3: Platform & Feature Cleanup | Complete |
+| CLEAN-04 | Phase 3: Platform & Feature Cleanup | Complete |
+| CLEAN-05 | Phase 3: Platform & Feature Cleanup | Complete |
+| MOD-01 | Phase 4: C++ Modernization | Complete |
+| MOD-02 | Phase 4: C++ Modernization | Complete |
+| MOD-03 | Phase 4: C++ Modernization | Complete |
+| MOD-04 | Phase 4: C++ Modernization | Complete |
+| BQ-01 | Phase 5: Build Validation & Regression | Complete (macOS) |
+| BQ-02 | Phase 5: Build Validation & Regression | Complete (macOS) |
 | BQ-03 | Phase 5: Build Validation & Regression | Pending |
 | BQ-04 | Phase 5: Build Validation & Regression | Pending |
 | BQ-05 | Phase 5: Build Validation & Regression | Pending |
@@ -98,4 +98,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-05-12*
-*Last updated: 2026-05-12 after Phase 1 completion (plan 01-03)*
+*Last updated: 2026-05-13 after Phase 5 Plan 01 completion (macOS build + tests)*
