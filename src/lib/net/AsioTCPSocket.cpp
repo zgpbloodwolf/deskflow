@@ -26,6 +26,8 @@ static const std::size_t s_maxInputBufferSize = 1024 * 1024;
 
 AsioTCPSocket::AsioTCPSocket(IEventQueue *events)
     : IDataSocket(events),
+      m_ioContextPtr(&m_ioContext),
+      m_ownsIoContext(true),
       m_socket(m_ioContext),
       m_strand(asio::make_strand(m_ioContext)),
       m_workGuard(m_ioContext.get_executor()),
@@ -37,20 +39,23 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events)
   LOG_DEBUG("创建 Asio TCP socket (新连接)");
 }
 
-AsioTCPSocket::AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket)
+AsioTCPSocket::AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket, asio::io_context &externalIoContext)
     : IDataSocket(events),
+      m_ioContextPtr(&externalIoContext),
+      m_ownsIoContext(false),
       m_socket(std::move(socket)),
-      m_strand(asio::make_strand(m_ioContext)),
-      m_workGuard(m_ioContext.get_executor()),
-      m_mouseTimer(m_ioContext),
-      m_keyboardPollTimer(m_ioContext),
-      m_reconnectTimer(m_ioContext),
+      m_strand(asio::make_strand(externalIoContext)),
+      m_workGuard(externalIoContext.get_executor()),
+      m_mouseTimer(externalIoContext),
+      m_keyboardPollTimer(externalIoContext),
+      m_reconnectTimer(externalIoContext),
       m_events(events)
 {
-  // 已接受的连接，socket 已经从 acceptor 转移过来
-  // 注意：被接受的 socket 来自另一个 io_context，需要移动到当前 io_context
-  // 由于 Asio 的移动语义，tcp::socket 可以在不同 io_context 间转移
-  LOG_DEBUG("创建 Asio TCP socket (已接受连接)");
+  // CR-02 修复：已接受的 socket 必须使用与 acceptor 相同的 io_context。
+  // 不创建独立的 io_context/线程，避免回调在错误线程执行。
+  m_connected.store(true, std::memory_order_relaxed);
+  m_writable.store(true, std::memory_order_relaxed);
+  LOG_DEBUG("创建 Asio TCP socket (已接受连接，共享外部 io_context)");
 }
 
 AsioTCPSocket::~AsioTCPSocket()
@@ -61,10 +66,13 @@ AsioTCPSocket::~AsioTCPSocket()
     LOG_DEBUG("Asio TCP socket 析构时发生错误");
   }
 
-  // 停止 io_context 并等待线程结束
-  m_ioContext.stop();
-  if (m_ioThread.joinable()) {
-    m_ioThread.join();
+  // 仅在拥有 io_context 时才停止和等待线程（CR-02 修复）
+  // 已接受的连接共享 listen socket 的 io_context，不由本对象管理
+  if (m_ownsIoContext) {
+    m_ioContext.stop();
+    if (m_ioThread.joinable()) {
+      m_ioThread.join();
+    }
   }
 }
 
@@ -211,12 +219,12 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
 
   // 启动 io_context 线程（如果尚未启动）
   if (!m_ioThread.joinable()) {
-    m_ioThread = std::thread([this]() { m_ioContext.run(); });
+    m_ioThread = std::thread([this]() { m_ioContextPtr->run(); });
   }
 
   // 异步解析和连接
   auto self = shared_from_this();
-  auto resolver = std::make_shared<asio::ip::tcp::resolver>(m_ioContext);
+  auto resolver = std::make_shared<asio::ip::tcp::resolver>(*m_ioContextPtr);
   resolver->async_resolve(
       addr.getHostname(), std::to_string(addr.getPort()),
       asio::bind_executor(

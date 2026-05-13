@@ -32,7 +32,12 @@ class AsioTCPSocket : public IDataSocket, public std::enable_shared_from_this<As
 {
 public:
   explicit AsioTCPSocket(IEventQueue *events);
-  AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket);
+  //! 已接受连接的构造函数，共享外部 io_context（CR-02 修复）
+  /*!
+  接受的 socket 必须使用与 acceptor 相同的 io_context，
+  否则 Asio 回调会在错误的线程上执行。
+  */
+  AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket, asio::io_context &externalIoContext);
   ~AsioTCPSocket() override;
 
   // 禁止拷贝和移动
@@ -77,7 +82,9 @@ private:
   void doReconnect();                                          // 执行重连
   void onReconnectSuccess();                                   // 重连成功后恢复输入流
 
-  asio::io_context m_ioContext;
+  asio::io_context m_ioContext;                  // 自有 io_context（仅客户端主动连接时使用）
+  asio::io_context *m_ioContextPtr;              // 指向实际使用的 io_context（自有或外部）
+  bool m_ownsIoContext;                          // 是否拥有 io_context（决定析构时是否停止/等待线程）
   asio::ip::tcp::socket m_socket;
   asio::strand<asio::io_context::executor_type> m_strand;
   asio::executor_work_guard<asio::io_context::executor_type> m_workGuard;

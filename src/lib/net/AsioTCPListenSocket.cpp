@@ -123,9 +123,9 @@ void AsioTCPListenSocket::startAsyncAccept()
 
         LOG_DEBUG("Asio acceptor 接受到新连接");
 
-        // 创建 AsioTCPSocket 包装已接受的 socket
-        // 注意：接受的 socket 需要在独立的 io_context 上运行
-        auto newSocket = std::make_unique<AsioTCPSocket>(m_events, std::move(socket));
+        // CR-02 修复：将 acceptor 的 io_context 传递给已接受的 socket，
+        // 确保所有 I/O 回调在同一个 io_context 线程上执行。
+        auto newSocket = std::make_unique<AsioTCPSocket>(m_events, std::move(socket), m_ioContext);
 
         // 设置 TCP_NODELAY 和 keep-alive
         // （已在 AsioTCPSocket 的 connect 完成回调中设置，这里为已接受 socket 额外设置）
