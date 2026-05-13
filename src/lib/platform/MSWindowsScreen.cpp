@@ -817,9 +817,6 @@ bool MSWindowsScreen::onPreDispatch(HWND hwnd, UINT message, WPARAM wParam, LPAR
 {
   // handle event
   switch (message) {
-  case DESKFLOW_MSG_SCREEN_SAVER:
-    return onScreensaver(wParam != 0);
-
   case DESKFLOW_MSG_DEBUG:
     LOG_DEBUG1("hook: 0x%08x 0x%08x", wParam, lParam);
     return true;
@@ -1224,12 +1221,6 @@ bool MSWindowsScreen::onMouseWheel(int32_t xDelta, int32_t yDelta)
     LOG_DEBUG1("event: button wheel delta=%+d,%+d", xDelta, yDelta);
     sendEvent(EventTypes::PrimaryScreenWheel, WheelInfo::alloc(xDelta, yDelta));
   }
-  return true;
-}
-
-bool MSWindowsScreen::onScreensaver(bool activated)
-{
-  // screensaver sync removed -- ignore screensaver events
   return true;
 }
 

@@ -167,7 +167,6 @@ private: // HACK
   bool onMouseButton(WPARAM, LPARAM);
   bool onMouseMove(int32_t x, int32_t y);
   bool onMouseWheel(int32_t xDelta, int32_t yDelta);
-  bool onScreensaver(bool activated);
   bool onDisplayChange();
   void onClipboardChange();
 

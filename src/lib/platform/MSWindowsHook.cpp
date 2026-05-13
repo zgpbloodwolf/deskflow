@@ -21,7 +21,6 @@ static DWORD g_threadID = 0;
 static HHOOK g_getMessage = nullptr;
 static HHOOK g_keyboardLL = nullptr;
 static HHOOK g_mouseLL = nullptr;
-static bool g_screenSaver = false;
 static EHookMode g_mode = kHOOK_DISABLE;
 static uint32_t g_zoneSides = 0;
 static int32_t g_zoneSize = 0;
@@ -85,7 +84,6 @@ int MSWindowsHook::init(DWORD threadID)
     g_getMessage = nullptr;
     g_keyboardLL = nullptr;
     g_mouseLL = nullptr;
-    g_screenSaver = false;
   }
 
   // save thread id.  we'll post messages to this thread's
@@ -601,7 +599,7 @@ static LRESULT CALLBACK mouseLLHook(int code, WPARAM wParam, LPARAM lParam)
 
 EHookResult MSWindowsHook::install()
 {
-  assert(g_getMessage == nullptr || g_screenSaver);
+  assert(g_getMessage == nullptr);
 
   // must be initialized
   if (g_threadID == 0) {
@@ -665,7 +663,7 @@ int MSWindowsHook::uninstall()
     UnhookWindowsHookEx(g_mouseLL);
     g_mouseLL = nullptr;
   }
-  if (g_getMessage != nullptr && !g_screenSaver) {
+  if (g_getMessage != nullptr) {
     UnhookWindowsHookEx(g_getMessage);
     g_getMessage = nullptr;
   }
@@ -675,15 +673,5 @@ int MSWindowsHook::uninstall()
 
 static LRESULT CALLBACK getMessageHook(int code, WPARAM wParam, LPARAM lParam)
 {
-  if (code >= 0) {
-    if (g_screenSaver) {
-      MSG *msg = reinterpret_cast<MSG *>(lParam);
-      if (msg->message == WM_SYSCOMMAND && msg->wParam == SC_SCREENSAVE) {
-        // broadcast screen saver started message
-        PostThreadMessage(g_threadID, DESKFLOW_MSG_SCREEN_SAVER, TRUE, 0);
-      }
-    }
-  }
-
   return CallNextHookEx(g_getMessage, code, wParam, lParam);
 }

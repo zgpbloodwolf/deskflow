@@ -805,8 +805,7 @@ void MSWindowsDesks::checkDesk()
       updateKeys();
     }
   } else if (name != m_activeDeskName) {
-    // screen saver might have started
-    PostThreadMessage(m_threadID, DESKFLOW_MSG_SCREEN_SAVER, TRUE, 0);
+    // desk changed but not accessible; nothing to do
   }
 }
 
@@ -829,14 +828,6 @@ void MSWindowsDesks::waitForDesk() const
 void MSWindowsDesks::handleCheckDesk()
 {
   checkDesk();
-
-  // also check if screen saver is running if on a modern OS and
-  // this is the primary screen.
-  if (m_isPrimary) {
-    BOOL running;
-    SystemParametersInfo(SPI_GETSCREENSAVERRUNNING, 0, &running, FALSE);
-    PostThreadMessage(m_threadID, DESKFLOW_MSG_SCREEN_SAVER, running, 0);
-  }
 }
 
 HDESK
