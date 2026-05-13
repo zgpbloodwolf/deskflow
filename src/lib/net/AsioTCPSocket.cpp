@@ -370,13 +370,16 @@ void AsioTCPSocket::startAsyncWrite()
 
 void AsioTCPSocket::onWriteComplete(const std::error_code &ec, size_t bytesTransferred)
 {
+  // CR-04 修复：将 getSize() 检查移入 mutex 锁作用域，防止与 write() 的数据竞争
+  bool hasMore = false;
   {
     std::lock_guard<std::mutex> lock(m_mutex);
     // 从输出缓冲区移除已写完的数据
     m_outputBuffer.pop(static_cast<uint32_t>(bytesTransferred));
+    hasMore = (m_outputBuffer.getSize() > 0);
   }
 
-  if (m_outputBuffer.getSize() == 0) {
+  if (!hasMore) {
     // 所有数据已发送完毕
     sendEvent(EventTypes::StreamOutputFlushed);
     {
@@ -486,7 +489,11 @@ void AsioTCPSocket::handleDisconnect(const std::error_code &ec)
     LOG_WARN("Asio socket 连接断开: %s", ec.message().c_str());
   }
 
-  // 1. 释放所有按下的键和鼠标按钮 (D-10)
+  // CR-03 修复：先标记断连，防止 releaseAllKeys 中的 writef 尝试写入
+  m_connected.store(false, std::memory_order_release);
+  m_writable.store(false, std::memory_order_release);
+
+  // 1. 释放所有按下的键和鼠标按钮 -- 仅清空 KeyStateTable，不发送网络数据 (D-10)
   releaseAllKeys();
 
   // 2. 取消所有定时器
@@ -494,8 +501,6 @@ void AsioTCPSocket::handleDisconnect(const std::error_code &ec)
   m_keyboardPollTimer.cancel();
 
   // 3. 通知上层断连 (D-06 桥接)
-  m_connected.store(false, std::memory_order_release);
-  m_writable.store(false, std::memory_order_release);
   sendEvent(EventTypes::SocketDisconnected);
 
   // 4. 自动重连（客户端模式，D-11）
@@ -509,9 +514,7 @@ void AsioTCPSocket::releaseAllKeys()
   auto releases = m_keyState.releaseAll();
   for (const auto &r : releases) {
     LOG_DEBUG("断连释放按键: key=%d, mask=0x%04x, button=0x%04x", r.key, r.mask, r.button);
-    // 注意：此时 socket 可能已断开，writef 可能失败，这是预期行为
-    // 重点是清空 KeyStateTable 状态
-    ProtocolUtil::writef(static_cast<deskflow::IStream *>(this), kMsgDKeyUp1_0, r.key, r.mask);
+    // CR-03 修复：不再调用 ProtocolUtil::writef，socket 已断开，仅清空按键状态
   }
 }
 
