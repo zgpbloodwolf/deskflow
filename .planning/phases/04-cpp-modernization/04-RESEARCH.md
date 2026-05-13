@@ -423,22 +423,19 @@ getEvents()->addEvent(Event(EventTypes::Quit));
 | A2 | PortalInputCapture/PortalRemoteDesktop 在 Phase 3 后可能被删除 | Thread sites | 如果仍存在则需重构，如果被删则跳过 |
 | A3 | Config.cpp 创建 RestartServer 时有 IEventQueue 可用 | exit(0) 替换 | 需要确认 Config 构造 RestartServer 的上下文 |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Lock 类接口: Lock 接受 Mutex* 还是 Mutex&?**
+1. **Lock 类接口: Lock 接受 Mutex* 还是 Mutex&?** — RESOLVED: 接受 Mutex*（Plan 01 使用 `.get()` 传递 unique_ptr 原始指针）
    - What we know: EventQueue.cpp:52 使用 `Lock lock(m_readyMutex)` 其中 m_readyMutex 是 Mutex*
-   - What's unclear: 如果 m_readyMutex 变为 unique_ptr<Mutex>，是否需要 `Lock lock(m_readyMutex.get())` 或 `Lock lock(*m_readyMutex)`
-   - Recommendation: 执行时先查看 Lock 类定义，确定接口
+   - Resolution: Plan 01 action 中已明确使用 `.get()` 方式传递给 Lock 构造函数
 
-2. **Phase 3 执行后 Portal 文件是否仍存在?**
+2. **Phase 3 执行后 Portal 文件是否仍存在?** — RESOLVED: Plan 02 前置条件检查，如文件不存在则跳过
    - What we know: 当前存在且包含 raw new Thread
-   - What's unclear: Phase 3 (Platform & Feature Cleanup) 可能删除 Linux 平台支持
-   - Recommendation: 在 Phase 4 执行前确认，或 conditional 地包含 Portal 文件重构
+   - Resolution: Plan 02 在 must_haves.truths 中明确 "如果文件仍存在" 条件，执行时先确认
 
-3. **RestartServer 修改是否需要同步修改 Config.cpp 的解析逻辑?**
+3. **RestartServer 修改是否需要同步修改 Config.cpp 的解析逻辑?** — RESOLVED: 需要，Plan 04 包含 Config.cpp 修改
    - What we know: Config.cpp:1112 `action = new InputFilter::RestartServer(mode)` 只传 mode，没有 IEventQueue
-   - What's unclear: Config 类的 parseAction 上下文是否能获取 IEventQueue
-   - Recommendation: 需要追踪 Config 类如何获取 IEventQueue（通过 ServerApp 或全局）
+   - Resolution: Plan 04 action 包含完整的 Config.cpp 修改链，传入 `m_events` 参数
 
 ## Environment Availability
 
