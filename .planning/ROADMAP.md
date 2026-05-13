@@ -13,7 +13,7 @@ Fix the core stuttering problem by rewriting the network pipeline, then systemat
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Network Pipeline Rewrite** - Replace blocking SocketMultiplexer with pipelined architecture using lock-free buffers
-- [ ] **Phase 2: TLS/Encryption Removal** - Remove entire TLS layer and all SecurityLevel dispatch code
+- [x] **Phase 2: TLS/Encryption Removal** - Remove entire TLS layer and all SecurityLevel dispatch code
 - [ ] **Phase 3: Platform & Feature Cleanup** - Remove Linux support, screensaver sync, and residual dead code
 - [ ] **Phase 4: C++ Modernization** - Replace raw new/delete, custom Thread, reinterpret_cast patterns with safe idioms
 - [ ] **Phase 5: Build Validation & Regression** - Verify both platforms build, all tests pass, no feature regressions
@@ -51,9 +51,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Trace and remove all SecurityLevel dispatch paths across client, server, GUI, and factory code
-- [ ] 02-02: Remove SecureSocket, TLS certificate files, and OpenSSL build dependencies
-- [ ] 02-03: Hardcode plain-text mode and remove all encryption-related GUI settings
+- [x] 02-01: Trace and remove all SecurityLevel dispatch paths across client, server, GUI, and factory code
+- [x] 02-02: Remove SecureSocket, TLS certificate files, and OpenSSL build dependencies
+- [x] 02-03: Hardcode plain-text mode and remove all encryption-related GUI settings
 
 ### Phase 3: Platform & Feature Cleanup
 **Goal**: The codebase only contains macOS and Windows platform code, with no Linux remnants and no disabled features leaving dead code paths
@@ -116,7 +116,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Network Pipeline Rewrite | 3/3 | Complete | 2026-05-13 |
-| 2. TLS/Encryption Removal | 0/3 | Not started | - |
+| 2. TLS/Encryption Removal | 3/3 | Complete | 2026-05-13 |
 | 3. Platform & Feature Cleanup | 0/3 | Not started | - |
 | 4. C++ Modernization | 0/4 | Not started | - |
 | 5. Build Validation & Regression | 0/3 | Not started | - |
