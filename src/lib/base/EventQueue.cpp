@@ -29,7 +29,9 @@ static void interrupt(Arch::ThreadSignal, void *data)
 // EventQueue
 //
 
-EventQueue::EventQueue() : m_readyMutex(new Mutex), m_readyCondVar(new CondVar<bool>(m_readyMutex, false))
+EventQueue::EventQueue()
+    : m_readyMutex(std::make_unique<Mutex>()),
+      m_readyCondVar(std::make_unique<CondVar<bool>>(m_readyMutex.get(), false))
 {
   ARCH->setSignalHandler(Arch::ThreadSignal::Interrupt, &interrupt, this);
   ARCH->setSignalHandler(Arch::ThreadSignal::Terminate, &interrupt, this);
@@ -38,9 +40,6 @@ EventQueue::EventQueue() : m_readyMutex(new Mutex), m_readyCondVar(new CondVar<b
 
 EventQueue::~EventQueue()
 {
-  delete m_readyCondVar;
-  delete m_readyMutex;
-
   ARCH->setSignalHandler(Arch::ThreadSignal::Interrupt, nullptr, nullptr);
   ARCH->setSignalHandler(Arch::ThreadSignal::Terminate, nullptr, nullptr);
 }
@@ -49,7 +48,7 @@ int EventQueue::loop()
 {
   m_buffer->init();
   {
-    Lock lock(m_readyMutex);
+    Lock lock(m_readyMutex.get());
     *m_readyCondVar = true;
     m_readyCondVar->signal();
   }
@@ -408,7 +407,7 @@ void *EventQueue::getSystemTarget()
 void EventQueue::waitForReady() const
 {
   double timeout = Arch::time() + 10;
-  Lock lock(m_readyMutex);
+  Lock lock(m_readyMutex.get());
 
   while (!m_readyCondVar->wait()) {
     if (Arch::time() > timeout) {
