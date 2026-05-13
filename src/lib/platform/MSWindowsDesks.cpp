@@ -734,7 +734,7 @@ MSWindowsDesks::Desk *MSWindowsDesks::addDesk(const std::wstring &name, HDESK hd
   desk->m_name = name;
   desk->m_desk = hdesk;
   desk->m_targetID = GetCurrentThreadId();
-  desk->m_thread = new Thread(new TMethodJob<MSWindowsDesks>(this, &MSWindowsDesks::deskThread, desk));
+  desk->m_thread = std::make_unique<Thread>(new TMethodJob<MSWindowsDesks>(this, &MSWindowsDesks::deskThread, desk));
   waitForDesk();
   m_desks.insert(std::make_pair(name, desk));
   return desk;
@@ -746,7 +746,7 @@ void MSWindowsDesks::removeDesks()
     Desk *desk = index->second;
     PostThreadMessage(desk->m_threadID, WM_QUIT, 0, 0);
     desk->m_thread->wait();
-    delete desk->m_thread;
+    desk->m_thread.reset();
     delete desk;
   }
   m_desks.clear();

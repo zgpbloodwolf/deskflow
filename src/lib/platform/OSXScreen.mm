@@ -151,7 +151,7 @@ OSXScreen::OSXScreen(IEventQueue *events, bool isPrimary, bool enableLangSync)
     m_carbonLoopMutex = new Mutex();
     m_carbonLoopReady = new CondVar<bool>(m_carbonLoopMutex, false);
     LOG_DEBUG("starting watchSystemPowerThread");
-    m_pmWatchThread = new Thread(new TMethodJob<OSXScreen>(this, &OSXScreen::watchSystemPowerThread));
+    m_pmWatchThread = std::make_unique<Thread>(new TMethodJob<OSXScreen>(this, &OSXScreen::watchSystemPowerThread));
   } catch (...) {
     m_events->removeHandler(EventTypes::OsxScreenConfirmSleep, getEventTarget());
     if (m_switchEventHandlerRef != 0) {
@@ -193,8 +193,7 @@ OSXScreen::~OSXScreen()
     LOG_DEBUG("stopping watchSystemPowerThread");
     CFRunLoopStop(m_pmRunloop);
     m_pmWatchThread->wait();
-    delete m_pmWatchThread;
-    m_pmWatchThread = nullptr;
+    m_pmWatchThread.reset();
   }
   delete m_pmThreadReady;
   delete m_pmMutex;

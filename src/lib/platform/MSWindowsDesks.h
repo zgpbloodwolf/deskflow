@@ -14,6 +14,7 @@
 #include "mt/Mutex.h"
 
 #include <map>
+#include <memory>
 #include <string>
 
 #define WIN32_LEAN_AND_MEAN
@@ -169,7 +170,7 @@ private:
   {
   public:
     std::wstring m_name;
-    Thread *m_thread;
+    std::unique_ptr<Thread> m_thread;
     DWORD m_threadID;
     DWORD m_targetID;
     HDESK m_desk;

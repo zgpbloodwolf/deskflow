@@ -269,7 +269,7 @@ private:
 
   // sleep / wakeup
   Mutex *m_pmMutex;
-  Thread *m_pmWatchThread;
+  std::unique_ptr<Thread> m_pmWatchThread;
   CondVar<bool> *m_pmThreadReady;
   CFRunLoopRef m_pmRunloop;
   io_connect_t m_pmRootPort;
