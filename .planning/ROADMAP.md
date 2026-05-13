@@ -104,9 +104,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: Fix build errors and warnings on macOS and Windows
-- [ ] 05-02: Run and fix all existing automated tests
-- [ ] 05-03: Manual smoke test of GUI, clipboard sharing, and file drag-and-drop on both platforms
+- [ ] 05-01-PLAN.md -- Fix macOS build, clean stale TLS references, run all tests on macOS (BQ-01, BQ-02)
+- [ ] 05-02-PLAN.md -- Prepare and verify Windows build environment and test execution (BQ-01, BQ-02)
+- [ ] 05-03-PLAN.md -- Manual smoke test of GUI, clipboard sharing, and file drag-and-drop on both platforms (BQ-03, BQ-04, BQ-05)
 
 ## Progress
 
@@ -119,4 +119,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. TLS/Encryption Removal | 3/3 | Complete | 2026-05-13 |
 | 3. Platform & Feature Cleanup | 0/3 | Not started | - |
 | 4. C++ Modernization | 0/4 | Not started | - |
-| 5. Build Validation & Regression | 0/3 | Not started | - |
+| 5. Build Validation & Regression | 0/3 | Planned | - |
