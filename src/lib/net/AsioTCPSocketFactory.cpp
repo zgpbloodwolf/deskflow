@@ -10,6 +10,8 @@
 #include "net/AsioTCPListenSocket.h"
 #include "net/AsioTCPSocket.h"
 
+#include <memory>
+
 //
 // AsioTCPSocketFactory
 //
@@ -25,11 +27,10 @@ IDataSocket *AsioTCPSocketFactory::create(
     [[maybe_unused]] SecurityLevel securityLevel
 ) const
 {
-  // Phase 1 忽略 SecurityLevel 参数（TLS 在 Phase 2 移除）
-  // AddressFamily 参数暂不使用，Asio 将使用 IPv4
-  auto *socket = new AsioTCPSocket(m_events);
+  // WR-06 修复：使用 make_unique + release()，异常安全
+  auto socket = std::make_unique<AsioTCPSocket>(m_events);
   socket->setAutoReconnect(m_autoReconnect);
-  return socket;
+  return socket.release();
 }
 
 IListenSocket *AsioTCPSocketFactory::createListen(
@@ -37,5 +38,5 @@ IListenSocket *AsioTCPSocketFactory::createListen(
     [[maybe_unused]] SecurityLevel securityLevel
 ) const
 {
-  return new AsioTCPListenSocket(m_events);
+  return std::make_unique<AsioTCPListenSocket>(m_events).release();
 }

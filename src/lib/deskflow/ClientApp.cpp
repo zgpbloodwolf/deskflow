@@ -384,8 +384,9 @@ void ClientApp::startNode()
 
 ISocketFactory *ClientApp::getSocketFactory() const
 {
-  // 使用 AsioTCPSocketFactory，客户端启用自动重连 (D-11)
-  return new AsioTCPSocketFactory(getEvents(), true);
+  // WR-06 修复：使用 make_unique + release()，异常安全
+  auto factory = std::make_unique<AsioTCPSocketFactory>(getEvents(), true);
+  return factory.release();
 }
 
 double ClientApp::retryTime() const

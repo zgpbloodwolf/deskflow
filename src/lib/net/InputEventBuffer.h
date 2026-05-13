@@ -10,7 +10,6 @@
 #include "net/SpscQueue.h"
 
 #include <cstdint>
-#include <string>
 
 /// 键盘事件结构 -- 存储在 FIFO 队列中
 struct KeyboardEvent
@@ -26,7 +25,8 @@ struct KeyboardEvent
   KeyID key = 0;
   KeyModifierMask mask = 0;
   KeyButton button = 0;
-  std::string language; // 仅 Down 事件需要语言代码
+  char language[16]{}; // WR-04 修复：固定大小数组，避免 std::string 堆分配
+  // 仅 Down 事件需要语言代码，16 字节足够存储语言标识
 };
 
 /// 组合缓冲区 -- 键盘 FIFO + 鼠标原子最新位置槽

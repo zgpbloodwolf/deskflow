@@ -91,8 +91,12 @@ void AsioTCPSocket::bind(const NetworkAddress &addr)
 
 void AsioTCPSocket::close()
 {
+  // WR-08 修复：使用 m_disconnectNotified 防止重复发送 SocketDisconnected
+  // handleDisconnect 已发送过时，close 不再重复发送
   if (m_connected.exchange(false)) {
-    sendEvent(EventTypes::SocketDisconnected);
+    if (!m_disconnectNotified.exchange(true)) {
+      sendEvent(EventTypes::SocketDisconnected);
+    }
   }
 
   // 取消定时器（停止鼠标和键盘定时器循环）
@@ -274,7 +278,7 @@ void AsioTCPSocket::connect(const NetworkAddress &addr)
                       m_socket.set_option(asio::socket_base::keep_alive(true));
 
                       bool wasReconnect = m_connected.exchange(true);
-                      m_writable = true;
+                      m_writable.store(true, std::memory_order_release);
                       sendEvent(EventTypes::DataSocketConnected);
 
                       if (wasReconnect) {
@@ -317,15 +321,22 @@ void AsioTCPSocket::onReadComplete(const std::error_code &ec, size_t bytesTransf
   }
 
   // 将收到的数据写入输入缓冲区
+  bool overflow = false;
   {
     std::lock_guard<std::mutex> lock(m_mutex);
     m_inputBuffer.write(m_readBuffer.data(), static_cast<uint32_t>(bytesTransferred));
 
-    // 缓冲区大小限制检查
+    // WR-01 修复：缓冲区超限时关闭连接，不再静默截断
+    // 截断会导致协议消息损坏，上层解析出错
     if (m_inputBuffer.getSize() > s_maxInputBufferSize) {
-      LOG_WARN("输入缓冲区超过 1MB 限制，丢弃多余数据");
-      m_inputBuffer.pop(m_inputBuffer.getSize() - static_cast<uint32_t>(s_maxInputBufferSize));
+      overflow = true;
     }
+  }
+
+  if (overflow) {
+    LOG_ERR("输入缓冲区超过 1MB 限制，关闭连接");
+    close();
+    return;
   }
 
   // 桥接到 EventQueue：通知上层有数据可读
@@ -449,12 +460,15 @@ void AsioTCPSocket::drainKeyboardFifo()
 
 void AsioTCPSocket::sendKeyboardEvent(const KeyboardEvent &evt)
 {
+  // WR-04 修复：从固定大小 char 数组构造临时 std::string 传给 ProtocolUtil
+  std::string langStr(evt.language);
+
   switch (evt.type) {
   case KeyboardEvent::Type::Down:
     m_keyState.recordKeyDown(evt.key, evt.mask, evt.button);
     ProtocolUtil::writef(
         static_cast<deskflow::IStream *>(this), kMsgDKeyDownLang, evt.key, evt.mask, evt.button,
-        &evt.language
+        &langStr
     );
     break;
   case KeyboardEvent::Type::Up:
@@ -501,7 +515,10 @@ void AsioTCPSocket::handleDisconnect(const std::error_code &ec)
   m_keyboardPollTimer.cancel();
 
   // 3. 通知上层断连 (D-06 桥接)
-  sendEvent(EventTypes::SocketDisconnected);
+  // WR-08 修复：使用 m_disconnectNotified 防止重复发送 SocketDisconnected
+  if (!m_disconnectNotified.exchange(true)) {
+    sendEvent(EventTypes::SocketDisconnected);
+  }
 
   // 4. 自动重连（客户端模式，D-11）
   if (m_autoReconnect) {
@@ -520,6 +537,14 @@ void AsioTCPSocket::releaseAllKeys()
 
 void AsioTCPSocket::scheduleReconnect()
 {
+  // WR-03 修复：限制最大重连次数，防止无限重试
+  if (m_reconnectAttempts >= 10) {
+    LOG_WARN("最大重连次数已达 (10)，停止重连");
+    sendEvent(EventTypes::DataSocketConnectionFailed);
+    return;
+  }
+  m_reconnectAttempts++;
+
   if (m_reconnectDelay == std::chrono::seconds(0)) {
     // 首次立即重试 (D-11)
     LOG_DEBUG("立即尝试重连");
@@ -554,6 +579,7 @@ void AsioTCPSocket::onReconnectSuccess()
 {
   LOG_INFO("重连成功，恢复输入流");
   m_reconnectDelay = std::chrono::seconds(0); // 重置退避延迟
+  m_reconnectAttempts = 0;                    // WR-03: 重置重连计数
   // 重新启动 200Hz 鼠标定时器和键盘 FIFO 消费
   startAsyncRead();
   startMouseSendTimer();

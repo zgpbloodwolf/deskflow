@@ -10,6 +10,8 @@
 #include "net/AsioTCPSocket.h"
 #include "net/InputEventBuffer.h"
 
+#include <cstring>
+
 #include "ClientProxy1_8.h"
 
 ClientProxy1_8::ClientProxy1_8(
@@ -48,7 +50,9 @@ void ClientProxy1_8::keyDown(KeyID key, KeyModifierMask mask, KeyButton button, 
     evt.key = key;
     evt.mask = mask;
     evt.button = button;
-    evt.language = language;
+    // WR-04 修复：将 std::string 复制到固定大小 char 数组
+    strncpy(evt.language, language.c_str(), sizeof(evt.language) - 1);
+    evt.language[sizeof(evt.language) - 1] = '\0';
     if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
       LOG_WARN("keyboard FIFO full, falling back to direct send");
       ProtocolUtil::writef(getStream(), kMsgDKeyDownLang, key, mask, button, &language);

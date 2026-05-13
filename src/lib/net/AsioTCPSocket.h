@@ -28,6 +28,10 @@ class IEventQueue;
 每个连接拥有独立的 io_context 线程 (D-04)。
 Asio 完成回调通过桥接层投递事件到 EventQueue (D-06)。
 */
+// WR-07 注意：AsioTCPSocket 继承 enable_shared_from_this，
+// 所有实例必须通过 shared_ptr 管理（例如 shared_ptr<AsioTCPSocket>）。
+// connect() 等异步方法内部使用 shared_from_this() 延长生命周期。
+// 工厂方法返回裸指针，调用者应立即包装为 shared_ptr。
 class AsioTCPSocket : public IDataSocket, public std::enable_shared_from_this<AsioTCPSocket>
 {
 public:
@@ -106,10 +110,12 @@ private:
   std::chrono::seconds m_reconnectDelay{0};               // 当前退避延迟 (0=首次立即重试)
   NetworkAddress m_targetAddress;                         // 重连目标地址
   bool m_autoReconnect{false};                            // 是否启用自动重连（客户端模式）
+  int m_reconnectAttempts{0};                             // WR-03: 重连尝试计数，上限 10 次
 
   std::array<char, 4096> m_readBuffer{};
   std::atomic<bool> m_connected{false};
   std::atomic<bool> m_writable{false};
+  std::atomic<bool> m_disconnectNotified{false}; // WR-08: 防止重复发送 SocketDisconnected 事件
 
   // flush() 同步等待 -- 使用 condition_variable 模式
   std::mutex m_flushMutex;

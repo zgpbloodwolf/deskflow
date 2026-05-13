@@ -12,6 +12,8 @@
 #include "net/AsioTCPSocket.h"
 #include "net/InputEventBuffer.h"
 
+#include <cstring>
+
 //
 // ClientProxy1_1
 //
@@ -63,7 +65,9 @@ void ClientProxy1_1::keyRepeat(
     evt.key = key;
     evt.mask = mask;
     evt.button = button;
-    evt.language = lang;
+    // WR-04 修复：将 std::string 复制到固定大小 char 数组
+    strncpy(evt.language, lang.c_str(), sizeof(evt.language) - 1);
+    evt.language[sizeof(evt.language) - 1] = '\0';
     if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
       LOG_WARN("keyboard FIFO full, falling back to direct send");
       ProtocolUtil::writef(getStream(), kMsgDKeyRepeat, key, mask, count, button, &lang);
