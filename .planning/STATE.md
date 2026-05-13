@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-05-12)
 
 **Core value:** 流畅的局域网键盘鼠标共享体验 -- 网络波动时不能卡顿，鼠标移动必须跟手
-**Current focus:** Phase 1: Network Pipeline Rewrite (COMPLETE)
+**Current focus:** Phase 2: TLS/Encryption Removal (Planned)
 
 ## Current Position
 
-Phase: 1 of 5 (Network Pipeline Rewrite)
-Plan: 3 of 3 in current phase
-Status: Phase 1 complete
-Last activity: 2026-05-13 -- Phase 1 complete + code review fixes applied
+Phase: 2 of 5 (TLS/Encryption Removal)
+Plan: 0 of 3 in current phase
+Status: Ready to execute
+Last activity: 2026-05-13 -- Phase 2 planned (3 plans, 3 waves)
 
-Progress: [██████████] 100%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
@@ -64,7 +64,7 @@ None yet.
 
 - [Phase 1 RESOLVED]: Full Asio adoption selected -- AsioTCPSocket/ListenSocket/Factory implemented
 - [Phase 1 RESOLVED]: SPSC queue implemented with alignas(64), MSVC validation pending integration testing
-- [Phase 2]: SecurityLevel dispatch graph audit needed at refactor time (6+ known locations, possibly more)
+- [Phase 2 PLANNED]: SecurityLevel dispatch graph fully traced — 6+ dispatch points, 22 files to delete, 30+ call sites to modify
 
 ## Deferred Items
 
