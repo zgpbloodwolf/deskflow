@@ -24,20 +24,16 @@
 //
 
 SocketMultiplexer::SocketMultiplexer()
-    : m_mutex(new Mutex),
-      m_jobsReady(new CondVar<bool>(m_mutex, false)),
-      m_jobListLock(new CondVar<bool>(m_mutex, false)),
-      m_jobListLockLocked(new CondVar<bool>(m_mutex, false))
+    : m_mutex(std::make_unique<Mutex>()),
+      m_jobsReady(std::make_unique<CondVar<bool>>(m_mutex.get(), false)),
+      m_jobListLock(std::make_unique<CondVar<bool>>(m_mutex.get(), false)),
+      m_jobListLockLocked(std::make_unique<CondVar<bool>>(m_mutex.get(), false)),
+      m_cursorMarkSentinel(std::make_unique<CursorMarkSentinel>()),
+      m_cursorMark(m_cursorMarkSentinel.get())
 {
-  // this pointer just has to be unique and not nullptr.  it will
-  // never be dereferenced.  it's used to identify cursor nodes
-  // in the jobs list.
-  // TODO: Remove this evilness
-  m_cursorMark = reinterpret_cast<ISocketMultiplexerJob *>(this);
-
-  // start thread
+  // 启动服务线程
   auto tMethodJob = new TMethodJob<SocketMultiplexer>(this, &SocketMultiplexer::serviceThread);
-  m_thread = new Thread(tMethodJob);
+  m_thread = std::make_unique<Thread>(tMethodJob);
 }
 
 SocketMultiplexer::~SocketMultiplexer()
@@ -45,15 +41,10 @@ SocketMultiplexer::~SocketMultiplexer()
   m_thread->cancel();
   m_thread->unblockPollSocket();
   m_thread->wait();
-  delete m_thread;
-  delete m_jobsReady;
-  delete m_jobListLock;
-  delete m_jobListLockLocked;
-  delete m_jobListLocker;
-  delete m_jobListLockLocker;
-  delete m_mutex;
 
-  // clean up jobs
+  // unique_ptr 自动释放成员，无需手动 delete
+
+  // 清理任务
   for (auto i = m_socketJobMap.begin(); i != m_socketJobMap.end(); ++i) {
     delete *(i->second);
   }
@@ -130,7 +121,7 @@ void SocketMultiplexer::removeSocket(ISocket *socket)
 
     // wait until there are jobs to handle
     {
-      Lock lock(m_mutex);
+      Lock lock(m_mutex.get());
       while (!(bool)*m_jobsReady) {
         m_jobsReady->wait();
       }
@@ -198,7 +189,7 @@ void SocketMultiplexer::removeSocket(ISocket *socket)
 
           // save job, if different
           if (ISocketMultiplexerJob *newJob = job->run(read, write, error); newJob != job) {
-            Lock lock(m_mutex);
+            Lock lock(m_mutex.get());
             delete job;
             *jobCursor = newJob;
             m_update = true;
@@ -230,13 +221,13 @@ void SocketMultiplexer::removeSocket(ISocket *socket)
 
 SocketMultiplexer::JobCursor SocketMultiplexer::newCursor()
 {
-  Lock lock(m_mutex);
+  Lock lock(m_mutex.get());
   return m_socketJobs.insert(m_socketJobs.begin(), m_cursorMark);
 }
 
 SocketMultiplexer::JobCursor SocketMultiplexer::nextCursor(JobCursor cursor)
 {
-  Lock lock(m_mutex);
+  Lock lock(m_mutex.get());
   auto j = m_socketJobs.end();
   JobCursor i = cursor;
   while (++i != m_socketJobs.end()) {
@@ -254,13 +245,13 @@ SocketMultiplexer::JobCursor SocketMultiplexer::nextCursor(JobCursor cursor)
 
 void SocketMultiplexer::deleteCursor(JobCursor cursor)
 {
-  Lock lock(m_mutex);
+  Lock lock(m_mutex.get());
   m_socketJobs.erase(cursor);
 }
 
 void SocketMultiplexer::lockJobListLock()
 {
-  Lock lock(m_mutex);
+  Lock lock(m_mutex.get());
 
   // wait for the lock on the lock
   while (*m_jobListLockLocked) {
@@ -269,12 +260,12 @@ void SocketMultiplexer::lockJobListLock()
 
   // take ownership of the lock on the lock
   *m_jobListLockLocked = true;
-  m_jobListLockLocker = new Thread(Thread::getCurrentThread());
+  m_jobListLockLocker = std::make_unique<Thread>(Thread::getCurrentThread());
 }
 
 void SocketMultiplexer::lockJobList()
 {
-  Lock lock(m_mutex);
+  Lock lock(m_mutex.get());
 
   // make sure we're the one that called lockJobListLock()
   assert(*m_jobListLockLocker == Thread::getCurrentThread());
@@ -286,8 +277,7 @@ void SocketMultiplexer::lockJobList()
 
   // take ownership of the lock
   *m_jobListLock = true;
-  m_jobListLocker = m_jobListLockLocker;
-  m_jobListLockLocker = nullptr;
+  m_jobListLocker = std::move(m_jobListLockLocker);
 
   // release the lock on the lock
   *m_jobListLockLocked = false;
@@ -296,14 +286,13 @@ void SocketMultiplexer::lockJobList()
 
 void SocketMultiplexer::unlockJobList()
 {
-  Lock lock(m_mutex);
+  Lock lock(m_mutex.get());
 
   // make sure we're the one that called lockJobList()
   assert(*m_jobListLocker == Thread::getCurrentThread());
 
   // release the lock
-  delete m_jobListLocker;
-  m_jobListLocker = nullptr;
+  m_jobListLocker.reset();
   *m_jobListLock = false;
   m_jobListLock->signal();
 

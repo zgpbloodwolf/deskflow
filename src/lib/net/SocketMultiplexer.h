@@ -9,12 +9,36 @@
 
 #include <list>
 #include <map>
+#include <memory>
+
+#include "net/ISocketMultiplexerJob.h"
 
 template <class T> class CondVar;
 class Mutex;
 class Thread;
 class ISocket;
-class ISocketMultiplexerJob;
+
+//! 用于替换 reinterpret_cast 的类型安全 sentinel 标记
+class CursorMarkSentinel : public ISocketMultiplexerJob
+{
+public:
+  ISocketMultiplexerJob *run(bool, bool, bool) override
+  {
+    return nullptr;
+  }
+  ArchSocket getSocket() const override
+  {
+    return nullptr;
+  }
+  bool isReadable() const override
+  {
+    return false;
+  }
+  bool isWritable() const override
+  {
+    return false;
+  }
+};
 
 //! Socket multiplexer
 /*!
@@ -87,16 +111,17 @@ private:
   void unlockJobList();
 
 private:
-  Mutex *m_mutex = nullptr;
-  Thread *m_thread = nullptr;
+  std::unique_ptr<Mutex> m_mutex;
+  std::unique_ptr<Thread> m_thread;
   bool m_update = false;
-  CondVar<bool> *m_jobsReady = nullptr;
-  CondVar<bool> *m_jobListLock = nullptr;
-  CondVar<bool> *m_jobListLockLocked = nullptr;
-  Thread *m_jobListLocker = nullptr;
-  Thread *m_jobListLockLocker = nullptr;
+  std::unique_ptr<CondVar<bool>> m_jobsReady;
+  std::unique_ptr<CondVar<bool>> m_jobListLock;
+  std::unique_ptr<CondVar<bool>> m_jobListLockLocked;
+  std::unique_ptr<Thread> m_jobListLocker;
+  std::unique_ptr<Thread> m_jobListLockLocker;
 
   SocketJobs m_socketJobs = {};
   SocketJobMap m_socketJobMap = {};
+  std::unique_ptr<CursorMarkSentinel> m_cursorMarkSentinel;
   ISocketMultiplexerJob *m_cursorMark = nullptr;
 };
