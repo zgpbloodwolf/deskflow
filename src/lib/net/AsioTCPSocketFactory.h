@@ -23,12 +23,10 @@ public:
 
   // ISocketFactory 接口实现
   IDataSocket *create(
-      IArchNetwork::AddressFamily family = IArchNetwork::AddressFamily::INet,
-      SecurityLevel securityLevel = SecurityLevel::PlainText
+      IArchNetwork::AddressFamily family = IArchNetwork::AddressFamily::INet
   ) const override;
   IListenSocket *createListen(
-      IArchNetwork::AddressFamily family = IArchNetwork::AddressFamily::INet,
-      SecurityLevel securityLevel = SecurityLevel::PlainText
+      IArchNetwork::AddressFamily family = IArchNetwork::AddressFamily::INet
   ) const override;
 
 private:

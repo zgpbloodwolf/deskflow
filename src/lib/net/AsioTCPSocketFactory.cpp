@@ -23,8 +23,7 @@ AsioTCPSocketFactory::AsioTCPSocketFactory(IEventQueue *events, bool autoReconne
 }
 
 IDataSocket *AsioTCPSocketFactory::create(
-    [[maybe_unused]] IArchNetwork::AddressFamily family,
-    [[maybe_unused]] SecurityLevel securityLevel
+    [[maybe_unused]] IArchNetwork::AddressFamily family
 ) const
 {
   // WR-06 修复：使用 make_unique + release()，异常安全
@@ -34,8 +33,7 @@ IDataSocket *AsioTCPSocketFactory::create(
 }
 
 IListenSocket *AsioTCPSocketFactory::createListen(
-    [[maybe_unused]] IArchNetwork::AddressFamily family,
-    [[maybe_unused]] SecurityLevel securityLevel
+    [[maybe_unused]] IArchNetwork::AddressFamily family
 ) const
 {
   return std::make_unique<AsioTCPListenSocket>(m_events).release();

@@ -440,17 +440,7 @@ void ServerApp::handleResume()
 
 ClientListener *ServerApp::openClientListener(const NetworkAddress &address)
 {
-  using enum SecurityLevel;
-  auto securityLevel = PlainText;
-  if (Settings::value(Settings::Security::TlsEnabled).toBool()) {
-    if (Settings::value(Settings::Security::CheckPeers).toBool()) {
-      securityLevel = PeerAuth;
-    } else {
-      securityLevel = Encrypted;
-    }
-  }
-
-  auto *listen = new ClientListener(getAddress(address), getSocketFactory(), getEvents(), securityLevel);
+  auto *listen = new ClientListener(getAddress(address), getSocketFactory(), getEvents());
 
   getEvents()->addHandler(EventTypes::ClientListenerAccepted, listen, [this, listen](const auto &e) {
     handleClientConnected(e, listen);
