@@ -34,8 +34,6 @@ if(WIN32)
     MSWindowsProcess.h
     MSWindowsScreen.cpp
     MSWindowsScreen.h
-    MSWindowsScreenSaver.cpp
-    MSWindowsScreenSaver.h
     MSWindowsSession.cpp
     MSWindowsSession.h
     MSWindowsWatchdog.cpp
@@ -76,11 +74,6 @@ elseif(APPLE)
     OSXPowerManager.h
     OSXScreen.h
     OSXScreen.mm
-    OSXScreenSaver.cpp
-    OSXScreenSaver.h
-    OSXScreenSaverControl.h
-    OSXScreenSaverUtil.h
-    OSXScreenSaverUtil.m
     OSXUchrKeyResource.cpp
     OSXUchrKeyResource.h
   )

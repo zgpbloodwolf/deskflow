@@ -70,9 +70,6 @@ public:
   void leave() override = 0;
   bool setClipboard(ClipboardID, const IClipboard *) override = 0;
   void checkClipboards() override = 0;
-  void openScreensaver(bool notify) override = 0;
-  void closeScreensaver() override = 0;
-  void screensaver(bool activate) override = 0;
   void resetOptions() override = 0;
   void setOptions(const OptionsList &options) override = 0;
   void setSequenceNumber(uint32_t) override = 0;

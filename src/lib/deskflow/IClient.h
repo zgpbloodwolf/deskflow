@@ -30,11 +30,10 @@ public:
   /*!
   Enter the screen.  The cursor should be warped to \p xAbs,yAbs.
   \p mask is the expected toggle button state and the client should
-  update its state to match.  \p forScreensaver is true iff the
-  screen is being entered because the screen saver is starting.
+  update its state to match.
   Subsequent clipboard events should report \p seqNum.
   */
-  virtual void enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask, bool forScreensaver) = 0;
+  virtual void enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask) = 0;
 
   //! Leave screen
   /*!
@@ -126,9 +125,6 @@ public:
   Each wheel click should generate a delta of +/-120.
   */
   virtual void mouseWheel(int32_t xDelta, int32_t yDelta) = 0;
-
-  //! Notify of screen saver change
-  virtual void screensaver(bool activate) = 0;
 
   //! Notify of options changes
   /*!

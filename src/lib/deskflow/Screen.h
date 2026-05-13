@@ -97,13 +97,6 @@ public:
   */
   void grabClipboard(ClipboardID);
 
-  //! Activate/deactivate screen saver
-  /*!
-  Forcibly activates the screen saver if \c activate is true otherwise
-  forcibly deactivates it.
-  */
-  void screensaver(bool activate) const;
-
   //! Notify of key press
   /*!
   Synthesize key events to generate a press of key \c id.  If possible

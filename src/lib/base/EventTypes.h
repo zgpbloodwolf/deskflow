@@ -180,12 +180,6 @@ enum class EventTypes : uint32_t
   /// This event is sent when mouse wheel is rotated. Event data is a pointer to WheelInfo.
   PrimaryScreenWheel,
 
-  /// This event is sent when screensaver is activated.
-  PrimaryScreenSaverActivated,
-
-  /// This event is sent when screensaver is deactivated.
-  PrimaryScreenSaverDeactivated,
-
   /// This event is sent when hotkey is down. Event data is a pointer to HotKeyInfo.
   PrimaryScreenHotkeyDown,
 

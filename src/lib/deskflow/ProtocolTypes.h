@@ -406,34 +406,6 @@ extern const char *const kMsgCLeave;
 extern const char *const kMsgCClipboard;
 
 /**
- * @brief Screensaver state change
- *
- * **Message Code**: `"CSEC"`
- * **Direction**: Primary → Secondary
- * **Format**: `"CSEC%1i"`
- * **Parameters**:
- * - `$1`: Screensaver state (1 byte): 1 = started, 0 = stopped
- * **Examples**:
- *
- * Screensaver started
- * ```
- * "CSEC\x01"
- * ```
- *
- * Screensaver stopped
- * ```
- * "CSEC\x00"
- * ```
- *
- * Notifies the secondary screen when the primary's screensaver
- * starts or stops. The secondary can use this to synchronize
- * its own screensaver state.
- *
- * @since Protocol version 1.0
- */
-extern const char *const kMsgCScreenSaver;
-
-/**
  * @brief Reset options command
  *
  * **Message Code**: `"CROP"`

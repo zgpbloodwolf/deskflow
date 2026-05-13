@@ -41,7 +41,6 @@ add_library(${lib_name} STATIC ${PLATFORM_CODE}
   IPrimaryScreen.cpp
   IPrimaryScreen.h
   IScreen.h
-  IScreenSaver.h
   ISecondaryScreen.h
   KeyTypes.cpp
   KeyTypes.h

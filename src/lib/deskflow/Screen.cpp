@@ -214,11 +214,6 @@ void Screen::grabClipboard(ClipboardID id)
   m_screen->setClipboard(id, nullptr);
 }
 
-void Screen::screensaver(bool) const
-{
-  // do nothing
-}
-
 void Screen::keyDown(KeyID id, KeyModifierMask mask, KeyButton button, const std::string &lang)
 {
   // check for ctrl+alt+del emulation
@@ -406,9 +401,6 @@ void Screen::getCursorPos(int32_t &x, int32_t &y) const
 
 void Screen::enablePrimary()
 {
-  // get notified of screen saver activation/deactivation
-  m_screen->openScreensaver(true);
-
   // claim screen changed size
   m_events->addEvent(Event(EventTypes::ScreenShapeChanged, getEventTarget()));
 }
@@ -423,14 +415,10 @@ void Screen::enableSecondary()
 
 void Screen::disablePrimary()
 {
-  // done with screen saver
-  m_screen->closeScreensaver();
 }
 
 void Screen::disableSecondary()
 {
-  // done with screen saver
-  m_screen->closeScreensaver();
 }
 
 void Screen::enterPrimary() const

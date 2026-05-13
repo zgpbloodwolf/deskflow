@@ -85,30 +85,6 @@ public:
   */
   virtual void checkClipboards() = 0;
 
-  //! Open screen saver
-  /*!
-  Open the screen saver.  If \c notify is true then this object must
-  send events when the screen saver activates or deactivates until
-  \c closeScreensaver() is called.  If \c notify is false then the
-  screen saver is disabled and restored on \c closeScreensaver().
-  */
-  virtual void openScreensaver(bool notify) = 0;
-
-  //! Close screen saver
-  /*!
-  Close the screen saver.  Stop reporting screen saver activation
-  and deactivation and, if the screen saver was disabled by
-  openScreensaver(), enable the screen saver.
-  */
-  virtual void closeScreensaver() = 0;
-
-  //! Activate/deactivate screen saver
-  /*!
-  Forcibly activate the screen saver if \c activate is true otherwise
-  forcibly deactivate it.
-  */
-  virtual void screensaver(bool activate) = 0;
-
   //! Notify of options changes
   /*!
   Reset all options to their default values.
