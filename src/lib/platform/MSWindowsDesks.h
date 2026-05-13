@@ -33,9 +33,9 @@ impose serious restrictions:  a thread can interact with only one
 desk at a time, you can't switch desks if the thread has any hooks
 installed or owns any windows, windows cannot exist on multiple
 desks at once, etc.  Basically, they're useless except for running
-the login window or the screensaver, which is what they're used
-for.  Deskflow must deal with them mainly because of the login
-window and screensaver but users can create their own desks and
+the login window, which is what they're used for.
+Deskflow must deal with them mainly because of the login
+window but users can create their own desks and
 deskflow should work on those too.
 
 This class encapsulates all the desk nastiness.  Clients of this
@@ -47,10 +47,8 @@ public:
   //! Constructor
   /*!
   \p isPrimary is true iff the desk is for a primary screen.
-  \p screensaver points to a screensaver object and it's used
-  only to check if the screensaver is active.  The \p updateKeys
-  job is adopted and is called when the key state should be
-  updated in a thread attached to the current desk.
+  The \p updateKeys job is adopted and is called when the key
+  state should be updated in a thread attached to the current desk.
   \p hookLibrary must be a handle to the hook library.
   */
   MSWindowsDesks(bool isPrimary, bool useHooks, IEventQueue *events, IJob *updateKeys);
