@@ -104,6 +104,10 @@ macro(replace_arch_sources)
   if(WIN32)
     file(GLOB arch_sources ${arch_dir}/win32/*.cpp)
     file(GLOB arch_headers ${arch_dir}/win32/*.h)
+  elseif(APPLE)
+    # macOS 使用 unix 目录下的架构测试
+    file(GLOB arch_sources ${arch_dir}/unix/*.cpp)
+    file(GLOB arch_headers ${arch_dir}/unix/*.h)
   endif()
 
   list(APPEND sources ${arch_sources})
