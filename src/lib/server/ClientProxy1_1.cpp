@@ -27,6 +27,7 @@ void ClientProxy1_1::keyDown(KeyID key, KeyModifierMask mask, KeyButton button, 
   LOG_DEBUG1("send key down to \"%s\" id=%d, mask=0x%04x, button=0x%04x", getName().c_str(), key, mask, button);
 
   // 通过 SPSC 缓冲区路由键盘事件 (D-05)
+  // CR-01 修复：检查 push 返回值，队列满时回退到直接发送
   auto *asioSocket = dynamic_cast<AsioTCPSocket *>(getStream());
   if (asioSocket) {
     KeyboardEvent evt;
@@ -34,7 +35,10 @@ void ClientProxy1_1::keyDown(KeyID key, KeyModifierMask mask, KeyButton button, 
     evt.key = key;
     evt.mask = mask;
     evt.button = button;
-    asioSocket->eventBuffer().pushKeyboardEvent(evt);
+    if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
+      LOG_WARN("keyboard FIFO full, falling back to direct send");
+      ProtocolUtil::writef(getStream(), kMsgDKeyDown, key, mask, button);
+    }
   } else {
     ProtocolUtil::writef(getStream(), kMsgDKeyDown, key, mask, button);
   }
@@ -51,6 +55,7 @@ void ClientProxy1_1::keyRepeat(
   );
 
   // 通过 SPSC 缓冲区路由键盘事件 (D-05)
+  // CR-01 修复：检查 push 返回值，队列满时回退到直接发送
   auto *asioSocket = dynamic_cast<AsioTCPSocket *>(getStream());
   if (asioSocket) {
     KeyboardEvent evt;
@@ -59,7 +64,10 @@ void ClientProxy1_1::keyRepeat(
     evt.mask = mask;
     evt.button = button;
     evt.language = lang;
-    asioSocket->eventBuffer().pushKeyboardEvent(evt);
+    if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
+      LOG_WARN("keyboard FIFO full, falling back to direct send");
+      ProtocolUtil::writef(getStream(), kMsgDKeyRepeat, key, mask, count, button, &lang);
+    }
   } else {
     ProtocolUtil::writef(getStream(), kMsgDKeyRepeat, key, mask, count, button, &lang);
   }
@@ -70,6 +78,7 @@ void ClientProxy1_1::keyUp(KeyID key, KeyModifierMask mask, KeyButton button)
   LOG_DEBUG1("send key up to \"%s\" id=%d, mask=0x%04x, button=0x%04x", getName().c_str(), key, mask, button);
 
   // 通过 SPSC 缓冲区路由键盘事件 (D-05)
+  // CR-01 修复：检查 push 返回值，队列满时回退到直接发送
   auto *asioSocket = dynamic_cast<AsioTCPSocket *>(getStream());
   if (asioSocket) {
     KeyboardEvent evt;
@@ -77,7 +86,10 @@ void ClientProxy1_1::keyUp(KeyID key, KeyModifierMask mask, KeyButton button)
     evt.key = key;
     evt.mask = mask;
     evt.button = button;
-    asioSocket->eventBuffer().pushKeyboardEvent(evt);
+    if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
+      LOG_WARN("keyboard FIFO full, falling back to direct send");
+      ProtocolUtil::writef(getStream(), kMsgDKeyUp, key, mask, button);
+    }
   } else {
     ProtocolUtil::writef(getStream(), kMsgDKeyUp, key, mask, button);
   }

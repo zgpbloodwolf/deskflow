@@ -264,6 +264,7 @@ void ClientProxy1_0::keyDown(KeyID key, KeyModifierMask mask, KeyButton button, 
   LOG_DEBUG1("send key down to \"%s\" id=%d, mask=0x%04x", getName().c_str(), key, mask);
 
   // 通过 SPSC 缓冲区路由键盘事件 (D-05)
+  // CR-01 修复：检查 push 返回值，队列满时回退到直接发送
   auto *asioSocket = dynamic_cast<AsioTCPSocket *>(getStream());
   if (asioSocket) {
     KeyboardEvent evt;
@@ -271,7 +272,10 @@ void ClientProxy1_0::keyDown(KeyID key, KeyModifierMask mask, KeyButton button, 
     evt.key = key;
     evt.mask = mask;
     evt.button = button;
-    asioSocket->eventBuffer().pushKeyboardEvent(evt);
+    if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
+      LOG_WARN("keyboard FIFO full, falling back to direct send");
+      ProtocolUtil::writef(getStream(), kMsgDKeyDown1_0, key, mask);
+    }
   } else {
     // 非 Asio socket 时回退到直接发送（过渡期兼容）
     ProtocolUtil::writef(getStream(), kMsgDKeyDown1_0, key, mask);
@@ -289,6 +293,7 @@ void ClientProxy1_0::keyUp(KeyID key, KeyModifierMask mask, KeyButton button)
   LOG_DEBUG1("send key up to \"%s\" id=%d, mask=0x%04x", getName().c_str(), key, mask);
 
   // 通过 SPSC 缓冲区路由键盘事件 (D-05)
+  // CR-01 修复：检查 push 返回值，队列满时回退到直接发送
   auto *asioSocket = dynamic_cast<AsioTCPSocket *>(getStream());
   if (asioSocket) {
     KeyboardEvent evt;
@@ -296,7 +301,10 @@ void ClientProxy1_0::keyUp(KeyID key, KeyModifierMask mask, KeyButton button)
     evt.key = key;
     evt.mask = mask;
     evt.button = button;
-    asioSocket->eventBuffer().pushKeyboardEvent(evt);
+    if (!asioSocket->eventBuffer().pushKeyboardEvent(evt)) {
+      LOG_WARN("keyboard FIFO full, falling back to direct send");
+      ProtocolUtil::writef(getStream(), kMsgDKeyUp1_0, key, mask);
+    }
   } else {
     ProtocolUtil::writef(getStream(), kMsgDKeyUp1_0, key, mask);
   }
