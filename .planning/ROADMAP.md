@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Network Pipeline Rewrite** - Replace blocking SocketMultiplexer with pipelined architecture using lock-free buffers
 - [x] **Phase 2: TLS/Encryption Removal** - Remove entire TLS layer and all SecurityLevel dispatch code
-- [ ] **Phase 3: Platform & Feature Cleanup** - Remove Linux support, screensaver sync, and residual dead code
+- [x] **Phase 3: Platform & Feature Cleanup** - Remove Linux support, screensaver sync, and residual dead code
 - [ ] **Phase 4: C++ Modernization** - Replace raw new/delete, custom Thread, reinterpret_cast patterns with safe idioms
 - [ ] **Phase 5: Build Validation & Regression** - Verify both platforms build, all tests pass, no feature regressions
 
@@ -68,9 +68,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: Remove all Linux platform files (X11, Wayland, EI) and update CMakeLists.txt
-- [ ] 03-02: Remove screensaver sync feature and clean all residual #ifdef branches
-- [ ] 03-03: Grep for and remove all remaining dead code paths from removed features
+- [x] 03-01: Remove all Linux platform files (X11, Wayland, EI) and update CMakeLists.txt
+- [x] 03-02: Remove screensaver sync feature and clean all residual #ifdef branches
+- [x] 03-03: Grep for and remove all remaining dead code paths from removed features
 
 ### Phase 4: C++ Modernization
 **Goal**: All manual memory management, custom threading, and unsafe pointer casts are replaced with modern C++20 idioms
@@ -117,6 +117,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Network Pipeline Rewrite | 3/3 | Complete | 2026-05-13 |
 | 2. TLS/Encryption Removal | 3/3 | Complete | 2026-05-13 |
-| 3. Platform & Feature Cleanup | 0/3 | Not started | - |
+| 3. Platform & Feature Cleanup | 3/3 | Complete | 2026-05-13 |
 | 4. C++ Modernization | 0/4 | Not started | - |
 | 5. Build Validation & Regression | 0/3 | Planned | - |
