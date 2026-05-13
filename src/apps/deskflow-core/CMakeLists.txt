@@ -60,6 +60,4 @@ elseif (WIN32)
     POST_EXCLUDE_REGEXES ${WIN32_POST_EXCLUDE_REGEXES}
     RUNTIME DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
-else()
-  generate_app_man(${target} "${CMAKE_PROJECT_DESCRIPTION}")
 endif()

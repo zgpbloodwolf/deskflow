@@ -19,18 +19,6 @@ if(WIN32)
     win32/XArchWindows.cpp
     win32/XArchWindows.h
   )
-
-elseif(UNIX)
-  set(PLATFORM_CODE
-    unix/ArchLogUnix.cpp
-    unix/ArchLogUnix.h
-    unix/ArchMultithreadPosix.cpp
-    unix/ArchMultithreadPosix.h
-    unix/ArchNetworkBSD.cpp
-    unix/ArchNetworkBSD.h
-    unix/XArchUnix.cpp
-    unix/XArchUnix.h
-  )
 endif()
 
 add_library(arch STATIC ${PLATFORM_CODE}

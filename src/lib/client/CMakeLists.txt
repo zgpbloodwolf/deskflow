@@ -12,6 +12,6 @@ add_library(client STATIC
 
 target_link_libraries(client PUBLIC common)
 
-if(UNIX)
+if(APPLE)
   target_link_libraries(client PUBLIC app io)
 endif()

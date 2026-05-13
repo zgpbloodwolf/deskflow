@@ -11,16 +11,6 @@ if(WIN32)
     win32/AppUtilWindows.cpp
     win32/AppUtilWindows.h
   )
-elseif(UNIX)
-  set(PLATFORM_CODE
-    unix/AppUtilUnix.cpp
-    unix/AppUtilUnix.h
-    unix/DeskflowXkbKeyboard.cpp
-    unix/DeskflowXkbKeyboard.h
-    unix/ISO639Table.h
-    unix/X11LayoutsParser.cpp
-    unix/X11LayoutsParser.h
-  )
 endif()
 
 add_library(${lib_name} STATIC ${PLATFORM_CODE}
@@ -95,7 +85,7 @@ if(WIN32)
   target_link_libraries(${lib_name} PRIVATE platform)
 endif()
 
-if(UNIX)
+if(APPLE)
   target_link_libraries(
     ${lib_name}
     PRIVATE
@@ -107,8 +97,4 @@ if(UNIX)
     mt
     server
   )
-
-  if(NOT APPLE)
-    target_link_libraries(${lib_name} PRIVATE Qt6::Xml)
-  endif()
 endif()

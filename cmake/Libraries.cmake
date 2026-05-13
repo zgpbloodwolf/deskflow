@@ -20,9 +20,6 @@ macro(configure_libs)
   endif()
 
   find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Widgets Network)
-  if(UNIX AND NOT APPLE)
-      find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS DBus Xml)
-  endif()
 
   # Define the location of Qt deployment tool
   if(WIN32)
@@ -91,10 +88,6 @@ endmacro()
 #
 macro(configure_unix_libs)
 
-  if(NOT APPLE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-  endif()
-
   # For config.h, detect the libraries, functions, etc.
   include(CheckIncludeFiles)
   include(CheckLibraryExists)
@@ -140,119 +133,5 @@ macro(configure_unix_libs)
       ${lib_ScreenSaver} ${lib_IOKit} ${lib_ApplicationServices}
       ${lib_Foundation} ${lib_Carbon} ${lib_UserNotifications}
     )
-  else()
-
-    if (BUILD_X11_SUPPORT)
-      configure_xorg_libs()
-    endif()
-
-    include(FindPkgConfig)
-    find_package(PkgConfig)
-    if(PKG_CONFIG_FOUND)
-      pkg_check_modules(LIBXKBCOMMON REQUIRED xkbcommon)
-      pkg_check_modules(GLIB2 REQUIRED glib-2.0)
-      find_library(LIBM m)
-      include_directories(${LIBXKBCOMMON_INCLUDE_DIRS} ${GLIB2_INCLUDE_DIRS}
-                          ${LIBM_INCLUDE_DIRS})
-      
-      message(STATUS "xkbcommon version: ${LIBXKBCOMMON_VERSION}")
-    else()
-      message(WARNING "pkg-config not found, skipping wayland libraries")
-    endif()
   endif()
-endmacro()
-
-#
-# X.org/X11 for Linux, BSD, etc
-#
-macro(configure_xorg_libs)
-
-  # Set include dir for BSD-derived systems
-  set(CMAKE_REQUIRED_INCLUDES "/usr/local/include")
-
-  set(XKBlib "X11/Xlib.h;X11/XKBlib.h")
-  set(CMAKE_EXTRA_INCLUDE_FILES "${XKBlib};X11/extensions/Xrandr.h")
-  check_type_size("XRRNotifyEvent" X11_EXTENSIONS_XRANDR_H)
-  set(HAVE_X11_EXTENSIONS_XRANDR_H "${X11_EXTENSIONS_XRANDR_H}")
-  set(CMAKE_EXTRA_INCLUDE_FILES)
-
-  check_include_files("${XKBlib};X11/extensions/dpms.h"
-                      HAVE_X11_EXTENSIONS_DPMS_H)
-  check_include_files("X11/extensions/Xinerama.h"
-                      HAVE_X11_EXTENSIONS_XINERAMA_H)
-  check_include_files("X11/extensions/XKB.h" HAVE_XKB_EXTENSION)
-  check_include_files("X11/extensions/XTest.h" HAVE_X11_EXTENSIONS_XTEST_H)
-  check_include_files("${XKBlib}" HAVE_X11_XKBLIB_H)
-  check_include_files("X11/extensions/XInput2.h" HAVE_XI2)
-
-  if(NOT HAVE_X11_XKBLIB_H)
-    message(FATAL_ERROR "Missing header: " ${XKBlib})
-  endif()
-
-  # Set library path and -L flag for BSD-derived systems.
-  # On our FreeBSD CI, `link_directories` is also needed for some reason.
-  set(CMAKE_LIBRARY_PATH "/usr/local/lib")
-  set(CMAKE_REQUIRED_FLAGS "-L${CMAKE_LIBRARY_PATH}")
-  link_directories(${CMAKE_LIBRARY_PATH})
-
-  check_library_exists("SM;ICE" IceConnectionNumber "" HAVE_ICE)
-  check_library_exists("Xext;X11" DPMSQueryExtension "" HAVE_Xext)
-  check_library_exists("Xtst;Xext;X11" XTestQueryExtension "" HAVE_Xtst)
-  check_library_exists("Xinerama" XineramaQueryExtension "" HAVE_Xinerama)
-  check_library_exists("Xi" XISelectEvents "" HAVE_Xi)
-  check_library_exists("Xrandr" XRRQueryExtension "" HAVE_Xrandr)
-
-  if(HAVE_ICE)
-
-    # Assume we have SM if we have ICE.
-    set(HAVE_SM 1)
-    list(APPEND libs SM ICE)
-
-  endif()
-
-  if(!X11_xkbfile_FOUND)
-    message(FATAL_ERROR "Missing library: xkbfile")
-  endif()
-
-  if(HAVE_Xtst)
-
-    # Xtxt depends on X11.
-    set(HAVE_X11)
-    list(
-      APPEND
-      libs
-      Xtst
-      X11
-      xkbfile)
-
-  else()
-
-    message(FATAL_ERROR "Missing library: Xtst")
-
-  endif()
-
-  if(HAVE_Xext)
-    list(APPEND libs Xext)
-  endif()
-
-  if(HAVE_Xinerama)
-    list(APPEND libs Xinerama)
-  else(HAVE_Xinerama)
-    if(HAVE_X11_EXTENSIONS_XINERAMA_H)
-      set(HAVE_X11_EXTENSIONS_XINERAMA_H 0)
-      message(WARNING "Old Xinerama implementation detected, disabled")
-    endif()
-  endif()
-
-  if(HAVE_Xrandr)
-    list(APPEND libs Xrandr)
-  endif()
-
-  # this was outside of the linux scope, not sure why, moving it back inside.
-  if(HAVE_Xi)
-    list(APPEND libs Xi)
-  endif()
-
-  add_definitions(-DWINAPI_XWINDOWS=1)
-
 endmacro()

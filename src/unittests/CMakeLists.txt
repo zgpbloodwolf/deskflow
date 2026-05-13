@@ -65,11 +65,6 @@ add_subdirectory(net)
 add_subdirectory(platform)
 add_subdirectory(server)
 
-#make sure to use CI only plugin on Unix
-if (UNIX AND NOT APPLE)
-  set(qPA_Platform "QT_QPA_PLATFORM=minimal")
-endif()
-
 #Store all test that should be run post build in the property
 get_property(PROJECT_TESTS GLOBAL PROPERTY ${CMAKE_PROJECT_NAME}_tests)
 

@@ -42,6 +42,6 @@ add_library(server STATIC
 
 target_link_libraries(server PUBLIC common net)
 
-if(UNIX)
+if(APPLE)
   target_link_libraries(server PUBLIC app)
 endif()

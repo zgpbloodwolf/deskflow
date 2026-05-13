@@ -97,8 +97,6 @@ unset(DESKFLOW_VERSION_TWEAK)
 message(STATUS "Building ${CMAKE_PROJECT_NAME}-${CMAKE_PROJECT_VERSION}")
 
 # Set lib versions
-set(REQUIRED_LIBEI_VERSION 1.3)
-set(REQUIRED_LIBPORTAL_VERSION 0.9.1)
 set(REQUIRED_QT_VERSION 6.7.0)
 
 if (WIN32)
@@ -150,10 +148,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 # prevents issues when used with glib for libportal
 add_definitions(-DQT_NO_KEYWORDS)
 
-#Options for Linux platform support
-if(UNIX AND NOT APPLE)
-  option(BUILD_X11_SUPPORT "Build with x11 support" ON)
-elseif (APPLE)
+#Options for macOS bundle
+if(APPLE)
   option(BUILD_OSX_BUNDLE "Build mac os bundle" ON)
 endif()
 

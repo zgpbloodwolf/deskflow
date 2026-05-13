@@ -53,13 +53,3 @@ create_test(
   WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src/lib/deskflow"
 )
 
-if(BUILD_X11_SUPPORT)
-  create_test(
-    NAME X11LayoutParserTests
-    DEPENDS app
-    LIBS arch base ${extra_libs}
-    SOURCE X11LayoutParserTests.cpp
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/src/lib/deskflow"
-  )
-endif()
-
