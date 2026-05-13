@@ -116,16 +116,6 @@ void showCloseReminder(QWidget *parent)
   )
                      .arg(kAppName);
 
-#if defined(Q_OS_LINUX)
-  message.append(
-      QObject::tr(
-          "<p>On Linux systems using GNOME 3, the notification area might be disabled. "
-          R"(You may need to <a href="%1">enable an extension</a> to see the %2 tray icon.</p>)"
-      )
-          .arg(kUrlGnomeTrayFix, kAppName)
-  );
-#endif
-
   QMessageBox::information(parent, kAppName, message);
 }
 

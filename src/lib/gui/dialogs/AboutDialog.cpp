@@ -50,10 +50,6 @@ void AboutDialog::copyVersionText() const
 {
   QString infoString = QStringLiteral("%1: %2 (%3)\nQt: %4\nSystem: %5")
                            .arg(kAppName, kVersion, kVersionGitSha, qVersion(), QSysInfo::prettyProductName());
-#ifdef Q_OS_LINUX
-  infoString.append(QStringLiteral("\nSession: %1 (%2)")
-                        .arg(qEnvironmentVariable("XDG_CURRENT_DESKTOP"), qEnvironmentVariable("XDG_SESSION_TYPE")));
-#endif
   QGuiApplication::clipboard()->setText(infoString);
 }
 
