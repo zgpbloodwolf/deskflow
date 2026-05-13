@@ -280,10 +280,6 @@ ServerProxy::ConnectionResult ServerProxy::parseMessage(const uint8_t *code)
     grabClipboard();
   }
 
-  else if (memcmp(code, kMsgCScreenSaver, 4) == 0) {
-    screensaver();
-  }
-
   else if (memcmp(code, kMsgQInfo, 4) == 0) {
     queryInfo();
   }
@@ -509,7 +505,7 @@ void ServerProxy::enter()
   m_isUserNotifiedAboutLayoutSyncError = false;
 
   // forward
-  m_client->enter(x, y, seqNum, static_cast<KeyModifierMask>(mask), false);
+  m_client->enter(x, y, seqNum, static_cast<KeyModifierMask>(mask));
 }
 
 void ServerProxy::leave()
@@ -735,17 +731,6 @@ void ServerProxy::mouseWheel()
 
   // forward
   m_client->mouseWheel(xDelta, yDelta);
-}
-
-void ServerProxy::screensaver()
-{
-  // parse
-  int8_t on;
-  ProtocolUtil::readf(m_stream, kMsgCScreenSaver + 4, &on);
-  LOG_DEBUG1("recv screen saver on=%d", on);
-
-  // forward
-  m_client->screensaver(on != 0);
 }
 
 void ServerProxy::resetOptions()

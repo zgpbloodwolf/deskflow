@@ -136,7 +136,7 @@ public:
   void getCursorPos(int32_t &x, int32_t &y) const override;
 
   // IClient overrides
-  void enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask, bool forScreensaver) override;
+  void enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask) override;
   bool leave() override;
   void setClipboard(ClipboardID, const IClipboard *) override;
   void grabClipboard(ClipboardID) override;
@@ -149,7 +149,6 @@ public:
   void mouseMove(int32_t xAbs, int32_t yAbs) override;
   void mouseRelativeMove(int32_t xRel, int32_t yRel) override;
   void mouseWheel(int32_t xDelta, int32_t yDelta) override;
-  void screensaver(bool activate) override;
   void resetOptions() override;
   void setOptions(const OptionsList &options) override;
   std::string getName() const override;

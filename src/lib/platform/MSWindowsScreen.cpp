@@ -26,7 +26,6 @@
 #include "platform/MSWindowsDesks.h"
 #include "platform/MSWindowsEventQueueBuffer.h"
 #include "platform/MSWindowsKeyState.h"
-#include "platform/MSWindowsScreenSaver.h"
 
 #include <Shlobj.h>
 #include <algorithm>
@@ -98,9 +97,8 @@ MSWindowsScreen::MSWindowsScreen(bool isPrimary, bool useHooks, IEventQueue *eve
       m_hook.loadLibrary();
     }
 
-    m_screensaver = new MSWindowsScreenSaver();
     m_desks = new MSWindowsDesks(
-        m_isPrimary, m_useHooks, m_screensaver, m_events,
+        m_isPrimary, m_useHooks, m_events,
         new TMethodJob<MSWindowsScreen>(this, &MSWindowsScreen::updateKeysCB)
     );
     m_keyState = new MSWindowsKeyState(
@@ -122,7 +120,6 @@ MSWindowsScreen::MSWindowsScreen(bool isPrimary, bool useHooks, IEventQueue *eve
   } catch (...) {
     delete m_keyState;
     delete m_desks;
-    delete m_screensaver;
     destroyWindow(m_window);
     destroyClass(m_class);
     s_screen = nullptr;
@@ -147,7 +144,6 @@ MSWindowsScreen::~MSWindowsScreen()
   m_events->removeHandler(EventTypes::System, m_events->getSystemTarget());
   delete m_keyState;
   delete m_desks;
-  delete m_screensaver;
   destroyWindow(m_window);
   destroyClass(m_class);
 
@@ -247,14 +243,9 @@ void MSWindowsScreen::enter()
 
     m_primaryKeyDownList.clear();
   } else {
-    // Entering a secondary screen. Ensure that no screensaver is active
-    // and that the screen is not in powersave mode.
+    // Entering a secondary screen. Ensure that the screen is not in
+    // powersave mode.
     ArchMiscWindows::wakeupDisplay();
-
-    if (m_screensaver != nullptr && m_screensaverActive) {
-      m_screensaver->deactivate();
-      m_screensaverActive = 0;
-    }
   }
 
   // now on screen
@@ -351,43 +342,6 @@ void MSWindowsScreen::checkClipboards()
     m_ownClipboard = false;
     sendClipboardEvent(EventTypes::ClipboardGrabbed, kClipboardClipboard);
     sendClipboardEvent(EventTypes::ClipboardGrabbed, kClipboardSelection);
-  }
-}
-
-void MSWindowsScreen::openScreensaver(bool notify)
-{
-  assert(m_screensaver != nullptr);
-
-  m_screensaverNotify = notify;
-  if (m_screensaverNotify) {
-    m_desks->installScreensaverHooks(true);
-  } else if (m_screensaver) {
-    m_screensaver->disable();
-  }
-}
-
-void MSWindowsScreen::closeScreensaver()
-{
-  if (m_screensaver != nullptr) {
-    if (m_screensaverNotify) {
-      m_desks->installScreensaverHooks(false);
-    } else {
-      m_screensaver->enable();
-    }
-  }
-  m_screensaverNotify = false;
-}
-
-void MSWindowsScreen::screensaver(bool activate)
-{
-  assert(m_screensaver != nullptr);
-  if (m_screensaver == nullptr)
-    return;
-
-  if (activate) {
-    m_screensaver->activate();
-  } else {
-    m_screensaver->deactivate();
   }
 }
 
@@ -1275,31 +1229,7 @@ bool MSWindowsScreen::onMouseWheel(int32_t xDelta, int32_t yDelta)
 
 bool MSWindowsScreen::onScreensaver(bool activated)
 {
-  // ignore this message if there are any other screen saver
-  // messages already in the queue.  this is important because
-  // our checkStarted() function has a deliberate delay, so it
-  // can't respond to events at full CPU speed and will fall
-  // behind if a lot of screen saver events are generated.
-  // that can easily happen because windows will continually
-  // send SC_SCREENSAVE until the screen saver starts, even if
-  // the screen saver is disabled!
-  MSG msg;
-  if (PeekMessage(&msg, nullptr, DESKFLOW_MSG_SCREEN_SAVER, DESKFLOW_MSG_SCREEN_SAVER, PM_NOREMOVE)) {
-    return true;
-  }
-
-  if (activated) {
-    if (!m_screensaverActive && m_screensaver->checkStarted(DESKFLOW_MSG_SCREEN_SAVER, FALSE, 0)) {
-      m_screensaverActive = true;
-      sendEvent(EventTypes::PrimaryScreenSaverActivated);
-    }
-  } else {
-    if (m_screensaverActive) {
-      m_screensaverActive = false;
-      sendEvent(EventTypes::PrimaryScreenSaverDeactivated);
-    }
-  }
-
+  // screensaver sync removed -- ignore screensaver events
   return true;
 }
 

@@ -187,7 +187,7 @@ void Client::getCursorPos(int32_t &x, int32_t &y) const
   m_screen->getCursorPos(x, y);
 }
 
-void Client::enter(int32_t xAbs, int32_t yAbs, uint32_t, KeyModifierMask mask, bool)
+void Client::enter(int32_t xAbs, int32_t yAbs, uint32_t, KeyModifierMask mask)
 {
   m_active = true;
   m_screen->mouseMove(xAbs, yAbs);
@@ -269,11 +269,6 @@ void Client::mouseRelativeMove(int32_t dx, int32_t dy)
 void Client::mouseWheel(int32_t xDelta, int32_t yDelta)
 {
   m_screen->mouseWheel(xDelta, yDelta);
-}
-
-void Client::screensaver(bool activate)
-{
-  m_screen->screensaver(activate);
 }
 
 void Client::resetOptions()

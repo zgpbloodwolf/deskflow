@@ -36,7 +36,6 @@ class EventQueueTimer;
 class Mutex;
 class Thread;
 class OSXKeyState;
-class OSXScreenSaver;
 class IEventQueue;
 class Mutex;
 
@@ -85,9 +84,6 @@ public:
   void leave() override;
   bool setClipboard(ClipboardID, const IClipboard *) override;
   void checkClipboards() override;
-  void openScreensaver(bool notify) override;
-  void closeScreensaver() override;
-  void screensaver(bool activate) override;
   void resetOptions() override;
   void setOptions(const OptionsList &options) override;
   void setSequenceNumber(uint32_t) override;
@@ -254,10 +250,6 @@ private:
   // clipboards
   OSXClipboard m_pasteboard;
   uint32_t m_sequenceNumber;
-
-  // screen saver stuff
-  OSXScreenSaver *m_screensaver;
-  bool m_screensaverNotify;
 
   // clipboard stuff
   bool m_ownClipboard;

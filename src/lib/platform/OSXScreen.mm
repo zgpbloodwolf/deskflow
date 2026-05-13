@@ -31,7 +31,6 @@
 #include "platform/OSXKeyState.h"
 #include "platform/OSXMediaKeySupport.h"
 #include "platform/OSXPasteboardPeeker.h"
-#include "platform/OSXScreenSaver.h"
 
 #include <AppKit/NSEvent.h>
 #include <AvailabilityMacros.h>
@@ -86,8 +85,6 @@ OSXScreen::OSXScreen(IEventQueue *events, bool isPrimary, bool enableLangSync)
       m_cursorHidden(false),
       m_keyState(nullptr),
       m_sequenceNumber(0),
-      m_screensaver(nullptr),
-      m_screensaverNotify(false),
       m_ownClipboard(false),
       m_clipboardTimer(nullptr),
       m_axTimer(nullptr),
@@ -115,7 +112,6 @@ OSXScreen::OSXScreen(IEventQueue *events, bool isPrimary, bool enableLangSync)
   }
 
   try {
-    m_screensaver = new OSXScreenSaver(m_events, getEventTarget());
     m_keyState = new OSXKeyState(m_events, AppUtil::instance().getKeyboardLayoutList(), enableLangSync);
 
     if (Settings::value(Settings::Core::PreventSleep).toBool()) {
@@ -165,7 +161,6 @@ OSXScreen::OSXScreen(IEventQueue *events, bool isPrimary, bool enableLangSync)
     CGDisplayRemoveReconfigurationCallback(displayReconfigurationCallback, this);
 
     delete m_keyState;
-    delete m_screensaver;
     throw;
   }
 
@@ -211,7 +206,6 @@ OSXScreen::~OSXScreen()
   CGDisplayRemoveReconfigurationCallback(displayReconfigurationCallback, this);
 
   delete m_keyState;
-  delete m_screensaver;
 
   delete m_carbonLoopMutex;
   delete m_carbonLoopReady;
@@ -820,30 +814,6 @@ void OSXScreen::checkClipboards()
     LOG_DEBUG("clipboard changed");
     sendClipboardEvent(EventTypes::ClipboardGrabbed, kClipboardClipboard);
     sendClipboardEvent(EventTypes::ClipboardGrabbed, kClipboardSelection);
-  }
-}
-
-void OSXScreen::openScreensaver(bool notify)
-{
-  m_screensaverNotify = notify;
-  if (!m_screensaverNotify) {
-    m_screensaver->disable();
-  }
-}
-
-void OSXScreen::closeScreensaver()
-{
-  if (!m_screensaverNotify) {
-    m_screensaver->enable();
-  }
-}
-
-void OSXScreen::screensaver(bool activate)
-{
-  if (activate) {
-    m_screensaver->activate();
-  } else {
-    m_screensaver->deactivate();
   }
 }
 

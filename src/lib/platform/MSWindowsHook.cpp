@@ -44,7 +44,6 @@ MSWindowsHook::~MSWindowsHook()
 
   if (g_processID == GetCurrentProcessId()) {
     uninstall();
-    uninstallScreenSaver();
     g_processID = 0;
   }
 }
@@ -687,36 +686,4 @@ static LRESULT CALLBACK getMessageHook(int code, WPARAM wParam, LPARAM lParam)
   }
 
   return CallNextHookEx(g_getMessage, code, wParam, lParam);
-}
-
-int MSWindowsHook::installScreenSaver()
-{
-  // must be initialized
-  if (g_threadID == 0) {
-    return 0;
-  }
-
-  // generate screen saver messages
-  g_screenSaver = true;
-
-  // install hook unless it's already installed
-  if (g_getMessage == nullptr) {
-    g_getMessage = SetWindowsHookEx(WH_GETMESSAGE, &getMessageHook, nullptr, 0);
-  }
-
-  return (g_getMessage != nullptr) ? 1 : 0;
-}
-
-int MSWindowsHook::uninstallScreenSaver()
-{
-  // uninstall hook unless the mouse wheel hook is installed
-  if (g_getMessage != nullptr) {
-    UnhookWindowsHookEx(g_getMessage);
-    g_getMessage = nullptr;
-  }
-
-  // screen saver hook is no longer installed
-  g_screenSaver = false;
-
-  return 1;
 }

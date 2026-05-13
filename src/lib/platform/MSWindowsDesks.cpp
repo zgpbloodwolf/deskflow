@@ -13,7 +13,6 @@
 #include "base/IJob.h"
 #include "base/Log.h"
 #include "base/TMethodJob.h"
-#include "deskflow/IScreenSaver.h"
 #include "deskflow/ScreenException.h"
 #include "deskflow/win32/AppUtilWindows.h"
 #include "mt/Lock.h"
@@ -111,12 +110,11 @@ static void send_mouse_input(DWORD dwFlags, DWORD dx, DWORD dy, DWORD dwData)
 //
 
 MSWindowsDesks::MSWindowsDesks(
-    bool isPrimary, bool useHooks, const IScreenSaver *screensaver, IEventQueue *events, IJob *updateKeys
+    bool isPrimary, bool useHooks, IEventQueue *events, IJob *updateKeys
 )
     : m_isPrimary(isPrimary),
       m_useHooks(useHooks),
       m_isOnScreen(m_isPrimary),
-      m_screensaver(screensaver),
       m_deskReady(&m_mutex, false),
       m_updateKeys(updateKeys),
       m_events(events)
@@ -209,14 +207,6 @@ void MSWindowsDesks::setShape(
   m_xCenter = xCenter;
   m_yCenter = yCenter;
   m_multimon = isMultimon;
-}
-
-void MSWindowsDesks::installScreensaverHooks(bool install)
-{
-  if (m_isPrimary && m_screensaverNotify != install) {
-    m_screensaverNotify = install;
-    sendMessage(DESKFLOW_MSG_SCREENSAVER, install, 0);
-  }
 }
 
 void MSWindowsDesks::fakeInputBegin()
@@ -640,10 +630,6 @@ void MSWindowsDesks::deskThread(const void *vdesk)
     case DESKFLOW_MSG_SWITCH:
       if (m_useHooks) {
         MSWindowsHook::uninstall();
-        if (m_screensaverNotify) {
-          MSWindowsHook::uninstallScreenSaver();
-          MSWindowsHook::installScreenSaver();
-        }
         switch (MSWindowsHook::install()) {
         case kHOOK_FAILED:
           // we won't work on this desk
@@ -719,16 +705,6 @@ void MSWindowsDesks::deskThread(const void *vdesk)
       m_updateKeys->run();
       break;
 
-    case DESKFLOW_MSG_SCREENSAVER:
-      if (m_useHooks) {
-        if (msg.wParam != 0) {
-          MSWindowsHook::installScreenSaver();
-        } else {
-          MSWindowsHook::uninstallScreenSaver();
-        }
-      }
-      break;
-
     case DESKFLOW_MSG_FAKE_INPUT:
       send_keyboard_input(
           DESKFLOW_HOOK_FAKE_INPUT_VIRTUAL_KEY, DESKFLOW_HOOK_FAKE_INPUT_SCANCODE, msg.wParam ? 0 : KEYEVENTF_KEYUP
@@ -795,11 +771,8 @@ void MSWindowsDesks::checkDesk()
   }
 
   // if active desktop changed then tell the old and new desk threads
-  // about the change.  don't switch desktops when the screensaver is
-  // active becaue we'd most likely switch to the screensaver desktop
-  // which would have the side effect of forcing the screensaver to
-  // stop.
-  if (name != m_activeDeskName && !m_screensaver->isActive()) {
+  // about the change.
+  if (name != m_activeDeskName) {
     // show cursor on previous desk
     bool wasOnScreen = m_isOnScreen;
     if (!wasOnScreen) {

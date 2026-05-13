@@ -99,12 +99,10 @@ void PrimaryClient::disable()
   m_screen->disable();
 }
 
-void PrimaryClient::enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask, bool screensaver)
+void PrimaryClient::enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask)
 {
   m_screen->setSequenceNumber(seqNum);
-  if (!screensaver) {
-    m_screen->warpCursor(xAbs, yAbs);
-  }
+  m_screen->warpCursor(xAbs, yAbs);
   m_screen->enter(mask);
 }
 
@@ -187,11 +185,6 @@ void PrimaryClient::mouseRelativeMove(int32_t, int32_t)
 }
 
 void PrimaryClient::mouseWheel(int32_t, int32_t)
-{
-  // ignore
-}
-
-void PrimaryClient::screensaver(bool)
 {
   // ignore
 }

@@ -221,7 +221,7 @@ private:
   int32_t getJumpZoneSize(const BaseClientProxy *) const;
 
   // change the active screen
-  void switchScreen(BaseClientProxy *, int32_t x, int32_t y, bool forScreenSaver);
+  void switchScreen(BaseClientProxy *, int32_t x, int32_t y);
 
   // jump to screen
   void jumpToScreen(BaseClientProxy *);
@@ -325,7 +325,6 @@ private:
 
   // event processing
   void onClipboardChanged(const BaseClientProxy *sender, ClipboardID id, uint32_t seqNum);
-  void onScreensaver(bool activated);
   void onKeyDown(KeyID, KeyModifierMask, KeyButton, const std::string &, const char *screens);
   void onKeyUp(KeyID, KeyModifierMask, KeyButton, const char *screens);
   void onKeyRepeat(KeyID, KeyModifierMask, int32_t, KeyButton, const std::string &);
@@ -384,9 +383,6 @@ private:
   // input filter (from m_config);
   InputFilter *m_inputFilter = nullptr;
 
-  // state saved when screen saver activates
-  BaseClientProxy *m_activeSaver = nullptr;
-
   BaseClientProxy *m_switchScreen = nullptr;
   double m_switchWaitDelay = 0.0;
   EventQueueTimer *m_switchWaitTimer = nullptr;
@@ -437,9 +433,6 @@ private:
   int32_t m_yDelta = 0;
   int32_t m_xDelta2 = 0;
   int32_t m_yDelta2 = 0;
-
-  int32_t m_xSaver;
-  int32_t m_ySaver;
 
   // state for delayed screen switching
   int32_t m_switchWaitX;

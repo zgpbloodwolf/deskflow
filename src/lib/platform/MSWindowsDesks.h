@@ -23,7 +23,6 @@ class Event;
 class EventQueueTimer;
 class Thread;
 class IJob;
-class IScreenSaver;
 class IEventQueue;
 
 //! Microsoft Windows desk handling
@@ -54,7 +53,7 @@ public:
   updated in a thread attached to the current desk.
   \p hookLibrary must be a handle to the hook library.
   */
-  MSWindowsDesks(bool isPrimary, bool useHooks, const IScreenSaver *screensaver, IEventQueue *events, IJob *updateKeys);
+  MSWindowsDesks(bool isPrimary, bool useHooks, IEventQueue *events, IJob *updateKeys);
   ~MSWindowsDesks();
 
   //! @name manipulators
@@ -112,14 +111,6 @@ public:
   This tells the desks that the display size has changed.
   */
   void setShape(int32_t x, int32_t y, int32_t width, int32_t height, int32_t xCenter, int32_t yCenter, bool isMultimon);
-
-  //! Install/uninstall screensaver hooks
-  /*!
-  If \p install is true then the screensaver hooks are installed and,
-  if desk tracking is enabled, updated whenever the desk changes.  If
-  \p install is false then the screensaver hooks are uninstalled.
-  */
-  void installScreensaverHooks(bool install);
 
   //! Start ignoring user input
   /*!
@@ -258,8 +249,6 @@ private:
 
   // screen saver stuff
   DWORD m_threadID;
-  const IScreenSaver *m_screensaver;
-  bool m_screensaverNotify = false;
 
   // the current desk and it's name
   Desk *m_activeDesk = nullptr;

@@ -65,8 +65,4 @@ public:
   static EHookResult install();
 
   static int uninstall();
-
-  static int installScreenSaver();
-
-  static int uninstallScreenSaver();
 };

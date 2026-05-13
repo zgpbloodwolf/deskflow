@@ -90,14 +90,6 @@ Server::Server(ServerConfig &config, PrimaryClient *primaryClient, deskflow::Scr
   m_events->addHandler(EventTypes::PrimaryScreenWheel, m_primaryClient->getEventTarget(), [this](const auto &e) {
     handleWheelEvent(e);
   });
-  m_events->addHandler(
-      EventTypes::PrimaryScreenSaverActivated, m_primaryClient->getEventTarget(),
-      [this](const auto &) { onScreensaver(true); }
-  );
-  m_events->addHandler(
-      EventTypes::PrimaryScreenSaverDeactivated, m_primaryClient->getEventTarget(),
-      [this](const auto &) { onScreensaver(false); }
-  );
   m_events->addHandler(EventTypes::ServerSwitchToScreen, m_inputFilter, [this](const auto &e) {
     handleSwitchToScreenEvent(e);
   });
@@ -153,8 +145,6 @@ Server::~Server()
   m_events->removeHandler(PrimaryScreenMotionOnPrimary, m_primaryClient->getEventTarget());
   m_events->removeHandler(PrimaryScreenMotionOnSecondary, m_primaryClient->getEventTarget());
   m_events->removeHandler(PrimaryScreenWheel, m_primaryClient->getEventTarget());
-  m_events->removeHandler(PrimaryScreenSaverActivated, m_primaryClient->getEventTarget());
-  m_events->removeHandler(PrimaryScreenSaverDeactivated, m_primaryClient->getEventTarget());
   m_events->removeHandler(PrimaryScreenFakeInputBegin, m_inputFilter);
   m_events->removeHandler(PrimaryScreenFakeInputEnd, m_inputFilter);
   m_events->removeHandler(Timer, this);
@@ -253,11 +243,6 @@ void Server::adoptClient(BaseClientProxy *client)
 
   // send configuration options to client
   sendOptions(client);
-
-  // activate screen saver on new client if active on the primary screen
-  if (m_activeSaver != nullptr) {
-    client->screensaver(true);
-  }
 
   // send notification
   auto *info = new Server::ScreenConnectedInfo(getName(client));
@@ -376,7 +361,7 @@ int32_t Server::getJumpZoneSize(const BaseClientProxy *client) const
   }
 }
 
-void Server::switchScreen(BaseClientProxy *dst, int32_t x, int32_t y, bool forScreensaver)
+void Server::switchScreen(BaseClientProxy *dst, int32_t x, int32_t y)
 {
   assert(dst != nullptr);
 
@@ -471,7 +456,7 @@ void Server::switchScreen(BaseClientProxy *dst, int32_t x, int32_t y, bool forSc
     ++m_seqNum;
 
     // enter new screen
-    m_active->enter(x, y, m_seqNum, m_primaryClient->getToggleMask(), forScreensaver);
+    m_active->enter(x, y, m_seqNum, m_primaryClient->getToggleMask());
 
     if (m_enableClipboard) {
       // send the clipboard data to new active screen
@@ -503,7 +488,7 @@ void Server::jumpToScreen(BaseClientProxy *newScreen)
   int32_t y;
   newScreen->getJumpCursorPos(x, y);
 
-  switchScreen(newScreen, x, y, false);
+  switchScreen(newScreen, x, y);
 }
 
 float Server::mapToFraction(const BaseClientProxy *client, Direction dir, int32_t x, int32_t y) const
@@ -1287,7 +1272,7 @@ void Server::handleSwitchWaitTimeout()
   }
 
   // switch screen
-  switchScreen(m_switchScreen, m_switchWaitX, m_switchWaitY, false);
+  switchScreen(m_switchScreen, m_switchWaitX, m_switchWaitY);
 }
 
 void Server::handleClientDisconnected(BaseClientProxy *client)
@@ -1486,59 +1471,6 @@ void Server::onClipboardChanged(const BaseClientProxy *sender, ClipboardID id, u
   m_active->setClipboard(id, &clipboard.m_clipboard);
 }
 
-void Server::onScreensaver(bool activated)
-{
-  LOG_DEBUG("onScreenSaver %s", activated ? "activated" : "deactivated");
-
-  if (activated) {
-    // save current screen and position
-    m_activeSaver = m_active;
-    m_xSaver = m_x;
-    m_ySaver = m_y;
-
-    // jump to primary screen
-    if (m_active != m_primaryClient) {
-      switchScreen(m_primaryClient, 0, 0, true);
-    }
-  } else {
-    // jump back to previous screen and position.  we must check
-    // that the position is still valid since the screen may have
-    // changed resolutions while the screen saver was running.
-    if (m_activeSaver != nullptr && m_activeSaver != m_primaryClient) {
-      // check position
-      BaseClientProxy *screen = m_activeSaver;
-      int32_t x;
-      int32_t y;
-      int32_t w;
-      int32_t h;
-      screen->getShape(x, y, w, h);
-      int32_t zoneSize = getJumpZoneSize(screen);
-      if (m_xSaver < x + zoneSize) {
-        m_xSaver = x + zoneSize;
-      } else if (m_xSaver >= x + w - zoneSize) {
-        m_xSaver = x + w - zoneSize - 1;
-      }
-      if (m_ySaver < y + zoneSize) {
-        m_ySaver = y + zoneSize;
-      } else if (m_ySaver >= y + h - zoneSize) {
-        m_ySaver = y + h - zoneSize - 1;
-      }
-
-      // jump
-      switchScreen(screen, m_xSaver, m_ySaver, false);
-    }
-
-    // reset state
-    m_activeSaver = nullptr;
-  }
-
-  // send message to all clients
-  for (ClientList::const_iterator index = m_clients.begin(); index != m_clients.end(); ++index) {
-    BaseClientProxy *client = index->second;
-    client->screensaver(activated);
-  }
-}
-
 void Server::onKeyDown(KeyID id, KeyModifierMask mask, KeyButton button, const std::string &lang, const char *screens)
 {
   LOG_DEBUG1("onKeyDown id=%d mask=0x%04x button=0x%04x lang=%s", id, mask, button, lang.c_str());
@@ -1704,7 +1636,7 @@ bool Server::onMouseMovePrimary(int32_t x, int32_t y)
     // should we switch or not?
     if (isSwitchOkay(newScreen, dir, x, y, xc, yc)) {
       // switch screen
-      switchScreen(newScreen, x, y, false);
+      switchScreen(newScreen, x, y);
       return true;
     }
   }
@@ -2033,37 +1965,27 @@ void Server::removeOldClient(BaseClientProxy *client)
 
 void Server::forceLeaveClient(const BaseClientProxy *client)
 {
-  if (const auto *active = (m_activeSaver != nullptr) ? m_activeSaver : m_active; active == client) {
+  if (m_active == client) {
     // record new position (center of primary screen)
     m_primaryClient->getCursorCenter(m_x, m_y);
 
     // stop waiting to switch to this client
-    if (active == m_switchScreen) {
+    if (m_active == m_switchScreen) {
       stopSwitch();
     }
 
     // don't notify active screen since it has probably already
     // disconnected.
     LOG(
-        (CLOG_INFO "jump from \"%s\" to \"%s\" at %d,%d", getName(active).c_str(), getName(m_primaryClient).c_str(),
+        (CLOG_INFO "jump from \"%s\" to \"%s\" at %d,%d", getName(m_active).c_str(), getName(m_primaryClient).c_str(),
          m_x, m_y)
     );
 
     // cut over
     m_active = m_primaryClient;
 
-    // enter new screen (unless we already have because of the
-    // screen saver)
-    if (m_activeSaver == nullptr) {
-      m_primaryClient->enter(m_x, m_y, m_seqNum, m_primaryClient->getToggleMask(), false);
-    }
-  }
-
-  // if this screen had the cursor when the screen saver activated
-  // then we can't switch back to it when the screen saver
-  // deactivates.
-  if (m_activeSaver == client) {
-    m_activeSaver = nullptr;
+    // enter new screen
+    m_primaryClient->enter(m_x, m_y, m_seqNum, m_primaryClient->getToggleMask());
   }
 
   // tell primary client about the active sides

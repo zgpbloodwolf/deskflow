@@ -225,7 +225,7 @@ void ClientProxy1_0::getCursorPos(int32_t &x, int32_t &y) const
   y = m_info.m_my;
 }
 
-void ClientProxy1_0::enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask, bool)
+void ClientProxy1_0::enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask)
 {
   LOG_DEBUG1("send enter to \"%s\", %d,%d %d %04x", getName().c_str(), xAbs, yAbs, seqNum, mask);
   ProtocolUtil::writef(getStream(), kMsgCEnter, xAbs, yAbs, seqNum, mask);
@@ -371,12 +371,6 @@ void ClientProxy1_0::secureInputNotification(const std::string &) const
 {
   // ignore -- not supported in protocol 1.0
   LOG_DEBUG("secureInputNotification not supported");
-}
-
-void ClientProxy1_0::screensaver(bool on)
-{
-  LOG_DEBUG1("send screen saver to \"%s\" on=%d", getName().c_str(), on ? 1 : 0);
-  ProtocolUtil::writef(getStream(), kMsgCScreenSaver, on ? 1 : 0);
 }
 
 void ClientProxy1_0::resetOptions()

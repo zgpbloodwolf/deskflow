@@ -60,7 +60,7 @@ public:
   void getCursorPos(int32_t &x, int32_t &y) const override = 0;
 
   // IClient overrides
-  void enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask, bool forScreensaver) override = 0;
+  void enter(int32_t xAbs, int32_t yAbs, uint32_t seqNum, KeyModifierMask mask) override = 0;
   bool leave() override = 0;
   void setClipboard(ClipboardID, const IClipboard *) override = 0;
   void grabClipboard(ClipboardID) override = 0;
@@ -73,7 +73,6 @@ public:
   void mouseMove(int32_t xAbs, int32_t yAbs) override = 0;
   void mouseRelativeMove(int32_t xRel, int32_t yRel) override = 0;
   void mouseWheel(int32_t xDelta, int32_t yDelta) override = 0;
-  void screensaver(bool activate) override = 0;
   void resetOptions() override = 0;
   void setOptions(const OptionsList &options) override = 0;
   virtual void sendDragInfo(uint32_t fileCount, const char *info, size_t size) = 0;

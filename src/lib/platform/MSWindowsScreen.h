@@ -21,7 +21,6 @@
 class EventQueueTimer;
 class MSWindowsDesks;
 class MSWindowsKeyState;
-class MSWindowsScreenSaver;
 class Thread;
 class MSWindowsDropTarget;
 
@@ -113,9 +112,6 @@ public:
   void leave() override;
   bool setClipboard(ClipboardID, const IClipboard *) override;
   void checkClipboards() override;
-  void openScreensaver(bool notify) override;
-  void closeScreensaver() override;
-  void screensaver(bool activate) override;
   void resetOptions() override;
   void setOptions(const OptionsList &options) override;
   void setSequenceNumber(uint32_t) override;
@@ -292,11 +288,6 @@ private:
 
   // the keyboard layout to use when off primary screen
   HKL m_keyLayout = nullptr;
-
-  // screen saver stuff
-  MSWindowsScreenSaver *m_screensaver = nullptr;
-  bool m_screensaverNotify = false;
-  bool m_screensaverActive = false;
 
   // clipboard stuff.  our window is used mainly as a clipboard
   // owner and as a link in the clipboard viewer chain.
