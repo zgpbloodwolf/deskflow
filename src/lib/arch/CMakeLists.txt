@@ -19,6 +19,18 @@ if(WIN32)
     win32/XArchWindows.cpp
     win32/XArchWindows.h
   )
+elseif(APPLE)
+  # macOS 基于 POSIX/BSD，需要 unix 目录下的架构实现
+  set(PLATFORM_CODE
+    unix/ArchLogUnix.cpp
+    unix/ArchLogUnix.h
+    unix/ArchMultithreadPosix.cpp
+    unix/ArchMultithreadPosix.h
+    unix/ArchNetworkBSD.cpp
+    unix/ArchNetworkBSD.h
+    unix/XArchUnix.cpp
+    unix/XArchUnix.h
+  )
 endif()
 
 add_library(arch STATIC ${PLATFORM_CODE}

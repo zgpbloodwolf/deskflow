@@ -4,11 +4,10 @@
 # SPDX-License-Identifier: MIT
 
 include(FetchContent)
+# 使用 vendor 目录本地源码，避免网络下载失败（中国网络环境）
 FetchContent_Declare(
     googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        b514bdc898e2951020cbdca1304b75f5950d1f59 # release-1.15.2
-    GIT_SHALLOW 1
+    SOURCE_DIR ${PROJECT_SOURCE_DIR}/vendor/googletest-1.15.2
     FIND_PACKAGE_ARGS NAMES GTest
 )
 FetchContent_MakeAvailable(googletest)

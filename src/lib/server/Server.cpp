@@ -1788,7 +1788,7 @@ void Server::onMouseMoveSecondary(int32_t dx, int32_t dy)
     int32_t newY = m_y;
 
     // switch screens
-    switchScreen(newScreen, newX, newY, false);
+    switchScreen(newScreen, newX, newY);
   } else {
     // same screen.  clamp mouse to edge.
     m_x = xOld + dx;

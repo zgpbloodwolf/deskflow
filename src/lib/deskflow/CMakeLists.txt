@@ -11,6 +11,12 @@ if(WIN32)
     win32/AppUtilWindows.cpp
     win32/AppUtilWindows.h
   )
+elseif(APPLE)
+  # macOS 使用 unix 目录下的 AppUtilUnix
+  set(PLATFORM_CODE
+    unix/AppUtilUnix.cpp
+    unix/AppUtilUnix.h
+  )
 endif()
 
 add_library(${lib_name} STATIC ${PLATFORM_CODE}
