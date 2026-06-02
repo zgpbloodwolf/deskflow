@@ -7,6 +7,7 @@
 
 #include "deskflow/PacketStreamFilter.h"
 #include "base/IEventQueue.h"
+#include "base/Log.h"
 #include "deskflow/ProtocolTypes.h"
 
 #include <cstring>

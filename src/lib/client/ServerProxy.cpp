@@ -197,7 +197,21 @@ ServerProxy::ConnectionResult ServerProxy::parseHandshakeMessage(const uint8_t *
     return Disconnect;
   } else if (memcmp(code, kMsgDLanguageSynchronisation, 4) == 0) {
     setServerLanguages();
-  } else {
+  }
+
+  // 检测并跳过服务端可能重复发送的 hello 消息
+  // hello 格式: 7字节协议名("Barrier"/"Synergy") + 2字节major + 2字节minor = 11字节
+  // 已读4字节("Barr"/"Syne")，还需跳过剩余7字节
+  else if (memcmp(code, "Barr", 4) == 0 || memcmp(code, "Syne", 4) == 0) {
+    LOG_NOTE("检测到重复的 hello 消息，跳过剩余 7 字节");
+    uint8_t remaining[7];
+    uint32_t n = m_stream->read(remaining, sizeof(remaining));
+    if (n < sizeof(remaining)) {
+      LOG_WARN("重复 hello 消息不完整，只读到 %d/7 字节", n);
+    }
+  }
+
+  else {
     return Unknown;
   }
 

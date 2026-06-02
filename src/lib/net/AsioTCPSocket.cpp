@@ -59,6 +59,15 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket, 
   m_writable.store(true, std::memory_order_relaxed);
   // WR-07 修复：用空删除器 shared_ptr 初始化 enable_shared_from_this 内部 _weak_this
   m_selfPtr = std::shared_ptr<AsioTCPSocket>(this, [](AsioTCPSocket *) {});
+
+  // 设置 TCP_NODELAY 和 keep-alive（客户端 connect 路径在 connect 回调中设置）
+  m_socket.set_option(asio::ip::tcp::no_delay(true));
+  m_socket.set_option(asio::socket_base::keep_alive(true));
+
+  // 启动异步读取：服务端必须读取客户端发送的数据（helloBack 等）
+  // 注意：不启动 mouse/keyboard 定时器，这些仅在客户端模式使用
+  startAsyncRead();
+
   LOG_DEBUG("创建 Asio TCP socket (已接受连接，共享外部 io_context)");
 }
 
@@ -145,15 +154,21 @@ void AsioTCPSocket::write(const void *buffer, uint32_t n)
     return;
   }
 
+  bool shouldPost = false;
   {
     std::lock_guard<std::mutex> lock(m_mutex);
-    bool wasEmpty = (m_outputBuffer.getSize() == 0);
+    // 仅在缓冲区之前为空时投递 startAsyncWrite。
+    // 如果缓冲区已有数据，说明已有 startAsyncWrite 正在处理或等待处理，
+    // 它会读取缓冲区中的全部数据（包括本次写入的新数据）。
+    shouldPost = (m_outputBuffer.getSize() == 0);
     m_outputBuffer.write(buffer, n);
     m_flushed = false;
   }
 
-  // 通过 asio::post 将写操作调度到 io_context 线程
-  asio::post(m_strand, [this]() { startAsyncWrite(); });
+  if (shouldPost) {
+    // 通过 asio::post 将写操作调度到 io_context 线程
+    asio::post(m_strand, [this]() { startAsyncWrite(); });
+  }
 }
 
 void AsioTCPSocket::flush()
