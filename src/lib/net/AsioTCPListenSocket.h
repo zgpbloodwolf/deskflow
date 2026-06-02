@@ -40,7 +40,7 @@ public:
   void *getEventTarget() const override;
 
   // IListenSocket 接口实现
-  std::unique_ptr<IDataSocket> accept() override;
+  std::shared_ptr<IDataSocket> accept() override;
 
 private:
   void startAsyncAccept();
@@ -52,6 +52,6 @@ private:
 
   IEventQueue *m_events;
   std::mutex m_mutex;
-  std::unique_ptr<AsioTCPSocket> m_pendingSocket;
+  std::shared_ptr<AsioTCPSocket> m_pendingSocket;
   std::atomic<bool> m_accepting{false};
 };

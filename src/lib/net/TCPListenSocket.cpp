@@ -95,11 +95,11 @@ void *TCPListenSocket::getEventTarget() const
   return const_cast<void *>(static_cast<const void *>(this));
 }
 
-std::unique_ptr<IDataSocket> TCPListenSocket::accept()
+std::shared_ptr<IDataSocket> TCPListenSocket::accept()
 {
-  std::unique_ptr<IDataSocket> socket;
+  std::shared_ptr<IDataSocket> socket;
   try {
-    socket = std::make_unique<TCPSocket>(m_events, m_socketMultiplexer, ARCH->acceptSocket(m_socket, nullptr));
+    socket = std::make_shared<TCPSocket>(m_events, m_socketMultiplexer, ARCH->acceptSocket(m_socket, nullptr));
     setListeningJob();
     return socket;
   } catch (ArchNetworkException &) {

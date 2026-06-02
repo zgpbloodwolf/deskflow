@@ -79,7 +79,7 @@ private:
 private:
   using NewClients = std::set<ClientProxyUnknown *>;
   using WaitingClients = std::deque<ClientProxy *>;
-  using ClientSockets = std::set<IDataSocket *>;
+  using ClientSockets = std::set<std::shared_ptr<IDataSocket>>;
 
   IListenSocket *m_listen;
   std::unique_ptr<ISocketFactory> m_socketFactory;

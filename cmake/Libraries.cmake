@@ -21,6 +21,13 @@ macro(configure_libs)
 
   find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Widgets Network)
 
+  # 修复：macOS 13+ 移除了 AGL 框架，Qt6 的 FindWrapOpenGL 会错误地链接 -framework AGL
+  if(APPLE AND TARGET WrapOpenGL::WrapOpenGL)
+    get_target_property(_wrap_opengl_libs WrapOpenGL::WrapOpenGL INTERFACE_LINK_LIBRARIES)
+    list(FILTER _wrap_opengl_libs EXCLUDE REGEX "AGL")
+    set_target_properties(WrapOpenGL::WrapOpenGL PROPERTIES INTERFACE_LINK_LIBRARIES "${_wrap_opengl_libs}")
+  endif()
+
   # Define the location of Qt deployment tool
   if(WIN32)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug" AND VCPKG_QT)

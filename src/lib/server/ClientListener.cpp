@@ -128,23 +128,24 @@ void ClientListener::handleClientConnecting()
   if (!socket)
     return;
 
-  auto rawSocketPointer = socket.release();
-  m_clientSockets.insert(rawSocketPointer);
+  // shared_ptr 管理 socket 生命周期，确保 AsioTCPSocket 的 enable_shared_from_this 有效
+  auto rawPointer = socket.get();
+  m_clientSockets.insert(std::move(socket));
 
   m_events->addHandler(
-      EventTypes::ClientListenerAccepted, rawSocketPointer->getEventTarget(),
-      [this, rawSocketPointer](const auto &) { handleClientAccepted(rawSocketPointer); }
+      EventTypes::ClientListenerAccepted, rawPointer->getEventTarget(),
+      [this, rawPointer](const auto &) { handleClientAccepted(rawPointer); }
   );
 
   m_events->addHandler(
-      EventTypes::ClientListenerDisconnectedOnAccept, rawSocketPointer->getEventTarget(),
-      [this, rawSocketPointer](const auto &) {
+      EventTypes::ClientListenerDisconnectedOnAccept, rawPointer->getEventTarget(),
+      [this, rawPointer](const auto &) {
         LOG_DEBUG("disconnected client before accept");
-        removeClientSocket(rawSocketPointer);
+        removeClientSocket(rawPointer);
       }
   );
 
-  m_events->addEvent(Event(EventTypes::ClientListenerAccepted, rawSocketPointer->getEventTarget()));
+  m_events->addEvent(Event(EventTypes::ClientListenerAccepted, rawPointer->getEventTarget()));
 }
 
 void ClientListener::handleClientAccepted(IDataSocket *socket)
@@ -224,9 +225,13 @@ void ClientListener::handleClientDisconnected(ClientProxy *client)
 
 void ClientListener::removeClientSocket(IDataSocket *socket)
 {
-  m_clientSockets.erase(socket);
-  m_events->removeHandlers(socket->getEventTarget());
-  delete socket;
+  // 在 m_clientSockets 中查找匹配的 shared_ptr（通过裸指针比较）
+  auto it = std::find_if(m_clientSockets.begin(), m_clientSockets.end(),
+      [socket](const auto &sp) { return sp.get() == socket; });
+  if (it != m_clientSockets.end()) {
+    m_events->removeHandlers(socket->getEventTarget());
+    m_clientSockets.erase(it); // shared_ptr 引用计数减少，自动释放
+  }
 }
 
 void ClientListener::cleanupListenSocket()
@@ -236,8 +241,8 @@ void ClientListener::cleanupListenSocket()
 
 void ClientListener::cleanupClientSockets()
 {
-  for (auto client : m_clientSockets) {
-    delete client;
+  for (auto &client : m_clientSockets) {
+    m_events->removeHandlers(client->getEventTarget());
   }
-  m_clientSockets.clear();
+  m_clientSockets.clear(); // shared_ptr 引用计数减少，自动释放
 }

@@ -88,13 +88,13 @@ void *AsioTCPListenSocket::getEventTarget() const
   return const_cast<void *>(static_cast<const void *>(this));
 }
 
-std::unique_ptr<IDataSocket> AsioTCPListenSocket::accept()
+std::shared_ptr<IDataSocket> AsioTCPListenSocket::accept()
 {
   std::lock_guard<std::mutex> lock(m_mutex);
   if (m_pendingSocket) {
-    // 有待处理的已接受连接，返回它
-    // 释放裸指针的所有权给 unique_ptr
-    auto socket = std::unique_ptr<IDataSocket>(m_pendingSocket.release());
+    // 有待处理的已接受连接，返回 shared_ptr 以保持 enable_shared_from_this 有效
+    auto socket = std::static_pointer_cast<IDataSocket>(m_pendingSocket);
+    m_pendingSocket.reset();
     // 继续接受下一个连接
     startAsyncAccept();
     return socket;
@@ -125,7 +125,7 @@ void AsioTCPListenSocket::startAsyncAccept()
 
         // CR-02 修复：将 acceptor 的 io_context 传递给已接受的 socket，
         // 确保所有 I/O 回调在同一个 io_context 线程上执行。
-        auto newSocket = std::make_unique<AsioTCPSocket>(m_events, std::move(socket), m_ioContext);
+        auto newSocket = std::make_shared<AsioTCPSocket>(m_events, std::move(socket), m_ioContext);
 
         // 设置 TCP_NODELAY 和 keep-alive
         // （已在 AsioTCPSocket 的 connect 完成回调中设置，这里为已接受 socket 额外设置）

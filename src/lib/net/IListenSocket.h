@@ -30,7 +30,7 @@ public:
   data stream.  Returns nullptr if no socket is waiting to be accepted.
   This is only valid after a call to \c bind().
   */
-  virtual std::unique_ptr<IDataSocket> accept() = 0;
+  virtual std::shared_ptr<IDataSocket> accept() = 0;
 
   //@}
 };

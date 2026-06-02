@@ -37,7 +37,7 @@ public:
   void *getEventTarget() const override;
 
   // IListenSocket overrides
-  std::unique_ptr<IDataSocket> accept() override;
+  std::shared_ptr<IDataSocket> accept() override;
 
   ISocketMultiplexerJob *serviceListening(ISocketMultiplexerJob *, bool, bool, bool);
 
