@@ -122,6 +122,12 @@ private:
   std::condition_variable m_flushCV;
   std::atomic<bool> m_flushed{true};
 
+  // WR-07 修复：自引用 shared_ptr（带空删除器）。
+  // AsioTCPSocket 继承 enable_shared_from_this，但工厂方法返回裸指针，
+  // 导致 shared_from_this() 抛 bad_weak_ptr。通过自引用 shared_ptr 初始化
+  // 内部 _weak_this，让 shared_from_this() 可用，对象生命周期仍由调用方管理。
+  std::shared_ptr<AsioTCPSocket> m_selfPtr;
+
 public:
   //! 获取 SPSC 事件缓冲区引用，供上层路由输入事件
   InputEventBuffer &eventBuffer() { return m_eventBuffer; }

@@ -36,6 +36,8 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events)
       m_reconnectTimer(m_ioContext),
       m_events(events)
 {
+  // WR-07 修复：用空删除器 shared_ptr 初始化 enable_shared_from_this 内部 _weak_this
+  m_selfPtr = std::shared_ptr<AsioTCPSocket>(this, [](AsioTCPSocket *) {});
   LOG_DEBUG("创建 Asio TCP socket (新连接)");
 }
 
@@ -55,6 +57,8 @@ AsioTCPSocket::AsioTCPSocket(IEventQueue *events, asio::ip::tcp::socket socket, 
   // 不创建独立的 io_context/线程，避免回调在错误线程执行。
   m_connected.store(true, std::memory_order_relaxed);
   m_writable.store(true, std::memory_order_relaxed);
+  // WR-07 修复：用空删除器 shared_ptr 初始化 enable_shared_from_this 内部 _weak_this
+  m_selfPtr = std::shared_ptr<AsioTCPSocket>(this, [](AsioTCPSocket *) {});
   LOG_DEBUG("创建 Asio TCP socket (已接受连接，共享外部 io_context)");
 }
 
