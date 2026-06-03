@@ -11,7 +11,6 @@
 
 #include "common/Constants.h"
 #include "common/NetworkProtocol.h"
-#include "common/PlatformInfo.h"
 #include "common/Settings.h"
 #include "dialogs/HotkeyDialog.h"
 #include "dialogs/ScreenSettingsDialog.h"
@@ -19,8 +18,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QPushButton>
-
-using enum ScreenConfig::SwitchCorner;
 
 // 预设动作 ID，用于标识表格中每行对应的动作类型
 enum PresetAction
@@ -70,14 +67,6 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
   ui->sbHeartbeat->setValue(serverConfig().heartbeat());
   connect(ui->sbHeartbeat, QOverload<int>::of(&QSpinBox::valueChanged), this, &ServerConfigDialog::setHeartbeat);
 
-  ui->cbRelativeMouseMoves->setChecked(serverConfig().relativeMouseMoves());
-
-  if (!deskflow::platform::isWindows())
-    ui->cbWin32KeepForeground->setVisible(false);
-
-  ui->cbWin32KeepForeground->setChecked(serverConfig().win32KeepForeground());
-  connect(ui->cbWin32KeepForeground, &QCheckBox::toggled, this, &ServerConfigDialog::toggleWin32Foreground);
-
   ui->cbSwitchDelay->setChecked(serverConfig().hasSwitchDelay());
   connect(ui->cbSwitchDelay, &QCheckBox::toggled, this, &ServerConfigDialog::toggleSwitchDelay);
 
@@ -94,7 +83,6 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
       ui->sbSwitchDoubleTap, QOverload<int>::of(&QSpinBox::valueChanged), this, &ServerConfigDialog::setSwitchDoubleTap
   );
 
-  connect(ui->cbRelativeMouseMoves, &QCheckBox::toggled, this, &ServerConfigDialog::toggleRelativeMouseMoves);
   connect(ui->cbEnableClipboard, &QCheckBox::toggled, this, &ServerConfigDialog::toggleClipboard);
 
   connect(ui->btnBrowseConfigFile, &QPushButton::clicked, this, &ServerConfigDialog::browseConfigFile);
@@ -107,35 +95,9 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
   connect(ui->groupExternalConfig, &QGroupBox::toggled, this, &ServerConfigDialog::toggleExternalConfig);
 
   connect(
-      ui->sbSwitchCornerSize, QOverload<int>::of(&QSpinBox::valueChanged), this,
-      &ServerConfigDialog::setSwitchCornerSize
-  );
-  connect(
       ui->sbClipboardSizeLimit, QOverload<int>::of(&QSpinBox::valueChanged), this,
       &ServerConfigDialog::setClipboardLimit
   );
-
-  ui->cbCornerTopLeft->setChecked(serverConfig().switchCorner(static_cast<int>(TopLeft)));
-  connect(ui->cbCornerTopLeft, &QCheckBox::toggled, this, &ServerConfigDialog::toggleCornerTopLeft);
-
-  ui->cbCornerTopRight->setChecked(serverConfig().switchCorner(static_cast<int>(TopRight)));
-  connect(ui->cbCornerTopRight, &QCheckBox::toggled, this, &ServerConfigDialog::toggleCornerTopRight);
-
-  ui->cbCornerBottomLeft->setChecked(serverConfig().switchCorner(static_cast<int>(BottomLeft)));
-  connect(ui->cbCornerBottomLeft, &QCheckBox::toggled, this, &ServerConfigDialog::toggleCornerBottomLeft);
-
-  ui->cbCornerBottomRight->setChecked(serverConfig().switchCorner(static_cast<int>(BottomRight)));
-  connect(ui->cbCornerBottomRight, &QCheckBox::toggled, this, &ServerConfigDialog::toggleCornerBottomRight);
-
-  ui->sbSwitchCornerSize->setValue(serverConfig().switchCornerSize());
-
-  ui->cbDefaultLockToScreenState->setChecked(serverConfig().defaultLockToScreenState());
-  connect(
-      ui->cbDefaultLockToScreenState, &QCheckBox::toggled, this, &ServerConfigDialog::toggleDefaultLockToScreenState
-  );
-
-  ui->cbDisableLockToScreen->setChecked(serverConfig().disableLockToScreen());
-  connect(ui->cbDisableLockToScreen, &QCheckBox::toggled, this, &ServerConfigDialog::toggleLockToScreen);
 
   ui->cbEnableClipboard->setChecked(serverConfig().clipboardSharing());
   auto clipboardSharingSizeM = static_cast<int>(serverConfig().clipboardSharingSize() / 1024);
@@ -401,47 +363,11 @@ void ServerConfigDialog::setHeartbeat(int rate)
   onChange();
 }
 
-void ServerConfigDialog::toggleRelativeMouseMoves(bool enabled)
-{
-  serverConfig().setRelativeMouseMoves(enabled);
-  onChange();
-}
-
 void ServerConfigDialog::toggleProtocol()
 {
   auto proto = ui->rbProtocolBarrier->isChecked() ? NetworkProtocol::Barrier : NetworkProtocol::Synergy;
   serverConfig().setProtocol(proto);
   Settings::setValue(Settings::Server::Protocol, networkProtocolToOption(proto));
-  onChange();
-}
-
-void ServerConfigDialog::setSwitchCornerSize(int size)
-{
-  serverConfig().setSwitchCornerSize(size);
-  onChange();
-}
-
-void ServerConfigDialog::toggleCornerBottomLeft(bool enable)
-{
-  serverConfig().setSwitchCorner(static_cast<int>(BottomLeft), enable);
-  onChange();
-}
-
-void ServerConfigDialog::toggleCornerTopLeft(bool enable)
-{
-  serverConfig().setSwitchCorner(static_cast<int>(TopLeft), enable);
-  onChange();
-}
-
-void ServerConfigDialog::toggleCornerBottomRight(bool enable)
-{
-  serverConfig().setSwitchCorner(static_cast<int>(BottomRight), enable);
-  onChange();
-}
-
-void ServerConfigDialog::toggleCornerTopRight(bool enable)
-{
-  serverConfig().setSwitchCorner(static_cast<int>(TopRight), enable);
   onChange();
 }
 
@@ -468,24 +394,6 @@ void ServerConfigDialog::toggleSwitchDelay(bool enable)
 void ServerConfigDialog::setSwitchDelay(int delay)
 {
   serverConfig().setSwitchDelay(delay);
-  onChange();
-}
-
-void ServerConfigDialog::toggleDefaultLockToScreenState(bool state)
-{
-  serverConfig().setDefaultLockToScreenState(state);
-  onChange();
-}
-
-void ServerConfigDialog::toggleLockToScreen(bool disabled)
-{
-  serverConfig().setDisableLockToScreen(disabled);
-  onChange();
-}
-
-void ServerConfigDialog::toggleWin32Foreground(bool enabled)
-{
-  serverConfig().setWin32KeepForeground(enabled);
   onChange();
 }
 

@@ -53,24 +53,13 @@ protected:
   void toggleSwitchDelay(bool enable);
   void setSwitchDelay(int delay);
 
-  void toggleDefaultLockToScreenState(bool state);
-  void toggleLockToScreen(bool disabled);
-  void toggleWin32Foreground(bool enabled);
-
   void toggleClipboard(bool enabled);
   void setClipboardLimit(int limit);
 
   void toggleHeartbeat(bool enabled);
   void setHeartbeat(int rate);
 
-  void toggleRelativeMouseMoves(bool enabled);
   void toggleProtocol();
-
-  void setSwitchCornerSize(int size);
-  void toggleCornerBottomLeft(bool enable);
-  void toggleCornerTopLeft(bool enable);
-  void toggleCornerBottomRight(bool enable);
-  void toggleCornerTopRight(bool enable);
 
   void toggleExternalConfig(bool enable = false);
   bool browseConfigFile();

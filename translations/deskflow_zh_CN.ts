@@ -972,31 +972,31 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&amp;Dead corners (for this computer)</source>
-        <translation>屏幕死角 (针对此计算机)(&amp;D)</translation>
+        <translation type="vanished">屏幕死角 (针对此计算机)(&amp;D)</translation>
     </message>
     <message>
         <source>&amp;Bottom-left</source>
-        <translation>左下(&amp;B)</translation>
+        <translation type="vanished">左下(&amp;B)</translation>
     </message>
     <message>
         <source>To&amp;p-left</source>
-        <translation>左上(&amp;P)</translation>
+        <translation type="vanished">左上(&amp;P)</translation>
     </message>
     <message>
         <source>Bottom-ri&amp;ght</source>
-        <translation>右下(&amp;G)</translation>
+        <translation type="vanished">右下(&amp;G)</translation>
     </message>
     <message>
         <source>Top-rig&amp;ht</source>
-        <translation>右上(&amp;H)</translation>
+        <translation type="vanished">右上(&amp;H)</translation>
     </message>
     <message>
         <source>Cor&amp;ner size</source>
-        <translation>角落大小(&amp;N)</translation>
+        <translation type="vanished">角落大小(&amp;N)</translation>
     </message>
     <message>
         <source>px</source>
-        <translation>像素</translation>
+        <translation type="vanished">像素</translation>
     </message>
     <message>
         <source>&amp;Misc</source>
@@ -1004,15 +1004,15 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>Disable lock to computer (scroll lock key)</source>
-        <translation>禁用锁定到计算机 (Scroll Lock 键)</translation>
+        <translation type="vanished">禁用锁定到计算机 (Scroll Lock 键)</translation>
     </message>
     <message>
         <source>Use &amp;relative mouse movements</source>
-        <translation>使用相对鼠标移动(&amp;R)</translation>
+        <translation type="vanished">使用相对鼠标移动(&amp;R)</translation>
     </message>
     <message>
         <source>Don&apos;t take &amp;foreground window (Windows only)</source>
-        <translation>不获取前台窗口焦点 (仅限 Windows)(&amp;F)</translation>
+        <translation type="vanished">不获取前台窗口焦点 (仅限 Windows)(&amp;F)</translation>
     </message>
     <message>
         <source>Enable clipboard sharing</source>
@@ -1097,7 +1097,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Enable lock to computer at startup</source>
-        <translation type="unfinished">启动时启用锁定到计算机</translation>
+        <translation type="obsolete">启动时启用锁定到计算机</translation>
     </message>
     <message>
         <source>&amp;Add</source>
