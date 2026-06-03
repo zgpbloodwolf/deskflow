@@ -59,8 +59,6 @@ protected:
   void toggleHeartbeat(bool enabled);
   void setHeartbeat(int rate);
 
-  void toggleProtocol();
-
   void toggleExternalConfig(bool enable = false);
   bool browseConfigFile();
 

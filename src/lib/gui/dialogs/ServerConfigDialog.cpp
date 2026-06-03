@@ -10,7 +10,6 @@
 #include "ui_ServerConfigDialog.h"
 
 #include "common/Constants.h"
-#include "common/NetworkProtocol.h"
 #include "common/Settings.h"
 #include "dialogs/HotkeyDialog.h"
 #include "dialogs/ScreenSettingsDialog.h"
@@ -55,10 +54,6 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
 
   ui->btnBrowseConfigFile->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentOpen));
   ui->lineConfigFile->setText(serverConfig().configFile());
-
-  ui->rbProtocolSynergy->setChecked(serverConfig().protocol() == NetworkProtocol::Synergy);
-  ui->rbProtocolBarrier->setChecked(serverConfig().protocol() == NetworkProtocol::Barrier);
-  connect(ui->rbProtocolBarrier, &QRadioButton::toggled, this, &ServerConfigDialog::toggleProtocol);
 
   ui->cbHeartbeat->setChecked(serverConfig().hasHeartbeat());
   connect(ui->cbHeartbeat, &QCheckBox::toggled, this, &ServerConfigDialog::toggleHeartbeat);
@@ -360,14 +355,6 @@ void ServerConfigDialog::toggleHeartbeat(bool enabled)
 void ServerConfigDialog::setHeartbeat(int rate)
 {
   serverConfig().setHeartbeat(rate);
-  onChange();
-}
-
-void ServerConfigDialog::toggleProtocol()
-{
-  auto proto = ui->rbProtocolBarrier->isChecked() ? NetworkProtocol::Barrier : NetworkProtocol::Synergy;
-  serverConfig().setProtocol(proto);
-  Settings::setValue(Settings::Server::Protocol, networkProtocolToOption(proto));
   onChange();
 }
 
