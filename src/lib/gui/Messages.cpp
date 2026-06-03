@@ -37,23 +37,23 @@ void raiseCriticalDialog()
 
 void showErrorDialog(const QString &message, const QString &fileLine, QtMsgType type)
 {
-  auto errorType = QtFatalMsg ? QObject::tr("fatal error") : QObject::tr("error");
+  auto errorType = QtFatalMsg ? QObject::tr("致命错误") : QObject::tr("错误");
   auto title = QStringLiteral("%1 %2").arg(kAppName, errorType);
   auto text = QObject::tr(
-                  R"(<p>Please <a href="%1">report a bug</a>)"
+                  R"(<p>请<a href="%1">报告问题</a>)"
                   " and copy/paste the following error:</p><pre>v%2\n%3\n%4</pre>"
   )
                   .arg(kUrlHelp, kVersion, message, fileLine);
 
   if (type == QtFatalMsg) {
-    text.prepend(QObject::tr("<p>Sorry, a fatal error has occurred and the application must now exit.</p>\n"));
+    text.prepend(QObject::tr("<p>抱歉，发生了致命错误，应用程序必须退出。</p>\n"));
     // create a blocking message box for fatal errors, as we want to wait
     // until the dialog is dismissed before aborting the app.
     QMessageBox::critical(nullptr, title, text, QMessageBox::Abort);
     return;
   }
 
-  text.prepend(QObject::tr("<p>Sorry, a critical error has occurred.</p>\n"));
+  text.prepend(QObject::tr("<p>抱歉，发生了严重错误。</p>\n"));
   if (!Errors::s_ignoredErrors.contains(message)) {
     // prevent message boxes piling up by deleting the last one if it exists.
     // if none exists yet, then nothing will happen.
@@ -122,11 +122,10 @@ void showCloseReminder(QWidget *parent)
 void showFirstServerStartMessage(QWidget *parent)
 {
   QMessageBox::information(
-      parent, QObject::tr("%1 Server").arg(kAppName),
+      parent, QObject::tr("%1 服务器").arg(kAppName),
       QObject::tr(
-          "<p>Great, the %1 server is now running.</p>"
-          "<p>Now you can connect your client computers to this server. "
-          "You should see a prompt here on the server when a new client tries to connect.</p>"
+          "<p>很好，%1 服务器正在运行。</p>"
+          "<p>现在你可以将客户端电脑连接到此服务器。当新客户端尝试连接时，服务器上会弹出提示。</p>"
       )
           .arg(kAppName)
   );
@@ -134,18 +133,16 @@ void showFirstServerStartMessage(QWidget *parent)
 
 void showFirstConnectedMessage(QWidget *parent)
 {
-  auto message = QObject::tr("<p>%1 is now connected!</p>").arg(kAppName);
+  auto message = QObject::tr("<p>%1 已连接！</p>").arg(kAppName);
 
   if (Settings::value(Settings::Core::CoreMode).value<Settings::CoreMode>() == Settings::Server) {
     message.append(
         QObject::tr(
-            "<p>Try moving your mouse to your other computer. Once there, go ahead "
-            "and type something.</p>"
-            "<p>Don't forget, you can copy and paste between computers too.</p>"
+            "<p>试试将鼠标移到另一台电脑上，然后输入一些内容。</p>\n"            "<p>别忘了，你还可以在电脑之间复制粘贴。</p>"
         )
     );
   } else {
-    message.append(QObject::tr("<p>Try controlling this computer remotely.</p>"));
+    message.append(QObject::tr("<p>试试远程控制这台电脑。</p>"));
   }
 
   using ProcessMode = Settings::ProcessMode;
@@ -154,42 +151,42 @@ void showFirstConnectedMessage(QWidget *parent)
       !Settings::value(Settings::Gui::CloseToTray).toBool()) {
     message.append(
         QObject::tr(
-            "<p>As you do not have the setting enabled to keep %1 running in "
-            "the background, you'll need to keep this window open or minimized "
-            "to keep %1 running.</p>"
+            "<p>由于你没有开启 %1 后台运行设置， "
+            "需要保持此窗口打开或最小化 "
+            "才能让 %1 继续运行。</p>"
         )
             .arg(kAppName)
     );
   } else {
     message.append(
         QObject::tr(
-            "<p>You can now close this window and %1 will continue to run in "
-            "the background. This setting can be disabled.</p>"
+            "<p>你现在可以关闭此窗口，%1 将继续在后台运行。 "
+            "此设置可以关闭。</p>"
         )
             .arg(kAppName)
     );
   }
 
-  const auto title = QObject::tr("%1 Connected").arg(kAppName);
+  const auto title = QObject::tr("%1 已连接").arg(kAppName);
   QMessageBox::information(parent, title, message);
 }
 
 bool showNewClientPrompt(QWidget *parent, const QString &clientName)
 {
   QMessageBox message(parent);
-  message.addButton(QObject::tr("Ignore"), QMessageBox::RejectRole);
-  message.addButton(QObject::tr("Add client"), QMessageBox::AcceptRole);
-  message.setText(QObject::tr("A new client called '%1' wants to connect").arg(clientName));
+  message.addButton(QObject::tr("忽略"), QMessageBox::RejectRole);
+  message.addButton(QObject::tr("添加客户端"), QMessageBox::AcceptRole);
+  message.setText(QObject::tr("一个名为 '%1' 的新客户端想要连接").arg(clientName));
   message.exec();
   return message.buttonRole(message.clickedButton()) == QMessageBox::AcceptRole;
 }
 
 bool showClearSettings(QWidget *parent)
 {
-  const auto title = QObject::tr("%1 Clear Settings").arg(kAppName);
+  const auto title = QObject::tr("清除 %1 设置").arg(kAppName);
   const auto message = QObject::tr(
-                           "<p>Are you sure you want to clear all settings and restart %1?</p>"
-                           "<p>This action cannot be undone.</p>"
+                           "<p>确定要清除所有设置并重启 %1 吗？</p>"
+                           "<p>此操作无法撤销。</p>"
   )
                            .arg(kAppName);
   return QMessageBox::question(parent, title, message) == QMessageBox::Yes;
@@ -197,10 +194,10 @@ bool showClearSettings(QWidget *parent)
 
 void showReadOnlySettings(QWidget *parent, const QString &systemSettingsPath)
 {
-  const auto title = QObject::tr("%1 Read-only settings").arg(kAppName);
+  const auto title = QObject::tr("%1 设置为只读").arg(kAppName);
   const auto message = QObject::tr(
-                           "<p>Settings are read-only because you only have read access "
-                           "to the file:</p><p>%1</p>"
+                           "<p>设置为只读，因为你只有文件的读取权限： "
+                           "</p><p>%1</p>"
   )
                            .arg(QDir::toNativeSeparators(systemSettingsPath));
   QMessageBox::information(parent, title, message);
@@ -209,13 +206,13 @@ void showReadOnlySettings(QWidget *parent, const QString &systemSettingsPath)
 bool showUpdateCheckOption(QWidget *parent)
 {
   QMessageBox message(parent);
-  message.addButton(QObject::tr("No thanks"), QMessageBox::RejectRole);
-  const auto checkButton = message.addButton(QObject::tr("Check for updates"), QMessageBox::AcceptRole);
+  message.addButton(QObject::tr("不用了"), QMessageBox::RejectRole);
+  const auto checkButton = message.addButton(QObject::tr("检查更新"), QMessageBox::AcceptRole);
   message.setText(
       QObject::tr(
-          "<p>Would you like to check for updates when %1 starts?</p>"
-          "<p>Checking for updates requires an Internet connection.</p>"
-          "<p>URL: <pre>%2</pre></p>"
+          "<p>是否要在 %1 启动时检查更新？</p>"
+          "<p>检查更新需要网络连接。</p>"
+          "<p>地址：<pre>%2</pre></p>"
       )
           .arg(kAppName, Settings::value(Settings::Gui::UpdateCheckUrl).toString())
   );
@@ -228,20 +225,20 @@ bool showDaemonOffline(QWidget *parent)
 {
   QMessageBox message(parent);
   message.setIcon(QMessageBox::Warning);
-  message.setWindowTitle(QObject::tr("Background service offline"));
+  message.setWindowTitle(QObject::tr("后台服务离线"));
 
-  message.addButton(QObject::tr("Retry"), QMessageBox::AcceptRole);
-  const auto ignore = message.addButton(QObject::tr("Ignore"), QMessageBox::RejectRole);
-  const auto disable = message.addButton(QObject::tr("Disable"), QMessageBox::NoRole);
+  message.addButton(QObject::tr("重试"), QMessageBox::AcceptRole);
+  const auto ignore = message.addButton(QObject::tr("忽略"), QMessageBox::RejectRole);
+  const auto disable = message.addButton(QObject::tr("禁用"), QMessageBox::NoRole);
 
   message.setText(
       QObject::tr(
-          "<p>There was a problem finding the %1 background service (daemon).</p>"
-          "<p>The background service makes %1 work with UAC prompts and the login screen.</p>"
-          "<p>If don't want to use the background service and intentionally stopped it, "
-          "you can prevent it's use by disabling this feature.</p>"
-          "<p>If you did not stop the background service intentionally, there may be a problem with it. "
-          "Please retry or try restarting the %1 service from the Windows services program.</p>"
+          "<p>找不到 %1 后台服务（守护进程）。</p>"
+          "<p>后台服务使 %1 能在 UAC 提示和登录界面下工作。</p>"
+          "<p>如果你不想使用后台服务并手动停止了它，可以禁用此功能。</p> "
+          ""
+          "<p>如果你没有手动停止后台服务，可能存在问题。请重试或从 Windows 服务管理器中重启 %1 服务。</p> "
+          ""
       )
           .arg(kAppName)
   );

@@ -51,7 +51,7 @@ ActionDialog::ActionDialog(QWidget *parent, const ServerConfig &config, Hotkey &
 
     ui->listScreens->addItem(newListItem);
 
-    ui->comboSwitchToScreen->addItem(tr("Switch to %1").arg(screen.name()), screen.name());
+    ui->comboSwitchToScreen->addItem(tr("切换到 %1").arg(screen.name()), screen.name());
     if (screen.name() == m_action.switchScreenName())
       ui->comboSwitchToScreen->setCurrentIndex(ui->comboSwitchToScreen->count() - 1);
   }

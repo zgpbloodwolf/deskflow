@@ -103,7 +103,7 @@ void SettingsDialog::initConnections() const
 void SettingsDialog::browseLogPath()
 {
   QString fileName =
-      QFileDialog::getSaveFileName(this, tr("Save log file to..."), ui->lineLogFilename->text(), "Logs (*.log *.txt)");
+      QFileDialog::getSaveFileName(this, tr("保存日志文件到..."), ui->lineLogFilename->text(), "Logs (*.log *.txt)");
 
   if (!fileName.isEmpty()) {
     ui->lineLogFilename->setText(fileName);
@@ -131,18 +131,18 @@ void SettingsDialog::showReadOnlyMessage()
 void SettingsDialog::updateText()
 {
   // Set Tooltip for the logLevel Items
-  ui->comboLogLevel->setItemData(0, tr("Required messages"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(1, tr("Non-fatal errors"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(2, tr("General warnings"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(3, tr("Notable events"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(4, tr("General events [Default]"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(5, tr("Debug entries"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(6, tr("More debug output"), Qt::ToolTipRole);
-  ui->comboLogLevel->setItemData(7, tr("Verbose debug output"), Qt::ToolTipRole);
-  ui->buttonBox->button(QDialogButtonBox::Save)->setToolTip(tr("Close and save changes"));
-  ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(tr("Close and forget changes"));
-  ui->buttonBox->button(QDialogButtonBox::Reset)->setToolTip(tr("Reset to stored values"));
-  ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("Reset to default values"));
+  ui->comboLogLevel->setItemData(0, tr("必要消息"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(1, tr("非致命错误"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(2, tr("一般警告"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(3, tr("重要事件"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(4, tr("一般事件 [默认]"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(5, tr("调试条目"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(6, tr("更多调试输出"), Qt::ToolTipRole);
+  ui->comboLogLevel->setItemData(7, tr("详细调试输出"), Qt::ToolTipRole);
+  ui->buttonBox->button(QDialogButtonBox::Save)->setToolTip(tr("关闭并保存更改"));
+  ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(tr("关闭并放弃更改"));
+  ui->buttonBox->button(QDialogButtonBox::Reset)->setToolTip(tr("重置为已保存的值"));
+  ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("重置为默认值"));
 }
 
 void SettingsDialog::accept()

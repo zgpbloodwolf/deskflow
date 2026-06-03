@@ -36,10 +36,10 @@ void ClientConfigDialog::changeEvent(QEvent *e)
 
 void ClientConfigDialog::updateText() const
 {
-  ui->buttonBox->button(QDialogButtonBox::Save)->setToolTip(tr("Close and save changes"));
-  ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(tr("Close and forget changes"));
-  ui->buttonBox->button(QDialogButtonBox::Reset)->setToolTip(tr("Reset to stored values"));
-  ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("Reset to default values"));
+  ui->buttonBox->button(QDialogButtonBox::Save)->setToolTip(tr("关闭并保存更改"));
+  ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(tr("关闭并放弃更改"));
+  ui->buttonBox->button(QDialogButtonBox::Reset)->setToolTip(tr("重置为已保存的值"));
+  ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("重置为默认值"));
 }
 
 void ClientConfigDialog::initConnections() const

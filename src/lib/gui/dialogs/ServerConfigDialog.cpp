@@ -138,7 +138,7 @@ void ServerConfigDialog::accept()
   if (ui->groupExternalConfig->isChecked() && !QFile::exists(ui->lineConfigFile->text())) {
 
     auto selectedButton = QMessageBox::warning(
-        this, "Filename invalid", "Please select a valid configuration file.", QMessageBox::Ok | QMessageBox::Ignore
+        this, tr("文件名无效"), tr("请选择有效的配置文件。"), QMessageBox::Ok | QMessageBox::Ignore
     );
 
     if (selectedButton != QMessageBox::Ok || !browseConfigFile()) {
@@ -287,7 +287,7 @@ void ServerConfigDialog::clearHotkey(int row)
   if (row < 0 || row >= table->rowCount())
     return;
 
-  table->item(row, 1)->setText(tr("Not set"));
+  table->item(row, 1)->setText(tr("未设置"));
   table->item(row, 1)->setForeground(QColor(Qt::gray));
 
   onChange();
@@ -404,10 +404,10 @@ bool ServerConfigDialog::browseConfigFile()
 {
   //: %1 is replaced with the application names
   //: (*.conf) and (*.*) should not be translated
-  const auto deskflowConfigFilter = tr("%1 Configurations (*.conf);;All files (*.*)");
+  const auto deskflowConfigFilter = tr("%1 配置文件 (*.conf);;所有文件 (*.*)");
 
   QString fileName =
-      QFileDialog::getOpenFileName(this, tr("Browse for a config file"), "", deskflowConfigFilter.arg(kAppName));
+      QFileDialog::getOpenFileName(this, tr("浏览配置文件"), "", deskflowConfigFilter.arg(kAppName));
 
   if (!fileName.isEmpty()) {
     ui->lineConfigFile->setText(fileName);

@@ -132,7 +132,11 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Switch to %1</source>
-        <translation>切换到 %1</translation>
+        <translation type="vanished">切换到 %1</translation>
+    </message>
+    <message>
+        <source>切换到 %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -167,19 +171,19 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Close and save changes</source>
-        <translation type="unfinished">关闭并保存更改</translation>
+        <translation type="obsolete">关闭并保存更改</translation>
     </message>
     <message>
         <source>Close and forget changes</source>
-        <translation>关闭并放弃修改</translation>
+        <translation type="vanished">关闭并放弃修改</translation>
     </message>
     <message>
         <source>Reset to stored values</source>
-        <translation type="unfinished">重置为存储值</translation>
+        <translation type="obsolete">重置为存储值</translation>
     </message>
     <message>
         <source>Reset to default values</source>
-        <translation type="unfinished">重置为默认值</translation>
+        <translation type="obsolete">重置为默认值</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow the client to slow the rate it attempts to reconnect to the server when connections attempts are failing. The delay between connection attempts will  start at 1 second intervals and can be a maxium of 5 minutes between connection attempts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -188,6 +192,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <source>Use dynamic reconnection time based on connection attempts</source>
         <translation type="unfinished">根据连接尝试次数，采用动态重连时间</translation>
+    </message>
+    <message>
+        <source>关闭并保存更改</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>关闭并放弃更改</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重置为已保存的值</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重置为默认值</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -340,7 +360,7 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>&amp;Start</source>
-        <translation>启动(&amp;S)</translation>
+        <translation type="vanished">启动(&amp;S)</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -356,39 +376,39 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Address missing</source>
-        <translation>缺少地址</translation>
+        <translation type="vanished">缺少地址</translation>
     </message>
     <message>
         <source>Please enter the hostname or IP address of the other computer.</source>
-        <translation>请输入另一台计算机的主机名或 IP 地址。</translation>
+        <translation type="vanished">请输入另一台计算机的主机名或 IP 地址。</translation>
     </message>
     <message>
         <source>Save server configuration as...</source>
-        <translation>另存服务器配置为...</translation>
+        <translation type="vanished">另存服务器配置为...</translation>
     </message>
     <message>
         <source>Save failed</source>
-        <translation>保存失败</translation>
+        <translation type="vanished">保存失败</translation>
     </message>
     <message>
         <source>Could not save server configuration to file.</source>
-        <translation>无法将服务器配置保存到文件。</translation>
+        <translation type="vanished">无法将服务器配置保存到文件。</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>启动</translation>
+        <translation type="vanished">启动</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>停止</translation>
+        <translation type="vanished">停止</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>连接</translation>
+        <translation type="vanished">连接</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation>断开</translation>
+        <translation type="vanished">断开</translation>
     </message>
     <message>
         <source>&lt;p&gt;Failed to connect to the server &apos;%1&apos;.&lt;/p&gt;&lt;p&gt;A Client with your name is already connected to the server.&lt;/p&gt;Please ensure that you&apos;re using a unique name and that only a single instance of the client process is running.&lt;/p&gt;</source>
@@ -396,87 +416,87 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>No IP Detected</source>
-        <translation>未检测到 IP</translation>
+        <translation type="vanished">未检测到 IP</translation>
     </message>
     <message>
         <source>Unable to detect an IP address. Check your network connection is active.</source>
-        <translation>无法检测到 IP 地址。请检查您的网络连接是否正常。</translation>
+        <translation type="vanished">无法检测到 IP 地址。请检查您的网络连接是否正常。</translation>
     </message>
     <message>
         <source>Using IP: </source>
-        <translation type="unfinished">使用IP地址： </translation>
+        <translation type="obsolete">使用IP地址： </translation>
     </message>
     <message>
         <source>&lt;p&gt;If connecting via the hostname fails, try %1&lt;/p&gt;</source>
-        <translation>&lt;p&gt;如果通过主机名连接失败，请尝试 %1&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;如果通过主机名连接失败，请尝试 %1&lt;/p&gt;</translation>
     </message>
     <message>
         <source>the suggested IP.</source>
-        <translation>建议的 IP 地址。</translation>
+        <translation type="vanished">建议的 IP 地址。</translation>
     </message>
     <message>
         <source>one of the following IPs:&lt;br/&gt;%1</source>
-        <translation>以下 IP 地址之一：&lt;br/&gt;%1</translation>
+        <translation type="vanished">以下 IP 地址之一：&lt;br/&gt;%1</translation>
     </message>
     <message>
         <source>
 A bound IP is now invalid, you may need to restart the server.</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
 绑定的IP地址现在无效，您可能需要重启服务器。</translation>
     </message>
     <message>
         <source>&amp;File</source>
-        <translation>文件(&amp;F)</translation>
+        <translation type="vanished">文件(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>编辑(&amp;E)</translation>
+        <translation type="vanished">编辑(&amp;E)</translation>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>视图(&amp;V)</translation>
+        <translation type="vanished">视图(&amp;V)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>帮助(&amp;H)</translation>
+        <translation type="vanished">帮助(&amp;H)</translation>
     </message>
     <message>
         <source>Clear settings</source>
-        <translation>清除设置</translation>
+        <translation type="vanished">清除设置</translation>
     </message>
     <message>
         <source>Report a Bug</source>
-        <translation>报告 Bug</translation>
+        <translation type="vanished">报告 Bug</translation>
     </message>
     <message>
         <source>&amp;Minimize to tray</source>
-        <translation>最小化到托盘(&amp;M)</translation>
+        <translation type="vanished">最小化到托盘(&amp;M)</translation>
     </message>
     <message>
         <source>&amp;Quit</source>
-        <translation>退出(&amp;Q)</translation>
+        <translation type="vanished">退出(&amp;Q)</translation>
     </message>
     <message>
         <source>&amp;Open %1</source>
         <extracomment>%1 will be the replaced with the appname</extracomment>
-        <translation>打开 %1(&amp;O)</translation>
+        <translation type="vanished">打开 %1(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Preferences</source>
-        <translation>首选项(&amp;P)</translation>
+        <translation type="vanished">首选项(&amp;P)</translation>
     </message>
     <message>
         <source>Rest&amp;art</source>
-        <translation>重启(&amp;A)</translation>
+        <translation type="vanished">重启(&amp;A)</translation>
     </message>
     <message>
         <source>S&amp;top</source>
-        <translation>停止(&amp;T)</translation>
+        <translation type="vanished">停止(&amp;T)</translation>
     </message>
     <message>
         <source>About %1...</source>
         <extracomment>%1 will be the replaced with the appname</extracomment>
-        <translation>关于 %1...</translation>
+        <translation type="vanished">关于 %1...</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
@@ -495,11 +515,11 @@ A bound IP is now invalid, you may need to restart the server.</source>
     </message>
     <message>
         <source>Invalid Screen Name</source>
-        <translation>无效的屏幕名称</translation>
+        <translation type="vanished">无效的屏幕名称</translation>
     </message>
     <message>
         <source>Screen name already exists</source>
-        <translation>屏幕名称已存在</translation>
+        <translation type="vanished">屏幕名称已存在</translation>
     </message>
     <message>
         <source>The name you have chosen is invalid.
@@ -517,11 +537,11 @@ Valid names:
     </message>
     <message>
         <source>%1 Connection Error</source>
-        <translation>%1 连接错误</translation>
+        <translation type="vanished">%1 连接错误</translation>
     </message>
     <message>
         <source>Suggested IP: </source>
-        <translation type="unfinished">建议 IP： </translation>
+        <translation type="obsolete">建议 IP： </translation>
     </message>
     <message>
         <source>&amp;Configure Client</source>
@@ -537,11 +557,11 @@ Valid names:
     </message>
     <message>
         <source>read</source>
-        <translation type="unfinished">读取</translation>
+        <translation type="obsolete">读取</translation>
     </message>
     <message>
         <source>read and write</source>
-        <translation type="unfinished">读取和写入</translation>
+        <translation type="obsolete">读取和写入</translation>
     </message>
     <message>
         <source>The Core executable could not be started.
@@ -552,16 +572,8 @@ Please check if you have sufficient permissions to run %1.</source>
     <message>
         <source>
 Additionally, check you are able to %1 the server config file: %2</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
 另外，请检查您是否能够%1服务器配置文件：%2</translation>
-    </message>
-    <message>
-        <source>Don&apos;t show this again</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Missing Keyboard Layouts</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;p&gt;Keyboard layout support requires matching layouts on all computers. The following layouts from the other computer are not installed on this computer:&lt;/p&gt;&lt;p&gt;&lt;b&gt;%1&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Please install them to enable support for these layouts.&lt;/p&gt;</source>
@@ -619,6 +631,150 @@ Additionally, check you are able to %1 the server config file: %2</source>
         <source>重启</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>地址缺失</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>请输入另一台电脑的主机名或 IP 地址。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>读取</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>读写</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>保存服务器配置为...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>保存失败</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>无法将服务器配置保存到文件。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>停止</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>连接</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>断开</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 连接错误</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>缺少键盘布局</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>不再显示</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>编辑</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>视图</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>帮助</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>清除设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>报告问题</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>最小化到托盘</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>退出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>打开 %1</source>
+        <extracomment>%1 will be the replaced with the appname</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>首选项</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>关于 %1...</source>
+        <extracomment>%1 will be the replaced with the appname</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>无效的屏幕名称</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>屏幕名称已存在</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>未检测到 IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>无法检测到 IP 地址，请检查网络连接。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+此外，请确认你能%1服务器配置文件：%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>使用 IP：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>建议 IP：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;如果通过主机名连接失败，请尝试 %1&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+绑定的 IP 已失效，可能需要重启服务器。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>建议的 IP。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>以下 IP 之一：&lt;br/&gt;%1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>NewScreenWidget</name>
@@ -632,16 +788,16 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <name>QObject</name>
     <message>
         <source>fatal error</source>
-        <translation>致命错误</translation>
+        <translation type="vanished">致命错误</translation>
     </message>
     <message>
         <source>error</source>
-        <translation>错误</translation>
+        <translation type="vanished">错误</translation>
     </message>
     <message>
         <source>&lt;p&gt;Sorry, a fatal error has occurred and the application must now exit.&lt;/p&gt;
 </source>
-        <translation>&lt;p&gt;抱歉，发生了致命错误，应用程序现在必须退出。&lt;/p&gt;
+        <translation type="vanished">&lt;p&gt;抱歉，发生了致命错误，应用程序现在必须退出。&lt;/p&gt;
 </translation>
     </message>
     <message>
@@ -649,7 +805,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
 </source>
         <translatorcomment>&lt;p&gt;抱歉，发生了严重错误。&lt;/p&gt;
 </translatorcomment>
-        <translation>&lt;p&gt;抱歉，发生了严重错误。&lt;/p&gt;
+        <translation type="vanished">&lt;p&gt;抱歉，发生了严重错误。&lt;/p&gt;
 </translation>
     </message>
     <message>
@@ -660,7 +816,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
         <source>&lt;p&gt;Please &lt;a href=&quot;%1&quot;&gt;report a bug&lt;/a&gt; and copy/paste the following error:&lt;/p&gt;&lt;pre&gt;v%2
 %3
 %4&lt;/pre&gt;</source>
-        <translation>&lt;p&gt;请 &lt;a href=&quot;%1&quot;&gt;报告 Bug&lt;/a&gt; 并复制/粘贴以下错误：&lt;/p&gt;&lt;pre&gt;v%2
+        <translation type="vanished">&lt;p&gt;请 &lt;a href=&quot;%1&quot;&gt;报告 Bug&lt;/a&gt; 并复制/粘贴以下错误：&lt;/p&gt;&lt;pre&gt;v%2
 %3
 %4&lt;/pre&gt;</translation>
     </message>
@@ -670,35 +826,35 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>%1 Server</source>
-        <translation>%1 服务器</translation>
+        <translation type="vanished">%1 服务器</translation>
     </message>
     <message>
         <source>&lt;p&gt;Great, the %1 server is now running.&lt;/p&gt;&lt;p&gt;Now you can connect your client computers to this server. You should see a prompt here on the server when a new client tries to connect.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;太好了，服务器 %1 已在运行。&lt;/p&gt;&lt;p&gt;现在您可以将客户端计算机连接到此服务器。当新客户端尝试连接时，您会在服务器端看到提示。&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;太好了，服务器 %1 已在运行。&lt;/p&gt;&lt;p&gt;现在您可以将客户端计算机连接到此服务器。当新客户端尝试连接时，您会在服务器端看到提示。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;%1 is now connected!&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1 已连接！&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;%1 已连接！&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Try moving your mouse to your other computer. Once there, go ahead and type something.&lt;/p&gt;&lt;p&gt;Don&apos;t forget, you can copy and paste between computers too.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;试着将鼠标移动到另一台计算机。移动过去后，尝试输入一些内容。&lt;/p&gt;&lt;p&gt;别忘了，您还可以在计算机之间进行复制和粘贴。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;试着将鼠标移动到另一台计算机。移动过去后，尝试输入一些内容。&lt;/p&gt;&lt;p&gt;别忘了，您还可以在计算机之间进行复制和粘贴。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Try controlling this computer remotely.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;尝试远程控制此计算机。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;尝试远程控制此计算机。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;As you do not have the setting enabled to keep %1 running in the background, you&apos;ll need to keep this window open or minimized to keep %1 running.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;由于您未启用让 %1 在后台运行的设置，您需要保持此窗口打开或最小化以使 %1 保持运行。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;由于您未启用让 %1 在后台运行的设置，您需要保持此窗口打开或最小化以使 %1 保持运行。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;You can now close this window and %1 will continue to run in the background. This setting can be disabled.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;您现在可以关闭此窗口，%1 将在后台继续运行。此设置可以禁用。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;您现在可以关闭此窗口，%1 将在后台继续运行。此设置可以禁用。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Connected</source>
-        <translation>%1 已连接</translation>
+        <translation type="vanished">%1 已连接</translation>
     </message>
     <message>
         <source>%1 - New Client</source>
@@ -710,59 +866,59 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>Ignore</source>
-        <translation>忽略</translation>
+        <translation type="vanished">忽略</translation>
     </message>
     <message>
         <source>Add client</source>
-        <translation>添加客户端</translation>
+        <translation type="vanished">添加客户端</translation>
     </message>
     <message>
         <source>A new client called &apos;%1&apos; wants to connect</source>
-        <translation>名为“%1”的新客户端请求连接</translation>
+        <translation type="vanished">名为“%1”的新客户端请求连接</translation>
     </message>
     <message>
         <source>%1 Clear Settings</source>
-        <translation>%1 清除设置</translation>
+        <translation type="vanished">%1 清除设置</translation>
     </message>
     <message>
         <source>&lt;p&gt;Are you sure you want to clear all settings and restart %1?&lt;/p&gt;&lt;p&gt;This action cannot be undone.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;您确定要清除所有设置并重启 %1 吗？&lt;/p&gt;&lt;p&gt;此操作无法撤销。&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;您确定要清除所有设置并重启 %1 吗？&lt;/p&gt;&lt;p&gt;此操作无法撤销。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1 Read-only settings</source>
-        <translation>%1 只读设置</translation>
+        <translation type="vanished">%1 只读设置</translation>
     </message>
     <message>
         <source>&lt;p&gt;Settings are read-only because you only have read access to the file:&lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;</source>
-        <translation>&lt;p&gt;设置是只读的，因为您对该文件只有读取权限：&lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;设置是只读的，因为您对该文件只有读取权限：&lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;</translation>
     </message>
     <message>
         <source>No thanks</source>
-        <translation>不，谢谢</translation>
+        <translation type="vanished">不，谢谢</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation>检查更新</translation>
+        <translation type="vanished">检查更新</translation>
     </message>
     <message>
         <source>&lt;p&gt;Would you like to check for updates when %1 starts?&lt;/p&gt;&lt;p&gt;Checking for updates requires an Internet connection.&lt;/p&gt;&lt;p&gt;URL: &lt;pre&gt;%2&lt;/pre&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;您希望在 %1 启动时检查更新吗？&lt;/p&gt;&lt;p&gt;检查更新需要互联网连接。&lt;/p&gt;&lt;p&gt;URL: &lt;pre&gt;%2&lt;/pre&gt;&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;您希望在 %1 启动时检查更新吗？&lt;/p&gt;&lt;p&gt;检查更新需要互联网连接。&lt;/p&gt;&lt;p&gt;URL: &lt;pre&gt;%2&lt;/pre&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Background service offline</source>
-        <translation>后台服务离线</translation>
+        <translation type="vanished">后台服务离线</translation>
     </message>
     <message>
         <source>Retry</source>
-        <translation>重试</translation>
+        <translation type="vanished">重试</translation>
     </message>
     <message>
         <source>Disable</source>
-        <translation>禁用</translation>
+        <translation type="vanished">禁用</translation>
     </message>
     <message>
         <source>&lt;p&gt;There was a problem finding the %1 background service (daemon).&lt;/p&gt;&lt;p&gt;The background service makes %1 work with UAC prompts and the login screen.&lt;/p&gt;&lt;p&gt;If don&apos;t want to use the background service and intentionally stopped it, you can prevent it&apos;s use by disabling this feature.&lt;/p&gt;&lt;p&gt;If you did not stop the background service intentionally, there may be a problem with it. Please retry or try restarting the %1 service from the Windows services program.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;查找 %1 后台服务（守护进程）时出现问题。&lt;/p&gt;&lt;p&gt;%1 需后台服务来与 UAC 提示和登录屏幕配合工作。&lt;/p&gt;&lt;p&gt;如果您不想使用后台服务并已将其停止，可以通过禁用此功能来阻止使用它。&lt;/p&gt;&lt;p&gt;如果您并非有意停止后台服务，则可能存在问题。请重试，或尝试从 Windows 服务程序中重启 %1 服务。&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;查找 %1 后台服务（守护进程）时出现问题。&lt;/p&gt;&lt;p&gt;%1 需后台服务来与 UAC 提示和登录屏幕配合工作。&lt;/p&gt;&lt;p&gt;如果您不想使用后台服务并已将其停止，可以通过禁用此功能来阻止使用它。&lt;/p&gt;&lt;p&gt;如果您并非有意停止后台服务，则可能存在问题。请重试，或尝试从 Windows 服务程序中重启 %1 服务。&lt;/p&gt;</translation>
     </message>
     <message>
         <source>failed to read key from certificate file: %1</source>
@@ -786,6 +942,119 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <message>
         <source>%1 is already running</source>
         <translation>%1 已经在运行中</translation>
+    </message>
+    <message>
+        <source>致命错误</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>错误</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;请&lt;a href=&quot;%1&quot;&gt;报告问题&lt;/a&gt; and copy/paste the following error:&lt;/p&gt;&lt;pre&gt;v%2
+%3
+%4&lt;/pre&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;抱歉，发生了致命错误，应用程序必须退出。&lt;/p&gt;
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;抱歉，发生了严重错误。&lt;/p&gt;
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 服务器</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;很好，%1 服务器正在运行。&lt;/p&gt;&lt;p&gt;现在你可以将客户端电脑连接到此服务器。当新客户端尝试连接时，服务器上会弹出提示。&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;%1 已连接！&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;试试将鼠标移到另一台电脑上，然后输入一些内容。&lt;/p&gt;
+&lt;p&gt;别忘了，你还可以在电脑之间复制粘贴。&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;试试远程控制这台电脑。&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;由于你没有开启 %1 后台运行设置， 需要保持此窗口打开或最小化 才能让 %1 继续运行。&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;你现在可以关闭此窗口，%1 将继续在后台运行。 此设置可以关闭。&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 已连接</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>忽略</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>添加客户端</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一个名为 &apos;%1&apos; 的新客户端想要连接</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>清除 %1 设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;确定要清除所有设置并重启 %1 吗？&lt;/p&gt;&lt;p&gt;此操作无法撤销。&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 设置为只读</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;设置为只读，因为你只有文件的读取权限： &lt;/p&gt;&lt;p&gt;%1&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>不用了</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>检查更新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;是否要在 %1 启动时检查更新？&lt;/p&gt;&lt;p&gt;检查更新需要网络连接。&lt;/p&gt;&lt;p&gt;地址：&lt;pre&gt;%2&lt;/pre&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>后台服务离线</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重试</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>禁用</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;找不到 %1 后台服务（守护进程）。&lt;/p&gt;&lt;p&gt;后台服务使 %1 能在 UAC 提示和登录界面下工作。&lt;/p&gt;&lt;p&gt;如果你不想使用后台服务并手动停止了它，可以禁用此功能。&lt;/p&gt; &lt;p&gt;如果你没有手动停止后台服务，可能存在问题。请重试或从 Windows 服务管理器中重启 %1 服务。&lt;/p&gt; </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -908,7 +1177,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>Screen name is empty</source>
-        <translation>屏幕名称为空</translation>
+        <translation type="vanished">屏幕名称为空</translation>
     </message>
     <message>
         <source>The screen name cannot be empty. Please either fill in a name or cancel the dialog.</source>
@@ -916,11 +1185,19 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>Screen name matches alias</source>
-        <translation>屏幕名称与别名匹配</translation>
+        <translation type="vanished">屏幕名称与别名匹配</translation>
     </message>
     <message>
         <source>The screen name cannot be the same as an alias. Please either remove the alias or change the screen name.</source>
         <translation>屏幕名称不能与别名相同。请移除别名或更改屏幕名称。</translation>
+    </message>
+    <message>
+        <source>屏幕名称为空</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>屏幕名称与别名相同</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1141,11 +1418,11 @@ Enabling this setting will disable the server config GUI.</source>
     <message>
         <source>%1 Configurations (*.conf);;All files (*.*)</source>
         <extracomment>%1 is replaced with the application names (*.conf) and (*.*) should not be translated</extracomment>
-        <translation>%1 配置 (*.conf);;所有文件 (*.*)</translation>
+        <translation type="vanished">%1 配置 (*.conf);;所有文件 (*.*)</translation>
     </message>
     <message>
         <source>Browse for a config file</source>
-        <translation>浏览配置文件</translation>
+        <translation type="vanished">浏览配置文件</translation>
     </message>
     <message>
         <source>Enable lock to computer at startup</source>
@@ -1154,10 +1431,6 @@ Enabling this setting will disable the server config GUI.</source>
     <message>
         <source>&amp;Add</source>
         <translation type="obsolete">添加(&amp;A)</translation>
-    </message>
-    <message>
-        <source>Not set</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>点击&quot;录制&quot;为每个动作设置快捷键。</source>
@@ -1279,6 +1552,23 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>配置文件路径</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>文件名无效</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>请选择有效的配置文件。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 配置文件 (*.conf);;所有文件 (*.*)</source>
+        <extracomment>%1 is replaced with the application names (*.conf) and (*.*) should not be translated</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>浏览配置文件</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1414,55 +1704,55 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Save log file to...</source>
-        <translation>保存日志文件到...</translation>
+        <translation type="vanished">保存日志文件到...</translation>
     </message>
     <message>
         <source>Required messages</source>
-        <translation>必要消息</translation>
+        <translation type="vanished">必要消息</translation>
     </message>
     <message>
         <source>Non-fatal errors</source>
-        <translation>非致命错误</translation>
+        <translation type="vanished">非致命错误</translation>
     </message>
     <message>
         <source>General warnings</source>
-        <translation>一般警告</translation>
+        <translation type="vanished">一般警告</translation>
     </message>
     <message>
         <source>Notable events</source>
-        <translation>值得注意的事件</translation>
+        <translation type="vanished">值得注意的事件</translation>
     </message>
     <message>
         <source>General events [Default]</source>
-        <translation>一般事件 [默认]</translation>
+        <translation type="vanished">一般事件 [默认]</translation>
     </message>
     <message>
         <source>Debug entries</source>
-        <translation>调试条目</translation>
+        <translation type="vanished">调试条目</translation>
     </message>
     <message>
         <source>More debug output</source>
-        <translation>更多调试输出</translation>
+        <translation type="vanished">更多调试输出</translation>
     </message>
     <message>
         <source>Verbose debug output</source>
-        <translation>详细调试输出</translation>
+        <translation type="vanished">详细调试输出</translation>
     </message>
     <message>
         <source>Close and save changes</source>
-        <translation type="unfinished">关闭并保存更改</translation>
+        <translation type="obsolete">关闭并保存更改</translation>
     </message>
     <message>
         <source>Close and forget changes</source>
-        <translation>关闭并放弃修改</translation>
+        <translation type="vanished">关闭并放弃修改</translation>
     </message>
     <message>
         <source>Reset to stored values</source>
-        <translation type="unfinished">重置为存储值</translation>
+        <translation type="obsolete">重置为存储值</translation>
     </message>
     <message>
         <source>Reset to default values</source>
-        <translation type="unfinished">重置为默认值</translation>
+        <translation type="obsolete">重置为默认值</translation>
     </message>
     <message>
         <source>Enable wl-clipboard support</source>
@@ -1618,6 +1908,58 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>端口</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>保存日志文件到...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>必要消息</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>非致命错误</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一般警告</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重要事件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>一般事件 [默认]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>调试条目</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>更多调试输出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>详细调试输出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>关闭并保存更改</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>关闭并放弃更改</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重置为已保存的值</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重置为默认值</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -341,7 +341,7 @@ void MainWindow::coreProcessError(CoreProcess::Error error)
 {
   if (error == CoreProcess::Error::AddressMissing) {
     QMessageBox::warning(
-        this, tr("Address missing"), tr("Please enter the hostname or IP address of the other computer.")
+        this, tr("地址缺失"), tr("请输入另一台电脑的主机名或 IP 地址。")
     );
   } else if (error == CoreProcess::Error::StartFailed) {
     show();
@@ -351,8 +351,8 @@ void MainWindow::coreProcessError(CoreProcess::Error error)
 
     if (Settings::value(Settings::Core::CoreMode) == Settings::CoreMode::Server) {
       const auto mode =
-          Settings::value(Settings::Server::ExternalConfigFile).toBool() ? tr("read") : tr("read and write");
-      message.append(tr("\nAdditionally, check you are able to %1 the server config file: %2")
+          Settings::value(Settings::Server::ExternalConfigFile).toBool() ? tr("读取") : tr("读写");
+      message.append(tr("\n此外，请确认你能%1服务器配置文件：%2")
                          .arg(mode, Settings::serverConfigFile()));
     }
     QMessageBox::warning(this, kAppName, message);
@@ -404,10 +404,10 @@ void MainWindow::clearSettings()
 
 bool MainWindow::saveServerConfig()
 {
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save server configuration as..."));
+  QString fileName = QFileDialog::getSaveFileName(this, tr("保存服务器配置为..."));
 
   if (!fileName.isEmpty() && !m_serverConfig.save(fileName)) {
-    QMessageBox::warning(this, tr("Save failed"), tr("Could not save server configuration to file."));
+    QMessageBox::warning(this, tr("保存失败"), tr("无法将服务器配置保存到文件。"));
     return true;
   }
 
@@ -510,13 +510,13 @@ void MainWindow::updateModeControlLabels()
   QIcon stopIcon;
 
   if (isServer) {
-    startText = tr("Start");
-    stopText = tr("Stop");
+    startText = tr("启动");
+    stopText = tr("停止");
     startIcon = QIcon::fromTheme(QStringLiteral("system-run"));
     stopIcon = QIcon::fromTheme(QIcon::ThemeIcon::ProcessStop);
   } else {
-    startText = tr("Connect");
-    stopText = tr("Disconnect");
+    startText = tr("连接");
+    stopText = tr("断开");
     startIcon = QIcon::fromTheme(QStringLiteral("network-connect"));
     stopIcon = QIcon::fromTheme(QStringLiteral("network-disconnect"));
   }
@@ -744,7 +744,7 @@ void MainWindow::handleConnectionRefused(deskflow::core::ConnectionRefusal reaso
 
   const auto address = Settings::value(Settings::Client::RemoteHost).toString();
   QMessageBox::warning(
-      this, tr("%1 Connection Error").arg(kAppName),
+      this, tr("%1 连接错误").arg(kAppName),
       tr("<p>Failed to connect to the server '%1'.</p>"
          "<p>A Client with your name is already connected to the server.</p>"
          "Please ensure that you're using a unique name and that only a "
@@ -762,14 +762,14 @@ void MainWindow::handleMissingKeyboardLayouts(const QString &layouts)
 
   QMessageBox msgBox(this);
   msgBox.setIcon(QMessageBox::Warning);
-  msgBox.setWindowTitle(tr("Missing Keyboard Layouts"));
+  msgBox.setWindowTitle(tr("缺少键盘布局"));
   msgBox.setText(tr("<p>Keyboard layout support requires matching layouts on all computers. "
                     "The following layouts from the other computer are not installed on this computer:</p>"
                     "<p><b>%1</b></p>"
                     "<p>Please install them to enable support for these layouts.</p>")
                      .arg(layouts));
 
-  auto *checkBox = new QCheckBox(tr("Don't show this again"), &msgBox);
+  auto *checkBox = new QCheckBox(tr("不再显示"), &msgBox);
   msgBox.setCheckBox(checkBox);
   msgBox.exec();
 
@@ -922,24 +922,24 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::updateText()
 {
-  m_menuFile->setTitle(tr("&File"));
-  m_menuEdit->setTitle(tr("&Edit"));
-  m_menuView->setTitle(tr("&View"));
-  m_menuHelp->setTitle(tr("&Help"));
+  m_menuFile->setTitle(tr("文件"));
+  m_menuEdit->setTitle(tr("编辑"));
+  m_menuView->setTitle(tr("视图"));
+  m_menuHelp->setTitle(tr("帮助"));
 
-  m_actionClearSettings->setText(tr("Clear settings"));
-  m_actionReportBug->setText(tr("Report a Bug"));
-  m_actionMinimize->setText(tr("&Minimize to tray"));
-  m_actionQuit->setText(tr("&Quit"));
-  m_actionTrayQuit->setText(tr("&Quit"));
+  m_actionClearSettings->setText(tr("清除设置"));
+  m_actionReportBug->setText(tr("报告问题"));
+  m_actionMinimize->setText(tr("最小化到托盘"));
+  m_actionQuit->setText(tr("退出"));
+  m_actionTrayQuit->setText(tr("退出"));
   //: %1 will be the replaced with the appname
-  m_actionRestore->setText(tr("&Open %1").arg(kAppName));
-  m_actionSettings->setText(tr("&Preferences"));
-  m_actionStartCore->setText(tr("&Start"));
-  m_actionRestartCore->setText(tr("Rest&art"));
-  m_actionStopCore->setText(tr("S&top"));
+  m_actionRestore->setText(tr("打开 %1").arg(kAppName));
+  m_actionSettings->setText(tr("首选项"));
+  m_actionStartCore->setText(tr("启动"));
+  m_actionRestartCore->setText(tr("重启"));
+  m_actionStopCore->setText(tr("停止"));
   //: %1 will be the replaced with the appname
-  m_actionAbout->setText(tr("About %1...").arg(kAppName));
+  m_actionAbout->setText(tr("关于 %1...").arg(kAppName));
 
   //: start / restart core shortcut
   m_actionStartCore->setShortcut(QKeySequence(tr("Ctrl+S")));
@@ -1031,10 +1031,10 @@ void MainWindow::setHostName()
     ui->lineEditName->setText(screenName);
     blockSignals(false);
 
-    const auto title = tr("Invalid Screen Name");
+    const auto title = tr("无效的屏幕名称");
     QString body;
     if (existingScreen) {
-      body = tr("Screen name already exists");
+      body = tr("屏幕名称已存在");
     } else {
       body =
           tr("The name you have chosen is invalid.\n\n"
@@ -1099,13 +1099,13 @@ void MainWindow::updateIpLabel(const QStringList &addresses)
   const bool fixedIP = !Settings::value(Settings::Core::Interface).toString().isEmpty();
 
   if (!fixedIP && addresses.isEmpty() && !serverStarted || (serverStarted && m_serverStartSuggestedIP.isEmpty())) {
-    ui->lblIpAddresses->setText(colorText.arg(palette().linkVisited().color().name(), tr("No IP Detected")));
-    ui->lblIpAddresses->setToolTip(tr("Unable to detect an IP address. Check your network connection is active."));
+    ui->lblIpAddresses->setText(colorText.arg(palette().linkVisited().color().name(), tr("未检测到 IP")));
+    ui->lblIpAddresses->setToolTip(tr("无法检测到 IP 地址，请检查网络连接。"));
     return;
   }
 
-  QString labelText = fixedIP ? tr("Using IP: ") : tr("Suggested IP: ");
-  QString toolTipText = tr("<p>If connecting via the hostname fails, try %1</p>");
+  QString labelText = fixedIP ? tr("使用 IP：") : tr("建议 IP：");
+  QString toolTipText = tr("<p>如果通过主机名连接失败，请尝试 %1</p>");
 
   // Get all available IPs for tooltip
   const bool filterIpList = (serverStarted || fixedIP);
@@ -1122,13 +1122,13 @@ void MainWindow::updateIpLabel(const QStringList &addresses)
     labelText.append(m_currentIpAddress);
   } else {
     labelText.append(colorText.arg(palette().linkVisited().color().name(), m_serverStartSuggestedIP));
-    toolTipText.append(tr("\nA bound IP is now invalid, you may need to restart the server."));
+    toolTipText.append(tr("\n绑定的 IP 已失效，可能需要重启服务器。"));
   }
 
   if (ipList.count() < 2 || fixedIP) {
-    toolTipText = toolTipText.arg(tr("the suggested IP."));
+    toolTipText = toolTipText.arg(tr("建议的 IP。"));
   } else {
-    toolTipText = toolTipText.arg(tr("one of the following IPs:<br/>%1").arg(ipList.join("<br/>")));
+    toolTipText = toolTipText.arg(tr("以下 IP 之一：<br/>%1").arg(ipList.join("<br/>")));
   }
 
   ui->lblIpAddresses->setText(labelText);
