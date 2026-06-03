@@ -204,15 +204,23 @@ install(
 # 用法: cmake --build build --target run      (构建+启动server调试)
 #       cmake --build build --target run-gui   (构建+启动GUI)
 
+if(WIN32)
+  set(RUN_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run.bat)
+  set(RUN_GUI_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run-gui.bat)
+else()
+  set(RUN_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run.sh)
+  set(RUN_GUI_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run-gui.sh)
+endif()
+
 add_custom_target(run
-  COMMAND ${CMAKE_SOURCE_DIR}/scripts/run.sh
+  COMMAND ${RUN_SCRIPT}
   DEPENDS deskflow-core
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "构建并启动 deskflow-core server (调试模式)"
 )
 
 add_custom_target(run-gui
-  COMMAND ${CMAKE_SOURCE_DIR}/scripts/run-gui.sh
+  COMMAND ${RUN_GUI_SCRIPT}
   DEPENDS Deskflow
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "构建并启动 Deskflow GUI"
