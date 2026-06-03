@@ -925,35 +925,35 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&amp;Hotkeys</source>
-        <translation>热键(&amp;H)</translation>
+        <translation type="vanished">热键(&amp;H)</translation>
     </message>
     <message>
         <source>&amp;New</source>
-        <translation>新建(&amp;N)</translation>
+        <translation type="vanished">新建(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation>编辑(&amp;E)</translation>
+        <translation type="vanished">编辑(&amp;E)</translation>
     </message>
     <message>
         <source>&amp;Remove</source>
-        <translation>移除(&amp;R)</translation>
+        <translation type="vanished">移除(&amp;R)</translation>
     </message>
     <message>
         <source>A&amp;ctions</source>
-        <translation>动作(&amp;A)</translation>
+        <translation type="vanished">动作(&amp;A)</translation>
     </message>
     <message>
         <source>Ne&amp;w</source>
-        <translation>新建(&amp;W)</translation>
+        <translation type="vanished">新建(&amp;W)</translation>
     </message>
     <message>
         <source>E&amp;dit</source>
-        <translation>编辑(&amp;D)</translation>
+        <translation type="vanished">编辑(&amp;D)</translation>
     </message>
     <message>
         <source>Re&amp;move</source>
-        <translation>移除(&amp;M)</translation>
+        <translation type="vanished">移除(&amp;M)</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1106,10 +1106,6 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>快捷键</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&amp;高级...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -169,221 +169,47 @@
       </attribute>
       <layout class="QVBoxLayout" name="hotkeysLayout">
        <item>
-        <widget class="QStackedWidget" name="stackedHotkeys">
-         <property name="currentIndex">
-          <number>0</number>
+        <widget class="QLabel" name="lblHotkeyHint">
+         <property name="text">
+          <string>点击"录制"为每个动作设置快捷键。</string>
          </property>
-         <!-- Page 0: 简化模式 — 预设动作列表 -->
-         <widget class="QWidget" name="pageSimpleHotkeys">
-          <layout class="QVBoxLayout" name="simpleHotkeysLayout">
-           <item>
-            <widget class="QLabel" name="lblHotkeyHint">
-             <property name="text">
-              <string>点击"录制"为每个动作设置快捷键。</string>
-             </property>
-             <property name="wordWrap">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QTableWidget" name="tableHotkeys">
-             <property name="editTriggers">
-              <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
-             </property>
-             <property name="selectionBehavior">
-              <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
-             </property>
-             <property name="cornerButtonEnabled">
-              <bool>false</bool>
-             </property>
-             <property name="columnCount">
-              <number>3</number>
-             </property>
-             <attribute name="horizontalHeaderStretchLastSection">
-              <bool>false</bool>
-             </attribute>
-             <column>
-              <property name="text">
-               <string>动作</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>快捷键</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string/>
-              </property>
-             </column>
-            </widget>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="simpleHotkeysButtonBar">
-             <item>
-              <spacer name="simpleHotkeySpacer">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnAdvancedHotkeys">
-               <property name="text">
-                <string>&amp;高级...</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-         <!-- Page 1: 高级模式（原有双栏布局） -->
-         <widget class="QWidget" name="pageAdvancedHotkeys">
-          <layout class="QHBoxLayout" name="advancedHotkeysLayout">
-           <item>
-            <widget class="QGroupBox" name="groupHotkeys">
-             <property name="title">
-              <string>&amp;Hotkeys</string>
-             </property>
-             <layout class="QGridLayout" name="_3">
-              <item row="0" column="0" rowspan="4">
-               <widget class="QListWidget" name="listHotkeys"/>
-              </item>
-              <item row="0" column="1">
-               <widget class="QPushButton" name="btnNewHotkey">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>&amp;New</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::ListAdd"/>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QPushButton" name="btnEditHotkey">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>&amp;Edit</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="document-edit"/>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QPushButton" name="btnRemoveHotkey">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>&amp;Remove</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::ListRemove"/>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <spacer name="hotkeySpacer">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>75</width>
-                  <height>161</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="QGroupBox" name="groupActions">
-             <property name="font">
-              <font>
-               <kerning>true</kerning>
-              </font>
-             </property>
-             <property name="title">
-              <string>A&amp;ctions</string>
-             </property>
-             <layout class="QGridLayout">
-              <item row="0" column="0" rowspan="4">
-               <widget class="QListWidget" name="listActions"/>
-              </item>
-              <item row="0" column="1">
-               <widget class="QPushButton" name="btnNewAction">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Ne&amp;w</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::ListAdd"/>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="QPushButton" name="btnEditAction">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>E&amp;dit</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="document-edit"/>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QPushButton" name="btnRemoveAction">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Re&amp;move</string>
-                </property>
-                <property name="icon">
-                 <iconset theme="QIcon::ThemeIcon::ListRemove"/>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <spacer name="actionSpacer">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>20</width>
-                  <height>40</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableHotkeys">
+         <property name="editTriggers">
+          <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
+         </property>
+         <property name="cornerButtonEnabled">
+          <bool>false</bool>
+         </property>
+         <property name="columnCount">
+          <number>3</number>
+         </property>
+         <attribute name="horizontalHeaderStretchLastSection">
+          <bool>false</bool>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>动作</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>快捷键</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string/>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>

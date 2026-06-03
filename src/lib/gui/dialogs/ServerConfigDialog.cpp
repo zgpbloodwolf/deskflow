@@ -13,7 +13,6 @@
 #include "common/NetworkProtocol.h"
 #include "common/PlatformInfo.h"
 #include "common/Settings.h"
-#include "dialogs/ActionDialog.h"
 #include "dialogs/HotkeyDialog.h"
 #include "dialogs/ScreenSettingsDialog.h"
 
@@ -55,27 +54,7 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
   ui->lblNewScreen->setEnabled(!model().isFull());
   ui->lblNewScreen->setPixmap(QIcon::fromTheme("video-display").pixmap(QSize(64, 64)));
 
-  // 简化模式连接
-  connect(ui->btnAdvancedHotkeys, &QPushButton::clicked, this, &ServerConfigDialog::openAdvancedHotkeys);
-
-  // 高级模式连接（原有逻辑）
-  connect(ui->btnNewHotkey, &QPushButton::clicked, this, &ServerConfigDialog::addHotkey);
-  connect(ui->btnEditHotkey, &QPushButton::clicked, this, &ServerConfigDialog::editHotkey);
-  connect(ui->btnRemoveHotkey, &QPushButton::clicked, this, &ServerConfigDialog::removeHotkey);
-  connect(ui->listHotkeys, &QListView::doubleClicked, this, &ServerConfigDialog::editHotkey);
-  connect(
-      ui->listHotkeys->selectionModel(), &QItemSelectionModel::selectionChanged, this,
-      &ServerConfigDialog::listHotkeysSelectionChanged
-  );
-
-  connect(ui->btnNewAction, &QPushButton::clicked, this, &ServerConfigDialog::addAction);
-  connect(ui->btnEditAction, &QPushButton::clicked, this, &ServerConfigDialog::editAction);
-  connect(ui->btnRemoveAction, &QPushButton::clicked, this, &ServerConfigDialog::removeAction);
-  connect(ui->listActions, &QListView::doubleClicked, this, &ServerConfigDialog::editAction);
-  connect(
-      ui->listActions->selectionModel(), &QItemSelectionModel::selectionChanged, this,
-      &ServerConfigDialog::listActionsSelectionChanged
-  );
+  // 热键页面（简化模式）
 
   // force the first tab
   ui->tabWidget->setCurrentIndex(0);
@@ -166,15 +145,8 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
   ui->sbClipboardSizeLimit->setValue(clipboardSharingSizeM);
   ui->sbClipboardSizeLimit->setEnabled(serverConfig().clipboardSharing());
 
-  // 初始化高级模式列表
-  for (const Hotkey &hotkey : std::as_const(serverConfig().hotkeys()))
-    ui->listHotkeys->addItem(hotkey.text());
-
-  // 初始化简化模式表格
+  // 初始化热键表格
   refreshHotkeyTable();
-
-  // 默认显示简化模式
-  ui->stackedHotkeys->setCurrentIndex(0);
 
   ui->screenSetupView->setModel(&m_screenSetupModel);
 
@@ -217,10 +189,8 @@ void ServerConfigDialog::accept()
     }
   }
 
-  // 保存前：同步简化模式表格数据到配置
-  if (ui->stackedHotkeys->currentIndex() == 0) {
-    syncTableToConfig();
-  }
+  // 保存前：同步热键表格数据到配置
+  syncTableToConfig();
 
   setOriginalServerConfig(serverConfig());
   QDialog::accept();
@@ -395,150 +365,6 @@ void ServerConfigDialog::syncTableToConfig()
     // 修改 recordHotkey 同时保存 KeySequence
     // TODO: 后续优化 — 在 UserRole 中保存 KeySequence 数据
   }
-
-  // 同步高级模式列表
-  ui->listHotkeys->clear();
-  for (const Hotkey &hotkey : std::as_const(serverConfig().hotkeys()))
-    ui->listHotkeys->addItem(hotkey.text());
-}
-
-void ServerConfigDialog::openAdvancedHotkeys()
-{
-  ui->stackedHotkeys->setCurrentIndex(1);
-
-  // 同步高级模式列表
-  ui->listHotkeys->clear();
-  ui->listActions->clear();
-  for (const Hotkey &hotkey : std::as_const(serverConfig().hotkeys()))
-    ui->listHotkeys->addItem(hotkey.text());
-}
-
-//=============================================================================
-// 高级模式热键管理（原有逻辑）
-//=============================================================================
-
-void ServerConfigDialog::addHotkey()
-{
-  Hotkey hotkey;
-  HotkeyDialog dlg(this, hotkey);
-  if (dlg.exec() == QDialog::Accepted) {
-    serverConfig().hotkeys().append(hotkey);
-    ui->listHotkeys->addItem(hotkey.text());
-    onChange();
-  }
-}
-
-void ServerConfigDialog::editHotkey()
-{
-  int row = ui->listHotkeys->currentRow();
-  if (row < 0 || row >= serverConfig().hotkeys().size()) {
-    qDebug() << "Attempt to editing out of bounds hotkey row: " << row;
-    return;
-  }
-
-  Hotkey &hotkey = serverConfig().hotkeys()[row];
-  HotkeyDialog dlg(this, hotkey);
-  if (dlg.exec() == QDialog::Accepted) {
-    ui->listHotkeys->currentItem()->setText(hotkey.text());
-    onChange();
-  }
-}
-
-void ServerConfigDialog::removeHotkey()
-{
-  int row = ui->listHotkeys->currentRow();
-  if (row < 0 || row >= serverConfig().hotkeys().size()) {
-    qDebug() << "Attempt to remove out of bounds hotkey row: " << row;
-    return;
-  }
-
-  serverConfig().hotkeys().removeAt(row);
-  ui->listActions->clear();
-  delete ui->listHotkeys->item(row);
-  onChange();
-}
-
-void ServerConfigDialog::listHotkeysSelectionChanged(const QItemSelection &selected, const QItemSelection &)
-{
-  bool itemsSelected = !selected.isEmpty();
-  ui->btnEditHotkey->setEnabled(itemsSelected);
-  ui->btnRemoveHotkey->setEnabled(itemsSelected);
-  ui->btnNewAction->setEnabled(itemsSelected);
-
-  if (itemsSelected && !serverConfig().hotkeys().isEmpty()) {
-    ui->listActions->clear();
-    const Hotkey &hotkey = serverConfig().hotkeys().at(selected.indexes().first().row());
-    for (const Action &action : hotkey.actions())
-      ui->listActions->addItem(action.text());
-  }
-}
-
-void ServerConfigDialog::addAction()
-{
-  int row = ui->listHotkeys->currentRow();
-  if (row < 0 || row >= serverConfig().hotkeys().size()) {
-    qDebug() << "Attempt to add action to out of bounds hotkey row: " << row;
-    return;
-  }
-
-  Hotkey &hotkey = serverConfig().hotkeys()[row];
-  Action action;
-  ActionDialog dlg(this, serverConfig(), hotkey, action);
-  if (dlg.exec() == QDialog::Accepted) {
-    hotkey.actions().append(action);
-    ui->listActions->addItem(action.text());
-    onChange();
-  }
-}
-
-void ServerConfigDialog::editAction()
-{
-  int hotkeyRow = ui->listHotkeys->currentRow();
-  if (hotkeyRow < 0 || hotkeyRow >= serverConfig().hotkeys().size()) {
-    qDebug() << "Attempt to edit action from out of bounds hotkey row: " << hotkeyRow;
-    return;
-  }
-  Hotkey &hotkey = serverConfig().hotkeys()[hotkeyRow];
-
-  int actionRow = ui->listActions->currentRow();
-  if (actionRow < 0 || actionRow >= hotkey.actions().size()) {
-    qDebug() << "Attempt to remove out of bounds action row: " << actionRow;
-    return;
-  }
-  Action &action = hotkey.actions()[actionRow];
-
-  ActionDialog dlg(this, serverConfig(), hotkey, action);
-  if (dlg.exec() == QDialog::Accepted) {
-    ui->listActions->currentItem()->setText(action.text());
-    onChange();
-  }
-}
-
-void ServerConfigDialog::removeAction()
-{
-  int hotkeyRow = ui->listHotkeys->currentRow();
-  if (hotkeyRow < 0 || hotkeyRow >= serverConfig().hotkeys().size()) {
-    qDebug() << "Attempt to remove action from out of bounds hotkey row: " << hotkeyRow;
-    return;
-  }
-  Hotkey &hotkey = serverConfig().hotkeys()[hotkeyRow];
-
-  int actionRow = ui->listActions->currentRow();
-  if (actionRow < 0 || actionRow >= hotkey.actions().size()) {
-    qDebug() << "Attempt to remove out of bounds action row: " << actionRow;
-    return;
-  }
-
-  hotkey.actions().removeAt(actionRow);
-  delete ui->listActions->currentItem();
-  onChange();
-}
-
-void ServerConfigDialog::listActionsSelectionChanged(const QItemSelection &selected, const QItemSelection &)
-{
-  bool enabled = !selected.isEmpty();
-  ui->btnEditAction->setEnabled(enabled);
-  ui->btnRemoveAction->setEnabled(enabled);
 }
 
 //=============================================================================

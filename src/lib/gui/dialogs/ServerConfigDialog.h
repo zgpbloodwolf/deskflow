@@ -43,23 +43,11 @@ protected:
   void addClient();
   bool addComputer(const QString &clientName, bool doSilent);
 
-  // 简化模式：预设动作列表
+  // 热键：预设动作列表
   void refreshHotkeyTable();
   void recordHotkey(int row);
   void clearHotkey(int row);
-  void openAdvancedHotkeys();
   void syncTableToConfig();
-
-  // 高级模式热键管理（原有逻辑）
-  void addHotkey();
-  void editHotkey();
-  void removeHotkey();
-  void listHotkeysSelectionChanged(const QItemSelection &selected, [[maybe_unused]] const QItemSelection &deselected);
-
-  void addAction();
-  void editAction();
-  void removeAction();
-  void listActionsSelectionChanged(const QItemSelection &selected, [[maybe_unused]] const QItemSelection &deselected);
 
   void toggleSwitchDoubleTap(bool enable);
   void setSwitchDoubleTap(int within);
