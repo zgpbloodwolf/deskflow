@@ -199,3 +199,21 @@ install(
   DESTINATION ${CMAKE_INSTALL_LICENSE_DIR}
   RENAME LICENSE_EXCEPTION
 )
+
+# 快捷开发命令
+# 用法: cmake --build build --target run      (构建+启动server调试)
+#       cmake --build build --target run-gui   (构建+启动GUI)
+
+add_custom_target(run
+  COMMAND ${CMAKE_SOURCE_DIR}/scripts/run.sh
+  DEPENDS deskflow-core
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "构建并启动 deskflow-core server (调试模式)"
+)
+
+add_custom_target(run-gui
+  COMMAND ${CMAKE_SOURCE_DIR}/scripts/run-gui.sh
+  DEPENDS Deskflow
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  COMMENT "构建并启动 Deskflow GUI"
+)
