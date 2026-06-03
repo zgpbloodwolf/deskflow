@@ -166,7 +166,10 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
   onChange();
 
   // computers
-  connect(&m_screenSetupModel, &ScreenSetupModel::screensChanged, this, &ServerConfigDialog::onChange);
+  connect(&m_screenSetupModel, &ScreenSetupModel::screensChanged, this, [this]() {
+    refreshHotkeyTable();
+    onChange();
+  });
 }
 
 ServerConfigDialog::~ServerConfigDialog() = default;
