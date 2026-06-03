@@ -80,16 +80,23 @@ I18N::I18N(QObject *parent) : QObject{parent}
 
   detectLanguages();
 
-  // 固定加载中文翻译
+  // 固定中文界面，源码已直接使用中文文本，不需要加载应用翻译文件
+  // 仅加载 Qt 内部控件的中文翻译（如标准对话框按钮）
   m_currentLang = QStringLiteral("zh_CN");
   Settings::setValue(Settings::Core::Language, m_currentLang);
 
+  // 加载 Qt 内部翻译（QMessageBox 按钮等标准控件）
   const auto translations = m_translations.value(m_currentLang);
   for (const auto &translation : translations) {
     auto translator = new QTranslator(this);
     if (translator->load(translation)) {
-      m_currentTranslations.append(translator);
-      QCoreApplication::installTranslator(translator);
+      // 跳过 deskflow 自己的翻译文件，只加载 qt_ 开头的
+      if (translation.contains(QStringLiteral("/qt_"))) {
+        m_currentTranslations.append(translator);
+        QCoreApplication::installTranslator(translator);
+      } else {
+        delete translator;
+      }
     }
   }
 }
