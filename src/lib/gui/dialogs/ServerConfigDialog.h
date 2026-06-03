@@ -37,8 +37,6 @@ public Q_SLOTS:
   }
 
 protected Q_SLOTS:
-  void onScreenRemoved();
-
 protected:
   void addClient();
   bool addComputer(const QString &clientName, bool doSilent);

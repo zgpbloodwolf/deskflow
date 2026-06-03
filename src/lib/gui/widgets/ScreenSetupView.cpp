@@ -15,6 +15,7 @@
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
 #include <QHeaderView>
+#include <QMenu>
 #include <QMimeData>
 #include <QMouseEvent>
 #include <QResizeEvent>
@@ -143,6 +144,34 @@ void ScreenSetupView::startDrag(Qt::DropActions)
 
     Q_EMIT model()->screensChanged();
   }
+}
+
+void ScreenSetupView::contextMenuEvent(QContextMenuEvent *event)
+{
+  const auto &point = event->pos();
+  int col = columnAt(point.x());
+  int row = rowAt(point.y());
+
+  // 只在有屏幕的格子显示右键菜单
+  if (col < 0 || row < 0 || model()->screen(col, row).isNull())
+    return;
+
+  QMenu menu(this);
+
+  // 编辑屏幕设置
+  auto *editAction = menu.addAction(tr("编辑"));
+  connect(editAction, &QAction::triggered, this, [this, col, row]() { showScreenConfig(col, row); });
+
+  menu.addSeparator();
+
+  // 删除屏幕
+  auto *removeAction = menu.addAction(tr("删除"));
+  connect(removeAction, &QAction::triggered, this, [this, col, row]() {
+    model()->screen(col, row) = Screen();
+    Q_EMIT model()->screensChanged();
+  });
+
+  menu.exec(event->globalPos());
 }
 
 void ScreenSetupView::initViewItemOption(QStyleOptionViewItem *option) const

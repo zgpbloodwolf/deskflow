@@ -48,9 +48,6 @@ ServerConfigDialog::ServerConfigDialog(QWidget *parent, ServerConfig &config)
   connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &ServerConfigDialog::accept);
   connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &ServerConfigDialog::reject);
 
-  ui->lblRemoveScreen->setPixmap(QIcon::fromTheme("user-trash").pixmap(QSize(64, 64)));
-  connect(ui->lblRemoveScreen, &TrashScreenWidget::screenRemoved, this, &ServerConfigDialog::onScreenRemoved);
-
   ui->lblNewScreen->setEnabled(!model().isFull());
   ui->lblNewScreen->setPixmap(QIcon::fromTheme("video-display").pixmap(QSize(64, 64)));
 
@@ -495,12 +492,6 @@ void ServerConfigDialog::toggleWin32Foreground(bool enabled)
 void ServerConfigDialog::addClient()
 {
   addComputer("", false);
-}
-
-void ServerConfigDialog::onScreenRemoved()
-{
-  ui->lblNewScreen->setEnabled(true);
-  onChange();
 }
 
 void ServerConfigDialog::toggleExternalConfig(bool checked)

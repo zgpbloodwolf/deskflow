@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <QContextMenuEvent>
 #include <QFlags>
 #include <QTableView>
 
@@ -30,6 +31,7 @@ private:
 
 protected:
   void mouseDoubleClickEvent(QMouseEvent *) override;
+  void contextMenuEvent(QContextMenuEvent *event) override;
   void setTableSize();
   void resizeEvent(QResizeEvent *) override;
   void dragEnterEvent(QDragEnterEvent *event) override;
