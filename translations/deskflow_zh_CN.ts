@@ -1204,7 +1204,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>&amp;Advanced</source>
-        <translation>高级(&amp;A)</translation>
+        <translation type="vanished">高级(&amp;A)</translation>
     </message>
     <message>
         <source>Port</source>
@@ -1372,7 +1372,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>&amp;Window</source>
-        <translation type="unfinished">窗户(&amp;W)</translation>
+        <translation type="obsolete">窗户(&amp;W)</translation>
     </message>
     <message>
         <source>When the main window is closed</source>

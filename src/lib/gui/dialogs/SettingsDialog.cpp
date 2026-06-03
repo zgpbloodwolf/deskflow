@@ -234,7 +234,7 @@ void SettingsDialog::updateControls()
   if (!Settings::isPortableMode()) {
     ui->groupService->setEnabled(writable);
     ui->cbElevateDaemon->setEnabled(writable && serviceChecked);
-  } else if (ui->groupService->isVisibleTo(ui->tabAdvanced)) {
+  } else {
     ui->groupService->setVisible(false);
   }
 
