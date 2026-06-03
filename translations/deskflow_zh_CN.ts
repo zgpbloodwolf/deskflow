@@ -1088,6 +1088,58 @@ Enabling this setting will disable the server config GUI.</source>
         <source>Enable lock to computer at startup</source>
         <translation type="unfinished">启动时启用锁定到计算机</translation>
     </message>
+    <message>
+        <source>&amp;Add</source>
+        <translation type="obsolete">添加(&amp;A)</translation>
+    </message>
+    <message>
+        <source>Not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>点击&quot;录制&quot;为每个动作设置快捷键。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>动作</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>快捷键</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;高级...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>切换到 &quot;%1&quot;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>切换鼠标锁定</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>锁定鼠标</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重启服务</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>未设置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>录制</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>清除</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>
@@ -1205,7 +1257,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation type="vanished">语言</translation>
     </message>
     <message>
         <source>TLS Certificate Regenerated</source>
