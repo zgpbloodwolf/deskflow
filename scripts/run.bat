@@ -1,14 +1,12 @@
 @echo off
-REM 启动 deskflow-core server (调试模式)
-REM 用法: cmake --build build --target run
+chcp 65001 >nul 2>&1
+REM Start deskflow-core server (debug mode)
+REM Usage: cmake --build build --target run
 
-set SCRIPT_DIR=%~dp0
-set PROJECT_DIR=%SCRIPT_DIR%..
-
-REM 杀掉旧进程
+REM Kill old processes
 taskkill /f /im deskflow-core.exe >nul 2>&1
 timeout /t 1 /nobreak >nul
 
-REM 启动
-echo 启动 deskflow-core server...
-"%PROJECT_DIR%\build\bin\deskflow-core.exe" --server -f --debug DEBUG
+REM Start (WORKING_DIRECTORY is set to CMAKE_SOURCE_DIR by CMake)
+echo Starting deskflow-core server...
+"%cd%\build\bin\deskflow-core.exe" --server -f --debug DEBUG
