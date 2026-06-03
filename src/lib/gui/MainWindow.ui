@@ -57,7 +57,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>This computer's name:</string>
+          <string>本机名称：</string>
          </property>
         </widget>
        </item>
@@ -83,7 +83,7 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Name can't have have spaces or special characters&lt;/p&gt;&lt;p&gt;Use Enter to save the name change.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称不能包含空格或特殊字符&lt;/p&gt;&lt;p&gt;按回车键保存名称更改。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="maxLength">
           <number>255</number>
@@ -105,7 +105,7 @@
           </sizepolicy>
          </property>
          <property name="toolTip">
-          <string>Edit Computer Name</string>
+          <string>编辑计算机名称</string>
          </property>
          <property name="icon">
           <iconset theme="document-edit" />
@@ -260,7 +260,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>&amp;Configure Server</string>
+                <string>配置服务端</string>
                </property>
               </widget>
              </item>
@@ -285,7 +285,7 @@
                 </size>
                </property>
                <property name="toolTip">
-                <string>Export server configuration</string>
+                <string>导出服务器配置</string>
                </property>
                <property name="icon">
                 <iconset theme="QIcon::ThemeIcon::DocumentSaveAs" />
@@ -311,7 +311,7 @@
           <item>
            <widget class="QLabel" name="lblNoMode">
             <property name="text">
-             <string>You must select a mode</string>
+             <string>请选择一个模式</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -360,7 +360,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>&amp;Configure Client</string>
+                <string>配置客户端</string>
                </property>
               </widget>
              </item>
@@ -387,7 +387,7 @@
                   </sizepolicy>
                  </property>
                  <property name="text">
-                  <string>Connect to:</string>
+                  <string>连接到：</string>
                  </property>
                  <property name="indent">
                   <number>0</number>
@@ -397,7 +397,7 @@
                <item>
                 <widget class="QLineEdit" name="lineHostname">
                  <property name="toolTip">
-                  <string>&lt;html&gt;Hostname or IP address of the server computer.&lt;br/&gt;May contain a comma seperated list.&lt;/html&gt;</string>
+                  <string>&lt;html&gt;服务端计算机的主机名或 IP 地址。&lt;br/&gt;可用逗号分隔多个地址。&lt;/html&gt;</string>
                  </property>
                  <property name="minimumSize">
                   <size>
@@ -469,7 +469,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>&amp;Start</string>
+                <string>启动</string>
                </property>
               </widget>
              </item>
@@ -497,7 +497,7 @@
                 </size>
                </property>
                <property name="toolTip">
-                <string>Restart</string>
+                <string>重启</string>
                </property>
                <property name="icon">
                 <iconset theme="view-refresh" />

@@ -17,14 +17,14 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Server Configuration</string>
+   <string>服务器配置</string>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <widget class="QWidget" name="tabComputers">
       <attribute name="title">
-       <string>Computers</string>
+       <string>计算机</string>
       </attribute>
       <layout class="QVBoxLayout">
        <property name="leftMargin">
@@ -50,7 +50,7 @@
             <bool>true</bool>
            </property>
            <property name="toolTip">
-            <string>Drag a computer from the grid to the trashcan to remove it.</string>
+            <string>将计算机从网格拖到垃圾桶以移除。</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Shape::StyledPanel</enum>
@@ -88,7 +88,7 @@
             </size>
            </property>
            <property name="text">
-            <string>Configure the layout of your computer displays by dragging to where you want.</string>
+            <string>拖动计算机显示器到所需位置以配置布局。</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -117,7 +117,7 @@
          <item>
           <widget class="NewScreenWidget" name="lblNewScreen">
            <property name="toolTip">
-            <string>Drag to the grid to add a new computer.</string>
+            <string>拖动到网格以添加新计算机。</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::Shape::StyledPanel</enum>
@@ -165,7 +165,7 @@
      </widget>
      <widget class="QWidget" name="tabHotkeys">
       <attribute name="title">
-       <string>Hotkeys</string>
+       <string>快捷键</string>
       </attribute>
       <layout class="QVBoxLayout" name="hotkeysLayout">
        <item>
@@ -216,7 +216,7 @@
      </widget>
      <widget class="QWidget" name="tabAdvanced">
       <attribute name="title">
-       <string>Advanced</string>
+       <string>高级</string>
       </attribute>
       <layout class="QGridLayout" name="m_pGridCorners">
        <item row="0" column="0">
@@ -227,7 +227,7 @@
           </font>
          </property>
          <property name="title">
-          <string>&amp;Misc</string>
+          <string>杂项</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
@@ -241,7 +241,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Enable clipboard sharing</string>
+               <string>启用剪贴板共享</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -264,7 +264,7 @@
             <item>
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>Limit to:</string>
+               <string>大小限制：</string>
               </property>
              </widget>
             </item>
@@ -311,7 +311,7 @@
        <item row="1" column="0">
         <widget class="QGroupBox" name="groupNetwork">
          <property name="title">
-          <string>&amp;Network</string>
+          <string>网络</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
@@ -328,10 +328,10 @@
                <bool>true</bool>
               </property>
               <property name="whatsThis">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables the network heartbeat to ping clients every &lt;span style=&quot; font-style:italic;&quot;&gt;n&lt;/span&gt; seconds. This may help to diagnose network problems by retrying the connection if the client becomes unresponsive.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;启用网络心跳，每隔 &lt;span style=&quot; font-style:italic;&quot;&gt;n&lt;/span&gt; 毫秒检测客户端。当客户端无响应时重试连接，有助于诊断网络问题。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
               <property name="text">
-               <string>&amp;Check clients every</string>
+               <string>检测客户端间隔</string>
               </property>
              </widget>
             </item>
@@ -402,7 +402,7 @@
           </font>
          </property>
          <property name="title">
-          <string>&amp;Switching</string>
+          <string>切换</string>
          </property>
          <layout class="QVBoxLayout">
           <property name="spacing">
@@ -422,7 +422,7 @@
                <bool>true</bool>
               </property>
               <property name="text">
-               <string>Switch &amp;after waiting</string>
+               <string>延迟切换</string>
               </property>
              </widget>
             </item>
@@ -477,7 +477,7 @@
                <bool>true</bool>
               </property>
               <property name="text">
-               <string>Switch on double &amp;tap within</string>
+               <string>双击切换间隔</string>
               </property>
              </widget>
             </item>
@@ -563,7 +563,7 @@
        </sizepolicy>
       </property>
       <attribute name="title">
-       <string>Config file</string>
+       <string>配置文件</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="topMargin">
@@ -578,7 +578,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Core server config file</string>
+          <string>核心服务端配置文件</string>
          </property>
          <property name="textFormat">
           <enum>Qt::TextFormat::PlainText</enum>
@@ -591,9 +591,9 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="text">
-          <string>Use a server config file to create complex computer layouts that are not possible with the simple grid-based computer layout editor.
+          <string>使用配置文件创建简单的网格编辑器无法实现的复杂计算机布局。
 
-Enabling this setting will disable the server config GUI.</string>
+启用此设置将禁用服务器配置 GUI。</string>
          </property>
          <property name="textFormat">
           <enum>Qt::TextFormat::MarkdownText</enum>
@@ -625,7 +625,7 @@ Enabling this setting will disable the server config GUI.</string>
        <item>
         <widget class="QGroupBox" name="groupExternalConfig">
          <property name="title">
-          <string>Use a server config file</string>
+          <string>使用服务器配置文件</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -667,7 +667,7 @@ Enabling this setting will disable the server config GUI.</string>
                 </size>
                </property>
                <property name="text">
-                <string>Config file path</string>
+                <string>配置文件路径</string>
                </property>
               </widget>
              </item>

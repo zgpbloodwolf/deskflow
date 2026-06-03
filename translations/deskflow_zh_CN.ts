@@ -304,15 +304,15 @@ Do you want to connect to the server?
     <name>MainWindow</name>
     <message>
         <source>This computer&apos;s name:</source>
-        <translation>此计算机名称：</translation>
+        <translation type="vanished">此计算机名称：</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Name can&apos;t have have spaces or special characters&lt;/p&gt;&lt;p&gt;Use Enter to save the name change.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称不能包含空格或特殊字符&lt;/p&gt;&lt;p&gt;按 Enter 键保存更改。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称不能包含空格或特殊字符&lt;/p&gt;&lt;p&gt;按 Enter 键保存更改。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Edit Computer Name</source>
-        <translation>编辑计算机名称</translation>
+        <translation type="vanished">编辑计算机名称</translation>
     </message>
     <message>
         <source>Use this computer&apos;s keyboard and mouse
@@ -328,15 +328,15 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>&amp;Configure Server</source>
-        <translation>配置服务器(&amp;C)</translation>
+        <translation type="vanished">配置服务器(&amp;C)</translation>
     </message>
     <message>
         <source>Export server configuration</source>
-        <translation>导出服务器配置</translation>
+        <translation type="vanished">导出服务器配置</translation>
     </message>
     <message>
         <source>You must select a mode</source>
-        <translation>您必须选择一种模式</translation>
+        <translation type="vanished">您必须选择一种模式</translation>
     </message>
     <message>
         <source>&amp;Start</source>
@@ -344,7 +344,7 @@ Do you want to connect to the server?
     </message>
     <message>
         <source>Restart</source>
-        <translation>重启</translation>
+        <translation type="vanished">重启</translation>
     </message>
     <message>
         <source>Your current TLS key is smaller than the minimum allowed size, A new key 2048-bit key will be generated.</source>
@@ -525,15 +525,15 @@ Valid names:
     </message>
     <message>
         <source>&amp;Configure Client</source>
-        <translation type="unfinished">配置客户端(&amp;C)</translation>
+        <translation type="obsolete">配置客户端(&amp;C)</translation>
     </message>
     <message>
         <source>Connect to:</source>
-        <translation type="unfinished">连接到：</translation>
+        <translation type="obsolete">连接到：</translation>
     </message>
     <message>
         <source>&lt;html&gt;Hostname or IP address of the server computer.&lt;br/&gt;May contain a comma seperated list.&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;服务器计算机的主机名或 IP 地址。&lt;br/&gt;可以包含以逗号分隔的列表。&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;服务器计算机的主机名或 IP 地址。&lt;br/&gt;可以包含以逗号分隔的列表。&lt;/html&gt;</translation>
     </message>
     <message>
         <source>read</source>
@@ -573,6 +573,50 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>使用其他电脑的键盘和鼠标（作为客户端）</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>本机名称：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;名称不能包含空格或特殊字符&lt;/p&gt;&lt;p&gt;按回车键保存名称更改。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>编辑计算机名称</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>配置服务端</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>导出服务器配置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>请选择一个模式</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>配置客户端</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>连接到：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;服务端计算机的主机名或 IP 地址。&lt;br/&gt;可用逗号分隔多个地址。&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>启动</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>重启</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -920,27 +964,27 @@ Additionally, check you are able to %1 the server config file: %2</source>
     <name>ServerConfigDialog</name>
     <message>
         <source>Server Configuration</source>
-        <translation>服务器配置</translation>
+        <translation type="vanished">服务器配置</translation>
     </message>
     <message>
         <source>Computers</source>
-        <translation>计算机</translation>
+        <translation type="vanished">计算机</translation>
     </message>
     <message>
         <source>Drag a computer from the grid to the trashcan to remove it.</source>
-        <translation>将计算机从网格拖到垃圾桶以将其移除。</translation>
+        <translation type="vanished">将计算机从网格拖到垃圾桶以将其移除。</translation>
     </message>
     <message>
         <source>Configure the layout of your computer displays by dragging to where you want.</source>
-        <translation>通过将计算机显示器拖动到所需位置来配置布局。</translation>
+        <translation type="vanished">通过将计算机显示器拖动到所需位置来配置布局。</translation>
     </message>
     <message>
         <source>Drag to the grid to add a new computer.</source>
-        <translation>拖动到网格以添加新计算机。</translation>
+        <translation type="vanished">拖动到网格以添加新计算机。</translation>
     </message>
     <message>
         <source>Hotkeys</source>
-        <translation>热键</translation>
+        <translation type="vanished">热键</translation>
     </message>
     <message>
         <source>&amp;Hotkeys</source>
@@ -976,7 +1020,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>高级</translation>
+        <translation type="vanished">高级</translation>
     </message>
     <message>
         <source>&amp;Dead corners (for this computer)</source>
@@ -1008,7 +1052,7 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&amp;Misc</source>
-        <translation>杂项(&amp;M)</translation>
+        <translation type="vanished">杂项(&amp;M)</translation>
     </message>
     <message>
         <source>Disable lock to computer (scroll lock key)</source>
@@ -1024,11 +1068,11 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>Enable clipboard sharing</source>
-        <translation>启用剪贴板共享</translation>
+        <translation type="vanished">启用剪贴板共享</translation>
     </message>
     <message>
         <source>Limit to:</source>
-        <translation>限制为：</translation>
+        <translation type="vanished">限制为：</translation>
     </message>
     <message>
         <source>MB</source>
@@ -1036,15 +1080,15 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&amp;Network</source>
-        <translation>网络(&amp;N)</translation>
+        <translation type="vanished">网络(&amp;N)</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables the network heartbeat to ping clients every &lt;span style=&quot; font-style:italic;&quot;&gt;n&lt;/span&gt; seconds. This may help to diagnose network problems by retrying the connection if the client becomes unresponsive.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;启用网络心跳，每 &lt;span style=&quot; font-style:italic;&quot;&gt;n&lt;/span&gt; 秒 ping 一次客户端。如果客户端无响应，通过重试连接可能有助于诊断网络问题。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;启用网络心跳，每 &lt;span style=&quot; font-style:italic;&quot;&gt;n&lt;/span&gt; 秒 ping 一次客户端。如果客户端无响应，通过重试连接可能有助于诊断网络问题。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Check clients every</source>
-        <translation>检查客户端间隔(&amp;C)</translation>
+        <translation type="vanished">检查客户端间隔(&amp;C)</translation>
     </message>
     <message>
         <source>ms</source>
@@ -1060,39 +1104,39 @@ Additionally, check you are able to %1 the server config file: %2</source>
     </message>
     <message>
         <source>&amp;Switching</source>
-        <translation>切换(&amp;S)</translation>
+        <translation type="vanished">切换(&amp;S)</translation>
     </message>
     <message>
         <source>Switch &amp;after waiting</source>
-        <translation>等待后切换(&amp;A)</translation>
+        <translation type="vanished">等待后切换(&amp;A)</translation>
     </message>
     <message>
         <source>Switch on double &amp;tap within</source>
-        <translation>在指定时间内双击切换(&amp;T)</translation>
+        <translation type="vanished">在指定时间内双击切换(&amp;T)</translation>
     </message>
     <message>
         <source>Config file</source>
-        <translation>配置文件</translation>
+        <translation type="vanished">配置文件</translation>
     </message>
     <message>
         <source>Core server config file</source>
-        <translation>核心服务器配置文件</translation>
+        <translation type="vanished">核心服务器配置文件</translation>
     </message>
     <message>
         <source>Use a server config file to create complex computer layouts that are not possible with the simple grid-based computer layout editor.
 
 Enabling this setting will disable the server config GUI.</source>
-        <translation>使用服务器配置文件来创建简单的网格布局编辑器无法实现的复杂计算机布局。
+        <translation type="vanished">使用服务器配置文件来创建简单的网格布局编辑器无法实现的复杂计算机布局。
 
 启用此设置将禁用服务器配置 GUI。</translation>
     </message>
     <message>
         <source>Use a server config file</source>
-        <translation>使用服务器配置文件</translation>
+        <translation type="vanished">使用服务器配置文件</translation>
     </message>
     <message>
         <source>Config file path</source>
-        <translation>配置文件路径</translation>
+        <translation type="vanished">配置文件路径</translation>
     </message>
     <message>
         <source>%1 Configurations (*.conf);;All files (*.*)</source>
@@ -1155,20 +1199,102 @@ Enabling this setting will disable the server config GUI.</source>
         <source>清除</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>服务器配置</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>计算机</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>将计算机从网格拖到垃圾桶以移除。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>拖动计算机显示器到所需位置以配置布局。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>拖动到网格以添加新计算机。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>高级</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>杂项</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>启用剪贴板共享</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>大小限制：</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>网络</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;启用网络心跳，每隔 &lt;span style=&quot; font-style:italic;&quot;&gt;n&lt;/span&gt; 毫秒检测客户端。当客户端无响应时重试连接，有助于诊断网络问题。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>检测客户端间隔</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>切换</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>延迟切换</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>双击切换间隔</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>配置文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>核心服务端配置文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>使用配置文件创建简单的网格编辑器无法实现的复杂计算机布局。
+
+启用此设置将禁用服务器配置 GUI。</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>使用服务器配置文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>配置文件路径</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
         <source>Preferences</source>
-        <translation>首选项</translation>
+        <translation type="vanished">首选项</translation>
     </message>
     <message>
         <source>Check for updates on startup</source>
-        <translation>启动时检查更新</translation>
+        <translation type="vanished">启动时检查更新</translation>
     </message>
     <message>
         <source>Prevent this computer from going to sleep</source>
-        <translation>防止此计算机进入睡眠状态</translation>
+        <translation type="vanished">防止此计算机进入睡眠状态</translation>
     </message>
     <message>
         <source>Tray icon style</source>
@@ -1208,19 +1334,19 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Port</source>
-        <translation>端口</translation>
+        <translation type="vanished">端口</translation>
     </message>
     <message>
         <source>Network IP</source>
-        <translation>网络 IP</translation>
+        <translation type="vanished">网络 IP</translation>
     </message>
     <message>
         <source>Level</source>
-        <translation>级别</translation>
+        <translation type="vanished">级别</translation>
     </message>
     <message>
         <source>Fatal</source>
-        <translation>致命</translation>
+        <translation type="vanished">致命</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1228,15 +1354,15 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
         <source>Note</source>
-        <translation>注意</translation>
+        <translation type="vanished">注意</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>信息</translation>
+        <translation type="vanished">信息</translation>
     </message>
     <message>
         <source>Debug</source>
@@ -1252,7 +1378,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Log path</source>
-        <translation>日志路径</translation>
+        <translation type="vanished">日志路径</translation>
     </message>
     <message>
         <source>Using a Debug log level may affect performance. Only use a Debug level if you are attempting to debug an issue or are gathering logs to submit with a bug report.</source>
@@ -1264,11 +1390,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Use background service (daemon)</source>
-        <translation>使用后台服务 (守护进程)</translation>
+        <translation type="vanished">使用后台服务 (守护进程)</translation>
     </message>
     <message>
         <source>Always run as system (work at login screen and UAC)</source>
-        <translation type="unfinished">始终以系统身份运行 (在登录屏幕和 UAC 下工作)</translation>
+        <translation type="obsolete">始终以系统身份运行 (在登录屏幕和 UAC 下工作)</translation>
     </message>
     <message>
         <source>Language</source>
@@ -1348,7 +1474,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">自动的</translation>
+        <translation type="obsolete">自动的</translation>
     </message>
     <message>
         <source>Include version in the window title</source>
@@ -1356,19 +1482,19 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Log to file</source>
-        <translation>记录日志到文件</translation>
+        <translation type="vanished">记录日志到文件</translation>
     </message>
     <message>
         <source>&amp;Logs</source>
-        <translation type="unfinished">日志(&amp;L)</translation>
+        <translation type="obsolete">日志(&amp;L)</translation>
     </message>
     <message>
         <source>&amp;General</source>
-        <translation>常规(&amp;G)</translation>
+        <translation type="vanished">常规(&amp;G)</translation>
     </message>
     <message>
         <source>&amp;Network</source>
-        <translation>网络(&amp;N)</translation>
+        <translation type="vanished">网络(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -1376,23 +1502,23 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>When the main window is closed</source>
-        <translation type="unfinished">主窗口关闭时</translation>
+        <translation type="obsolete">主窗口关闭时</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="unfinished">出口</translation>
+        <translation type="obsolete">出口</translation>
     </message>
     <message>
         <source>Send to background</source>
-        <translation type="unfinished">发送到后台</translation>
+        <translation type="obsolete">发送到后台</translation>
     </message>
     <message>
         <source>When the application starts</source>
-        <translation type="unfinished">应用程序启动时</translation>
+        <translation type="obsolete">应用程序启动时</translation>
     </message>
     <message>
         <source>Show the main window</source>
-        <translation type="unfinished">显示主窗口</translation>
+        <translation type="obsolete">显示主窗口</translation>
     </message>
     <message>
         <source>Run command on enter</source>
@@ -1401,6 +1527,98 @@ Enabling this setting will disable the server config GUI.</source>
     <message>
         <source>Run command on exit</source>
         <translation type="obsolete">退出时运行命令</translation>
+    </message>
+    <message>
+        <source>首选项</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>常规</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>启动时检查更新</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>阻止此电脑进入睡眠</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>使用后台服务（守护进程）</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>始终以系统身份运行（在登录界面和 UAC 时生效）</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>应用启动时</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>显示主窗口</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>隐藏到后台</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>关闭主窗口时</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>退出</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>日志</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>级别</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>严重</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>警告</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>通知</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>信息</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>日志写入文件</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>日志路径</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>网络</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>网络 IP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>自动</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>端口</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

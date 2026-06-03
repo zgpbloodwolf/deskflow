@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Preferences</string>
+   <string>首选项</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -27,7 +27,7 @@
     <widget class="QTabWidget" name="tabWidget">
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
-       <string>&amp;General</string>
+       <string>常规</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <property name="spacing">
@@ -61,14 +61,14 @@
        <item>
         <widget class="QCheckBox" name="cbAutoUpdate">
          <property name="text">
-          <string>Check for updates on startup</string>
+          <string>启动时检查更新</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="cbPreventSleep">
          <property name="text">
-          <string>Prevent this computer from going to sleep</string>
+          <string>阻止此电脑进入睡眠</string>
          </property>
         </widget>
        </item>
@@ -78,7 +78,7 @@
           <bool>true</bool>
          </property>
          <property name="title">
-          <string>Use background service (daemon)</string>
+          <string>使用后台服务（守护进程）</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -90,7 +90,7 @@
           <item row="1" column="0">
            <widget class="QCheckBox" name="cbElevateDaemon">
             <property name="text">
-             <string>Always run as system (work at login screen and UAC)</string>
+             <string>始终以系统身份运行（在登录界面和 UAC 时生效）</string>
             </property>
             <property name="autoExclusive">
              <bool>false</bool>
@@ -123,7 +123,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>When the application starts</string>
+            <string>应用启动时</string>
            </property>
           </widget>
          </item>
@@ -133,14 +133,14 @@
             <item>
              <widget class="QRadioButton" name="rbShowOnStart">
               <property name="text">
-               <string>Show the main window</string>
+               <string>显示主窗口</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QRadioButton" name="rbAutoHide">
               <property name="text">
-               <string>Send to background</string>
+               <string>隐藏到后台</string>
               </property>
              </widget>
             </item>
@@ -150,7 +150,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>When the main window is closed</string>
+            <string>关闭主窗口时</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -163,14 +163,14 @@
             <item>
              <widget class="QRadioButton" name="rbExitOnClose">
               <property name="text">
-               <string>Exit</string>
+               <string>退出</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QRadioButton" name="rbCloseToTray">
               <property name="text">
-               <string>Send to background</string>
+               <string>隐藏到后台</string>
               </property>
              </widget>
             </item>
@@ -196,7 +196,7 @@
      </widget>
      <widget class="QWidget" name="tabLog">
       <attribute name="title">
-       <string>&amp;Logs</string>
+       <string>日志</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="spacing">
@@ -238,7 +238,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Level</string>
+            <string>级别</string>
            </property>
           </widget>
          </item>
@@ -246,7 +246,7 @@
           <widget class="QComboBox" name="comboLogLevel">
            <item>
             <property name="text">
-             <string>Fatal</string>
+             <string>严重</string>
             </property>
            </item>
            <item>
@@ -256,17 +256,17 @@
            </item>
            <item>
             <property name="text">
-             <string>Warning</string>
+             <string>警告</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Note</string>
+             <string>通知</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Info</string>
+             <string>信息</string>
             </property>
            </item>
            <item>
@@ -291,7 +291,7 @@
        <item>
         <widget class="QGroupBox" name="groupLogToFile">
          <property name="title">
-          <string>Log to file</string>
+          <string>日志写入文件</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
@@ -330,7 +330,7 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Log path</string>
+                <string>日志路径</string>
                </property>
               </widget>
              </item>
@@ -405,7 +405,7 @@
      </widget>
      <widget class="QWidget" name="tabNetwork">
       <attribute name="title">
-       <string>&amp;Network</string>
+       <string>网络</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="spacing">
@@ -447,7 +447,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Network IP</string>
+            <string>网络 IP</string>
            </property>
           </widget>
          </item>
@@ -461,7 +461,7 @@
            </property>
            <item>
             <property name="text">
-             <string>Automatic</string>
+             <string>自动</string>
             </property>
            </item>
           </widget>
@@ -495,7 +495,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Port</string>
+            <string>端口</string>
            </property>
           </widget>
          </item>
