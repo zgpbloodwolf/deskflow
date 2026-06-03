@@ -4,14 +4,9 @@ set_directory_properties(PROPERTIES CLEAN_NO_CUSTOM 1)
 option(CLEAN_TRS "Clean obsolete translations from tr files" OFF)
 find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS LinguistTools)
 
-# To add a new language Add 639 shortname
+# 仅保留中文翻译
 set (${CMAKE_PROJECT_NAME}_TRS
-  ${CMAKE_PROJECT_NAME}_es.ts
-  ${CMAKE_PROJECT_NAME}_it.ts
-  ${CMAKE_PROJECT_NAME}_ja.ts
   ${CMAKE_PROJECT_NAME}_zh_CN.ts
-  ${CMAKE_PROJECT_NAME}_ru.ts
-  ${CMAKE_PROJECT_NAME}_ko.ts
 )
 
 set(TR_OPTIONS -no-ui-lines -locations none -silent)

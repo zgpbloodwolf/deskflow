@@ -352,7 +352,7 @@ bool SettingsDialog::isDefault() const
       (ui->lineCommandExit->text() == Settings::defaultValue(Settings::Core::ScreenExitCommand).toString()) &&
       (ui->cbRunEnterCommand->isChecked() == Settings::defaultValue(Settings::Core::EnableEnterCommand).toBool()) &&
       (ui->cbRunExitCommand->isChecked() == Settings::defaultValue(Settings::Core::EnableExitCommand).toBool()) &&
-      (ui->comboLanguage->currentText() == "English")
+      (ui->comboLanguage->currentText() == I18N::toNativeName(QStringLiteral("zh_CN")))
   );
 }
 
