@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
@@ -108,7 +108,7 @@
           <string>Edit Computer Name</string>
          </property>
          <property name="icon">
-          <iconset theme="document-edit"/>
+          <iconset theme="document-edit" />
          </property>
          <property name="iconSize">
           <size>
@@ -156,7 +156,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string/>
+       <string />
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
@@ -288,7 +288,7 @@
                 <string>Export server configuration</string>
                </property>
                <property name="icon">
-                <iconset theme="QIcon::ThemeIcon::DocumentSaveAs"/>
+                <iconset theme="QIcon::ThemeIcon::DocumentSaveAs" />
                </property>
               </widget>
              </item>
@@ -326,7 +326,7 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QVBoxLayout">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -365,49 +365,49 @@
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Policy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>5</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QLabel" name="m_pLabelServerName">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Connect to:</string>
-               </property>
-               <property name="indent">
+              <layout class="QHBoxLayout">
+               <property name="leftMargin">
                 <number>0</number>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="lineHostname">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
+               <property name="topMargin">
+                <number>0</number>
                </property>
-               <property name="toolTip">
-                <string>&lt;html&gt;Hostname or IP address of the server computer.&lt;br/&gt;May contain a comma seperated list.&lt;/html&gt;</string>
+               <property name="rightMargin">
+                <number>0</number>
                </property>
-              </widget>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="m_pLabelServerName">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Connect to:</string>
+                 </property>
+                 <property name="indent">
+                  <number>0</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineHostname">
+                 <property name="toolTip">
+                  <string>&lt;html&gt;Hostname or IP address of the server computer.&lt;br/&gt;May contain a comma seperated list.&lt;/html&gt;</string>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
@@ -500,7 +500,7 @@
                 <string>Restart</string>
                </property>
                <property name="icon">
-                <iconset theme="view-refresh"/>
+                <iconset theme="view-refresh" />
                </property>
               </widget>
              </item>
@@ -516,6 +516,6 @@
    </layout>
   </widget>
  </widget>
- <resources/>
- <connections/>
+ <resources />
+ <connections />
 </ui>
