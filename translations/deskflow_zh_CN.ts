@@ -1172,15 +1172,15 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Tray icon style</source>
-        <translation>托盘图标样式</translation>
+        <translation type="vanished">托盘图标样式</translation>
     </message>
     <message>
         <source>Colorful</source>
-        <translation>彩色</translation>
+        <translation type="vanished">彩色</translation>
     </message>
     <message>
         <source>Monocolor</source>
-        <translation>单色</translation>
+        <translation type="vanished">单色</translation>
     </message>
     <message>
         <source>Enable TLS Encryption</source>
@@ -1256,11 +1256,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Using a Debug log level may affect performance. Only use a Debug level if you are attempting to debug an issue or are gathering logs to submit with a bug report.</source>
-        <translation>使用调试日志级别可能会影响性能。仅当您尝试调试问题或收集日志以提交 Bug 报告时，才使用调试级别。</translation>
+        <translation type="vanished">使用调试日志级别可能会影响性能。仅当您尝试调试问题或收集日志以提交 Bug 报告时，才使用调试级别。</translation>
     </message>
     <message>
         <source>Enable GUI debug messages</source>
-        <translation>启用 GUI 调试消息</translation>
+        <translation type="vanished">启用 GUI 调试消息</translation>
     </message>
     <message>
         <source>Use background service (daemon)</source>
@@ -1352,7 +1352,7 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Include version in the window title</source>
-        <translation type="unfinished">在窗口标题中包含版本信息</translation>
+        <translation type="obsolete">在窗口标题中包含版本信息</translation>
     </message>
     <message>
         <source>Log to file</source>
@@ -1396,11 +1396,11 @@ Enabling this setting will disable the server config GUI.</source>
     </message>
     <message>
         <source>Run command on enter</source>
-        <translation type="unfinished">按下回车键执行命令</translation>
+        <translation type="obsolete">按下回车键执行命令</translation>
     </message>
     <message>
         <source>Run command on exit</source>
-        <translation type="unfinished">退出时运行命令</translation>
+        <translation type="obsolete">退出时运行命令</translation>
     </message>
 </context>
 <context>

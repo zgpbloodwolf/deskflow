@@ -73,31 +73,6 @@
         </widget>
        </item>
        <item>
-        <layout class="QFormLayout" name="formLayout">
-         <item row="1" column="1">
-          <widget class="QRadioButton" name="rbIconColorful">
-           <property name="text">
-            <string>Colorful</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QRadioButton" name="rbIconMono">
-           <property name="text">
-            <string>Monocolor</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblTrayIconStyle">
-           <property name="text">
-            <string>Tray icon style</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
@@ -208,13 +183,6 @@
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cbShowVersion">
-         <property name="text">
-          <string>Include version in the window title</string>
-         </property>
-        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_11">
@@ -423,23 +391,6 @@
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="cbGuiDebug">
-         <property name="text">
-          <string>Enable GUI debug messages</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lblDebugWarning">
-         <property name="text">
-          <string>Using a Debug log level may affect performance. Only use a Debug level if you are attempting to debug an issue or are gathering logs to submit with a bug report.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
         </widget>
        </item>
        <item>
@@ -662,42 +613,6 @@
           </item>
          </layout>
         </widget>
-       </item>
-       <item>
-        <layout class="QFormLayout" name="formLayout_3">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow</enum>
-         </property>
-         <property name="rowWrapPolicy">
-          <enum>QFormLayout::RowWrapPolicy::DontWrapRows</enum>
-         </property>
-         <property name="labelAlignment">
-          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
-         <property name="formAlignment">
-          <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
-         </property>
-         <item row="0" column="0">
-          <widget class="QCheckBox" name="cbRunEnterCommand">
-           <property name="text">
-            <string>Run command on enter</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="lineCommandEnter"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QCheckBox" name="cbRunExitCommand">
-           <property name="text">
-            <string>Run command on exit</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineCommandExit"/>
-         </item>
-        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer">
