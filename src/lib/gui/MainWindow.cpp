@@ -545,6 +545,8 @@ void MainWindow::serverConnectionConfigureClient(const QString &clientName)
   m_serverConfigDialogVisible = true;
   ServerConfigDialog dialog(this, m_serverConfig);
   if (dialog.addClient(clientName) && dialog.exec() == QDialog::Accepted) {
+    // 无论 Core 进程是否运行，都必须将配置持久化到 QSettings
+    m_serverConfig.commit();
     m_coreProcess.restart();
   }
   m_serverConfigDialogVisible = false;
@@ -957,8 +959,12 @@ void MainWindow::showConfigureServer(const QString &message)
 {
   ServerConfigDialog dialog(this, serverConfig());
   dialog.message(message);
-  if ((dialog.exec() == QDialog::Accepted) && m_coreProcess.isStarted()) {
-    m_coreProcess.restart();
+  if (dialog.exec() == QDialog::Accepted) {
+    // 无论 Core 进程是否运行，都必须将配置持久化到 QSettings
+    m_serverConfig.commit();
+    if (m_coreProcess.isStarted()) {
+      m_coreProcess.restart();
+    }
   }
 }
 
