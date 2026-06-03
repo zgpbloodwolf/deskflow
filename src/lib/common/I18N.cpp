@@ -80,33 +80,16 @@ I18N::I18N(QObject *parent) : QObject{parent}
 
   detectLanguages();
 
-  static const auto s_prefix = QStringLiteral("_");
+  // 固定加载中文翻译
+  m_currentLang = QStringLiteral("zh_CN");
+  Settings::setValue(Settings::Core::Language, m_currentLang);
 
-  if (Settings::value(Settings::Core::Language).toString().isEmpty()) {
-    auto appTranslator = new QTranslator(this);
-    if (appTranslator->load(QLocale(), kAppId, s_prefix, m_appTrPath)) {
-      m_currentTranslations.append(appTranslator);
-      QCoreApplication::installTranslator(appTranslator);
-    }
-
-    m_currentLang = m_nameMap.key(appTranslator->translate("i18n", "LocalizedName"));
-    if (m_currentLang.isEmpty())
-      m_currentLang = QStringLiteral("en");
-
-    auto qtTranslator = new QTranslator(this);
-    if (qtTranslator->load(QLocale(), QStringLiteral("qt"), s_prefix, m_qtTrPath)) {
-      m_currentTranslations.append(qtTranslator);
-      QCoreApplication::installTranslator(qtTranslator);
-    }
-  } else {
-    m_currentLang = Settings::value(Settings::Core::Language).toString();
-    const auto translations = m_translations.value(m_currentLang);
-    for (const auto &translation : translations) {
-      auto translator = new QTranslator(this);
-      if (translator->load(translation)) {
-        m_currentTranslations.append(translator);
-        QCoreApplication::installTranslator(translator);
-      }
+  const auto translations = m_translations.value(m_currentLang);
+  for (const auto &translation : translations) {
+    auto translator = new QTranslator(this);
+    if (translator->load(translation)) {
+      m_currentTranslations.append(translator);
+      QCoreApplication::installTranslator(translator);
     }
   }
 }

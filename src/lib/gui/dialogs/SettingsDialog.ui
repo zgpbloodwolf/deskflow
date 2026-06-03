@@ -59,26 +59,6 @@
         </spacer>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="lblLanguage">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Language</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboLanguage"/>
-         </item>
-        </layout>
-       </item>
-       <item>
         <widget class="QCheckBox" name="cbAutoUpdate">
          <property name="text">
           <string>Check for updates on startup</string>
