@@ -177,8 +177,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Use this computer's keyboard and mouse
-(make this computer the server)</string>
+             <string>共享本机的键盘和鼠标（作为服务端）</string>
             </property>
            </widget>
           </item>
@@ -191,8 +190,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Use another computer’s mouse and keyboard
-(make this computer the client)</string>
+             <string>使用其他电脑的键盘和鼠标（作为客户端）</string>
             </property>
            </widget>
           </item>
