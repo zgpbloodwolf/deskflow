@@ -757,25 +757,7 @@ void MainWindow::handleConnectionRefused(deskflow::core::ConnectionRefusal reaso
 
 void MainWindow::handleMissingKeyboardLayouts(const QString &layouts)
 {
-  if (Settings::value(Settings::Gui::IgnoreMissingKeyboardLayouts).toBool())
-    return;
-
-  QMessageBox msgBox(this);
-  msgBox.setIcon(QMessageBox::Warning);
-  msgBox.setWindowTitle(tr("缺少键盘布局"));
-  msgBox.setText(tr("<p>Keyboard layout support requires matching layouts on all computers. "
-                    "The following layouts from the other computer are not installed on this computer:</p>"
-                    "<p><b>%1</b></p>"
-                    "<p>Please install them to enable support for these layouts.</p>")
-                     .arg(layouts));
-
-  auto *checkBox = new QCheckBox(tr("不再显示"), &msgBox);
-  msgBox.setCheckBox(checkBox);
-  msgBox.exec();
-
-  if (checkBox->isChecked()) {
-    Settings::setValue(Settings::Gui::IgnoreMissingKeyboardLayouts, true);
-  }
+  Q_UNUSED(layouts);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

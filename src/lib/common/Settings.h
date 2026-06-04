@@ -234,7 +234,6 @@ private:
     , Settings::Gui::ShownFirstConnectedMessage
     , Settings::Gui::ShownServerFirstStartMessage
     , Settings::Gui::ShowVersionInTitle
-    , Settings::Gui::IgnoreMissingKeyboardLayouts
     , Settings::Server::ExternalConfig
     , Settings::Server::ExternalConfigFile
     , Settings::Server::Protocol
@@ -268,6 +267,7 @@ private:
     , Settings::Gui::CloseReminder
     , Settings::Gui::LogExpanded
     , Settings::Gui::SymbolicTrayIcon
+    , Settings::Gui::IgnoreMissingKeyboardLayouts
   };
 
   // Settings saved in our State file
