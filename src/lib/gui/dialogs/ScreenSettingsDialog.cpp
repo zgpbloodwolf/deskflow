@@ -66,6 +66,25 @@ ScreenSettingsDialog::ScreenSettingsDialog(QWidget *parent, Screen *screen, cons
   connect(ui->btnRemoveAlias, &QPushButton::clicked, this, &ScreenSettingsDialog::removeAlias);
   connect(ui->lineAddAlias, &QLineEdit::textChanged, this, &ScreenSettingsDialog::checkNewAliasName);
   connect(ui->listAliases, &QListWidget::itemSelectionChanged, this, &ScreenSettingsDialog::aliasSelected);
+
+  // 预设下拉框：选择预设时自动设置所有修饰键映射
+  connect(ui->comboPreset, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+          &ScreenSettingsDialog::onPresetSelected);
+
+  // 修饰键下拉框：手动修改时将预设切换为"自定义"
+  connect(ui->comboShift, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+          &ScreenSettingsDialog::onModifierChanged);
+  connect(ui->comboCtrl, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+          &ScreenSettingsDialog::onModifierChanged);
+  connect(ui->comboAlt, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+          &ScreenSettingsDialog::onModifierChanged);
+  connect(ui->comboMeta, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+          &ScreenSettingsDialog::onModifierChanged);
+  connect(ui->comboSuper, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+          &ScreenSettingsDialog::onModifierChanged);
+
+  // 信号连接完成后再判断预设，避免初始化时被 onModifierChanged 覆盖
+  updatePresetLabel();
 }
 
 void ScreenSettingsDialog::accept()
@@ -140,4 +159,84 @@ void ScreenSettingsDialog::checkNewAliasName(const QString &text)
 void ScreenSettingsDialog::aliasSelected()
 {
   ui->btnRemoveAlias->setEnabled(!ui->listAliases->selectedItems().isEmpty());
+}
+
+void ScreenSettingsDialog::onPresetSelected(int index)
+{
+  // index 0 = "自定义"，不做任何事
+  if (index == 0)
+    return;
+
+  // 预设定义：{shift, ctrl, alt, meta, super} 的 combo index 值
+  // combo index: 0=Shift, 1=Ctrl, 2=Alt, 3=⌘ Command, 4=Win 键, 5=无
+  struct Preset
+  {
+    int shift;
+    int ctrl;
+    int alt;
+    int meta;
+    int super;
+  };
+
+  // index 1: 不映射（每个键映射到自身）
+  // index 2: Mac → Windows（⌘→Ctrl, Ctrl→Win 键）
+  // index 3: Windows → Mac（Ctrl→⌘, Win 键→Ctrl）
+  static const Preset presets[] = {
+      {0, 1, 2, 3, 4}, // 1: 不映射
+      {0, 4, 2, 1, 3}, // 2: Mac → Windows
+      {0, 3, 2, 4, 1}, // 3: Windows → Mac
+  };
+
+  const int presetIndex = index - 1;
+  if (presetIndex < 0 || presetIndex >= static_cast<int>(sizeof(presets) / sizeof(presets[0])))
+    return;
+
+  const auto &p = presets[presetIndex];
+  m_updatingFromPreset = true;
+  ui->comboShift->setCurrentIndex(p.shift);
+  ui->comboCtrl->setCurrentIndex(p.ctrl);
+  ui->comboAlt->setCurrentIndex(p.alt);
+  ui->comboMeta->setCurrentIndex(p.meta);
+  ui->comboSuper->setCurrentIndex(p.super);
+  m_updatingFromPreset = false;
+}
+
+void ScreenSettingsDialog::onModifierChanged()
+{
+  // 由预设设置触发时，不回切到"自定义"
+  if (m_updatingFromPreset)
+    return;
+
+  ui->comboPreset->setCurrentIndex(0);
+}
+
+void ScreenSettingsDialog::updatePresetLabel()
+{
+  // 读取当前各 combo 的值，判断是否匹配某个预设
+  const int shift = ui->comboShift->currentIndex();
+  const int ctrl = ui->comboCtrl->currentIndex();
+  const int alt = ui->comboAlt->currentIndex();
+  const int meta = ui->comboMeta->currentIndex();
+  const int superKey = ui->comboSuper->currentIndex();
+
+  // 不映射: {0, 1, 2, 3, 4}
+  if (shift == 0 && ctrl == 1 && alt == 2 && meta == 3 && superKey == 4) {
+    ui->comboPreset->setCurrentIndex(1);
+    return;
+  }
+
+  // Mac → Windows: {0, 4, 2, 1, 3}
+  if (shift == 0 && ctrl == 4 && alt == 2 && meta == 1 && superKey == 3) {
+    ui->comboPreset->setCurrentIndex(2);
+    return;
+  }
+
+  // Windows → Mac: {0, 3, 2, 4, 1}
+  if (shift == 0 && ctrl == 3 && alt == 2 && meta == 4 && superKey == 1) {
+    ui->comboPreset->setCurrentIndex(3);
+    return;
+  }
+
+  // 不匹配任何预设，设为"自定义"
+  ui->comboPreset->setCurrentIndex(0);
 }
