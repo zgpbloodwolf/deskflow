@@ -141,10 +141,11 @@ ServerProxy::ConnectionResult ServerProxy::parseHandshakeMessage(const uint8_t *
     // handshake is complete
     m_parser = &ServerProxy::parseMessage;
 
-    if (const auto missedKeyboardLayouts = m_layoutManager.getMissedLayouts(); !missedKeyboardLayouts.empty()) {
-      LOG_WARN("server layouts missing on this computer: %s", missedKeyboardLayouts.c_str());
-      ipcSendToClient("missingKeyboardLayouts", QString::fromStdString(missedKeyboardLayouts));
-    }
+    // 跳过键盘布局缺失检查，不再通知 GUI
+    // if (const auto missedKeyboardLayouts = m_layoutManager.getMissedLayouts(); !missedKeyboardLayouts.empty()) {
+    //   LOG_WARN("server layouts missing on this computer: %s", missedKeyboardLayouts.c_str());
+    //   ipcSendToClient("missingKeyboardLayouts", QString::fromStdString(missedKeyboardLayouts));
+    // }
 
     m_client->handshakeComplete();
   }
