@@ -39,6 +39,7 @@ endif()
 add_executable(${target} WIN32 MACOSX_BUNDLE
   ${platform_extra}
   ../res/deskflow.qrc
+  ../res/themes.qrc
   deskflow-gui.cpp
 )
 

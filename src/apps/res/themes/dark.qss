@@ -1,0 +1,359 @@
+/*
+ * Deskflow -- mouse and keyboard sharing utility
+ * SPDX-FileCopyrightText: (C) 2025 Deskflow Contributors
+ * SPDX-License-Identifier: GPL-2.0-only WITH LicenseRef-OpenSSL-Exception
+ *
+ * 暗色主题样式表 - 提供跨平台一致的视觉效果
+ */
+
+/* ===== 全局基础 ===== */
+QMainWindow,
+QDialog {
+  background: #1e1e1e;
+}
+
+QWidget {
+  color: #e0e0e0;
+  selection-background-color: #5b9bd5;
+  selection-color: #ffffff;
+}
+
+/* ===== 分组框 ===== */
+QGroupBox {
+  border: 1px solid #444444;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding: 12px 8px 8px 8px;
+  background: #2a2a2a;
+}
+
+QGroupBox::title {
+  subcontrol-origin: margin;
+  subcontrol-position: top left;
+  padding: 0 6px;
+  color: #e0e0e0;
+}
+
+/* ===== 按钮 ===== */
+QPushButton {
+  border: 1px solid #444444;
+  border-radius: 4px;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  padding: 5px 16px;
+  min-height: 20px;
+}
+
+QPushButton:hover {
+  background: #333333;
+}
+
+QPushButton:pressed {
+  background: #444444;
+}
+
+QPushButton:disabled {
+  color: #888888;
+  background: #2a2a2a;
+}
+
+QPushButton[flat="true"] {
+  border: none;
+  background: transparent;
+  padding: 2px;
+}
+
+QPushButton[flat="true"]:hover {
+  background: #333333;
+  border-radius: 4px;
+}
+
+/* ===== 输入框 ===== */
+QLineEdit,
+QSpinBox,
+QDoubleSpinBox {
+  border: 1px solid #444444;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: #e0e0e0;
+  padding: 4px 6px;
+  min-height: 20px;
+}
+
+QLineEdit:focus,
+QSpinBox:focus,
+QDoubleSpinBox:focus {
+  border-color: #5b9bd5;
+}
+
+QLineEdit:disabled,
+QSpinBox:disabled,
+QDoubleSpinBox:disabled {
+  background: #2a2a2a;
+  color: #888888;
+}
+
+/* ===== 下拉框 ===== */
+QComboBox {
+  border: 1px solid #444444;
+  border-radius: 4px;
+  background: #1e1e1e;
+  color: #e0e0e0;
+  padding: 4px 8px;
+  min-height: 20px;
+}
+
+QComboBox:hover {
+  border-color: #5b9bd5;
+}
+
+QComboBox::drop-down {
+  border: none;
+  width: 20px;
+}
+
+QComboBox::down-arrow {
+  image: none;
+  border: none;
+}
+
+QComboBox QAbstractItemView {
+  border: 1px solid #444444;
+  background: #1e1e1e;
+  selection-background-color: #5b9bd5;
+  selection-color: #ffffff;
+  outline: none;
+}
+
+/* ===== 复选框和单选框 ===== */
+QCheckBox,
+QRadioButton {
+  spacing: 8px;
+  color: #e0e0e0;
+}
+
+QCheckBox::indicator,
+QRadioButton::indicator {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #444444;
+  background: #1e1e1e;
+}
+
+QCheckBox::indicator:checked {
+  background: #5b9bd5;
+  border-color: #5b9bd5;
+}
+
+QRadioButton::indicator {
+  border-radius: 8px;
+}
+
+QRadioButton::indicator:checked {
+  background: #5b9bd5;
+  border-color: #5b9bd5;
+}
+
+QCheckBox::indicator:disabled,
+QRadioButton::indicator:disabled {
+  background: #2a2a2a;
+  border-color: #444444;
+}
+
+/* ===== 选项卡 ===== */
+QTabWidget::pane {
+  border: 1px solid #444444;
+  border-radius: 4px;
+  background: #1e1e1e;
+  padding: 4px;
+}
+
+QTabBar::tab {
+  background: transparent;
+  color: #888888;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 6px 16px;
+  min-width: 60px;
+}
+
+QTabBar::tab:selected {
+  color: #e0e0e0;
+  border-bottom: 2px solid #5b9bd5;
+}
+
+QTabBar::tab:hover:!selected {
+  color: #e0e0e0;
+  background: #2a2a2a;
+  border-radius: 4px 4px 0 0;
+}
+
+/* ===== 对话框按钮 ===== */
+QDialogButtonBox QPushButton {
+  min-width: 80px;
+}
+
+/* ===== 菜单栏 ===== */
+QMenuBar {
+  background: transparent;
+  border-bottom: 1px solid #444444;
+  padding: 2px;
+}
+
+QMenuBar::item {
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #e0e0e0;
+}
+
+QMenuBar::item:selected {
+  background: #333333;
+}
+
+/* ===== 下拉菜单 ===== */
+QMenu {
+  background: #1e1e1e;
+  border: 1px solid #444444;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+QMenu::item {
+  padding: 6px 24px;
+  border-radius: 4px;
+  color: #e0e0e0;
+}
+
+QMenu::item:selected {
+  background: #5b9bd5;
+  color: #ffffff;
+}
+
+QMenu::separator {
+  height: 1px;
+  background: #444444;
+  margin: 4px 8px;
+}
+
+/* ===== 状态栏 ===== */
+QStatusBar {
+  background: #333333;
+  border-top: 1px solid #444444;
+  color: #e0e0e0;
+  padding: 2px 4px;
+}
+
+/* ===== 停靠窗口 ===== */
+QDockWidget {
+  border: none;
+}
+
+/* ===== 文本编辑区（日志） ===== */
+QPlainTextEdit {
+  background: #1e1e1e;
+  color: #e0e0e0;
+  border: 1px solid #444444;
+  border-radius: 4px;
+  selection-background-color: #5b9bd5;
+  selection-color: #ffffff;
+}
+
+/* ===== 表格和列表 ===== */
+QTableView,
+QTableWidget {
+  background: #1e1e1e;
+  alternate-background-color: #2a2a2a;
+  gridline-color: #444444;
+  border: 1px solid #444444;
+  border-radius: 4px;
+  selection-background-color: #5b9bd5;
+  selection-color: #ffffff;
+}
+
+QHeaderView::section {
+  background: #2a2a2a;
+  border: none;
+  border-bottom: 1px solid #444444;
+  padding: 4px 8px;
+  color: #e0e0e0;
+}
+
+QListWidget {
+  border: 1px solid #444444;
+  border-radius: 4px;
+  background: #1e1e1e;
+  outline: none;
+}
+
+QListWidget::item {
+  padding: 4px 8px;
+}
+
+QListWidget::item:selected {
+  background: #5b9bd5;
+  color: #ffffff;
+}
+
+/* ===== 滚动区域 ===== */
+QScrollArea {
+  border: none;
+}
+
+/* ===== 滚动条 ===== */
+QScrollBar:vertical {
+  background: #252525;
+  width: 10px;
+  margin: 0;
+}
+
+QScrollBar::handle:vertical {
+  background: #555555;
+  min-height: 30px;
+  border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+  background: #888888;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+  height: 0;
+}
+
+QScrollBar:horizontal {
+  background: #252525;
+  height: 10px;
+  margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+  background: #555555;
+  min-width: 30px;
+  border-radius: 5px;
+}
+
+QScrollBar::handle:horizontal:hover {
+  background: #888888;
+}
+
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal {
+  width: 0;
+}
+
+QScrollBar::add-page:vertical,
+QScrollBar::sub-page:vertical,
+QScrollBar::add-page:horizontal,
+QScrollBar::sub-page:horizontal {
+  background: none;
+}
+
+/* ===== 工具提示 ===== */
+QToolTip {
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444444;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
