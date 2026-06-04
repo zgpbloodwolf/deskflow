@@ -163,9 +163,12 @@ void ScreenSettingsDialog::aliasSelected()
 
 void ScreenSettingsDialog::onPresetSelected(int index)
 {
-  // index 0 = "自定义"，不做任何事
-  if (index == 0)
+  // index 0 = "自定义"，显示所有修饰键
+  if (index == 0) {
+    setModifierCombosVisible(true, true);
+    ui->labelPresetDesc->hide();
     return;
+  }
 
   // 预设定义：{shift, ctrl, alt, meta, super} 的 combo index 值
   // combo index: 0=Shift, 1=Ctrl, 2=Alt, 3=⌘ Command, 4=Win 键, 5=无
@@ -176,15 +179,17 @@ void ScreenSettingsDialog::onPresetSelected(int index)
     int alt;
     int meta;
     int super;
+    bool showMeta;  // 显示 ⌘ Command 行
+    bool showSuper; // 显示 Win 键 行
   };
 
-  // index 1: 不映射（每个键映射到自身）
-  // index 2: Mac → Windows（⌘→Ctrl, Ctrl→Win 键）
-  // index 3: Windows → Mac（Ctrl→⌘, Win 键→Ctrl）
+  // index 1: 不映射（全部显示）
+  // index 2: Mac → Windows（隐藏 Win 键，Mac 上没有）
+  // index 3: Windows → Mac（隐藏 ⌘ Command，Windows 上没有）
   static const Preset presets[] = {
-      {0, 1, 2, 3, 4}, // 1: 不映射
-      {0, 4, 2, 1, 3}, // 2: Mac → Windows
-      {0, 3, 2, 4, 1}, // 3: Windows → Mac
+      {0, 1, 2, 3, 4, true, true},  // 1: 不映射
+      {0, 4, 2, 1, 3, true, false}, // 2: Mac → Windows
+      {0, 3, 2, 4, 1, false, true}, // 3: Windows → Mac
   };
 
   const int presetIndex = index - 1;
@@ -199,6 +204,10 @@ void ScreenSettingsDialog::onPresetSelected(int index)
   ui->comboMeta->setCurrentIndex(p.meta);
   ui->comboSuper->setCurrentIndex(p.super);
   m_updatingFromPreset = false;
+
+  // 根据预设控制哪些修饰键行可见
+  setModifierCombosVisible(p.showMeta, p.showSuper);
+  ui->labelPresetDesc->hide();
 }
 
 void ScreenSettingsDialog::onModifierChanged()
@@ -239,4 +248,23 @@ void ScreenSettingsDialog::updatePresetLabel()
 
   // 不匹配任何预设，设为"自定义"
   ui->comboPreset->setCurrentIndex(0);
+}
+
+void ScreenSettingsDialog::setModifierCombosVisible(bool showMeta, bool showSuper)
+{
+  // Shift、Ctrl、Alt 始终显示
+  ui->label_2->setVisible(true);
+  ui->comboShift->setVisible(true);
+  ui->label_3->setVisible(true);
+  ui->comboCtrl->setVisible(true);
+  ui->label_4->setVisible(true);
+  ui->comboAlt->setVisible(true);
+
+  // ⌘ Command 行：Mac 特有
+  ui->label_5->setVisible(showMeta);
+  ui->comboMeta->setVisible(showMeta);
+
+  // Win 键 行：Windows 特有
+  ui->label_6->setVisible(showSuper);
+  ui->comboSuper->setVisible(showSuper);
 }

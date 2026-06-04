@@ -40,6 +40,7 @@ private Q_SLOTS:
 
 private:
   void updatePresetLabel();
+  void setModifierCombosVisible(bool showMeta, bool showSuper);
   std::unique_ptr<Ui::ScreenSettingsDialog> ui;
   Screen *m_screen;
   bool m_updatingFromPreset = false;
