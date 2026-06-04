@@ -875,6 +875,7 @@ void MainWindow::changeEvent(QEvent *e)
 {
   QMainWindow::changeEvent(e);
   if (e->type() == QEvent::PaletteChange) {
+    applyTheme();
     updateIconTheme();
     setWindowIcon(QIcon::fromTheme(kRevFqdnName));
     setTrayIcon();

@@ -117,6 +117,9 @@ int main(int argc, char *argv[])
   // Sets the fallback icon path and fallback theme
   updateIconTheme();
 
+  // 根据系统深色/浅色模式应用统一样式表
+  applyTheme();
+
   qInstallMessageHandler(deskflow::gui::messages::messageHandler);
   qInfo("%s v%s", kAppName, kDisplayVersion);
 
