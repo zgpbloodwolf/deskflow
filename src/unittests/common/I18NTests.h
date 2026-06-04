@@ -12,22 +12,12 @@ class I18NTests : public QObject
 private Q_SLOTS:
   void initTestCase();
   void creationTest();
-  void detectedLangTest();
-  void check639NameTest_validMapValues();
-  void check639NameTest_invalidName();
-  void toNativeNameTest_validMapValues();
-  void toNativeNameTest_invalidName();
-  void setLangTest_validLangs();
+  void currentLangTest();
   void setLangTest_invalidLang();
   void setLangTest_currentLang();
-  void reDetectTest();
 
 private:
-  QString m_myTDir;
   inline static const QString m_settingsPathTemp = QStringLiteral("tmp/test");
   inline static const QString m_settingsFile = QStringLiteral("%1/Deskflow.conf").arg(m_settingsPathTemp);
   inline static const QString m_stateFile = QStringLiteral("%1/Deskflow.state").arg(m_settingsPathTemp);
-  inline static const QMap<QString, QString> m_langMap = {
-      {QStringLiteral("简体中文"), QStringLiteral("zh_CN")}
-  };
 };

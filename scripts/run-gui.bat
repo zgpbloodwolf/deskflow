@@ -8,14 +8,16 @@ taskkill /f /im deskflow-core.exe >nul 2>&1
 ping -n 2 127.0.0.1 >nul
 
 REM Start (WORKING_DIRECTORY is set to CMAKE_SOURCE_DIR by CMake)
-REM CMAKE_RUNTIME_OUTPUT_DIRECTORY is build/bin, but MSVC puts exe in build/bin/Debug
+REM CMAKE_RUNTIME_OUTPUT_DIRECTORY is build/bin, MSVC puts exe in build/bin/Release or build/bin/Debug
 echo Starting Deskflow GUI...
-if exist "%cd%\build\bin\Debug\deskflow.exe" (
+if exist "%cd%\build\bin\Release\deskflow.exe" (
+    start "" "%cd%\build\bin\Release\deskflow.exe"
+) else if exist "%cd%\build\bin\Debug\deskflow.exe" (
     start "" "%cd%\build\bin\Debug\deskflow.exe"
 ) else if exist "%cd%\build\bin\deskflow.exe" (
     start "" "%cd%\build\bin\deskflow.exe"
 ) else (
-    echo ERROR: deskflow.exe not found in build\bin\ or build\bin\Debug\
+    echo ERROR: deskflow.exe not found in build\bin\, build\bin\Release\ or build\bin\Debug\
     exit /b 1
 )
 echo Done
