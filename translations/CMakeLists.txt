@@ -15,10 +15,10 @@ if(CLEAN_TRS)
 endif()
 
 # English will have only plurals
-qt_create_translation(TRS ${CMAKE_SOURCE_DIR}/src ${CMAKE_PROJECT_NAME}_en.ts OPTIONS -pluralonly ${TR_OPTIONS})
+qt_add_translation(TRS ${CMAKE_PROJECT_NAME}_en.ts)
 
 # Other languages contain the full set of strings.
-qt_create_translation(TRS ${CMAKE_SOURCE_DIR}/src ${${CMAKE_PROJECT_NAME}_TRS} OPTIONS ${TR_OPTIONS})
+qt_add_translation(TRS ${${CMAKE_PROJECT_NAME}_TRS})
 
 #ensure that the targets are built always
 add_custom_target(app_translations ALL DEPENDS ${TRS})

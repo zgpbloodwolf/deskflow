@@ -76,11 +76,25 @@ endif()
 
 option(SKIP_BUILD_TESTS "Skip build time test" OFF)
 
+# Windows 下测试需要 Qt DLL 在 PATH 中
+if(WIN32)
+  get_filename_component(QT_BIN_DIR "${Qt6_DIR}/../../../bin" ABSOLUTE)
+endif()
+
 if(NOT SKIP_BUILD_TESTS)
   add_custom_target(run_tests ALL DEPENDS ${PROJECT_TESTS} ${guiApp})
-  add_custom_command (
-    TARGET run_tests
-    POST_BUILD
-    COMMAND ${qPA_Platform} ${CMAKE_CTEST_COMMAND} --test-dir  "${CMAKE_BINARY_DIR}/src/unittests" --output-on-failure
-  )
+  if(WIN32)
+    add_custom_command (
+      TARGET run_tests
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E env "PATH=${QT_BIN_DIR}\;${CMAKE_BINARY_DIR}/bin/$<CONFIG>\;$ENV{PATH}"
+        ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/src/unittests" --output-on-failure -C $<CONFIG>
+    )
+  else()
+    add_custom_command (
+      TARGET run_tests
+      POST_BUILD
+      COMMAND ${CMAKE_CTEST_COMMAND} --test-dir "${CMAKE_BINARY_DIR}/src/unittests" --output-on-failure -C $<CONFIG>
+    )
+  endif()
 endif()
