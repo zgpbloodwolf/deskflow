@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Hotkey</string>
+   <string>热键</string>
   </property>
   <layout class="QVBoxLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Enter the specification for the hotkey:</string>
+      <string>输入热键的配置：</string>
      </property>
     </widget>
    </item>

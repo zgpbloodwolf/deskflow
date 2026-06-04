@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Configure Action</string>
+   <string>配置动作</string>
   </property>
   <layout class="QVBoxLayout" name="_2">
    <item>
@@ -26,12 +26,12 @@
       <widget class="QComboBox" name="comboTriggerOn">
        <item>
         <property name="text">
-         <string>When the hotkey is pressed</string>
+         <string>当热键被按下时</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>When the hotkey is released</string>
+         <string>当热键被释放时</string>
         </property>
        </item>
       </widget>
@@ -40,42 +40,42 @@
       <widget class="QComboBox" name="comboActionType">
        <item>
         <property name="text">
-         <string>Press key(s)</string>
+         <string>按下按键</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Release key(s)</string>
+         <string>释放按键</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Press and release key(s)</string>
+         <string>按下并释放按键</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Switch to a computer</string>
+         <string>切换到指定电脑</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Switch in a direction</string>
+         <string>向指定方向切换</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Switch to next computer</string>
+         <string>切换到下一台电脑</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Modify the cursor lock</string>
+         <string>修改光标锁定</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Restart the server</string>
+         <string>重启服务端</string>
         </property>
        </item>
       </widget>
@@ -98,22 +98,22 @@
        </property>
        <item>
         <property name="text">
-         <string>Switch to the computer on the left</string>
+         <string>切换到左侧的电脑</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Switch to the computer on the right</string>
+         <string>切换到右侧的电脑</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Switch to the computer above</string>
+         <string>切换到上方的电脑</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Switch to the computer below</string>
+         <string>切换到下方的电脑</string>
         </property>
        </item>
       </widget>
@@ -125,17 +125,17 @@
        </property>
        <item>
         <property name="text">
-         <string>Toggle the cursor lock</string>
+         <string>切换光标锁定</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Enable the cursor lock</string>
+         <string>启用光标锁定</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Disable the cursor lock</string>
+         <string>禁用光标锁定</string>
         </property>
        </item>
       </widget>
@@ -154,7 +154,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Computers to receive this event</string>
+      <string>接收此事件的电脑</string>
      </property>
      <layout class="QHBoxLayout" name="_3">
       <item>

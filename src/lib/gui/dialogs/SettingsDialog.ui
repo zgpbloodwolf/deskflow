@@ -251,7 +251,7 @@
            </item>
            <item>
             <property name="text">
-             <string>Error</string>
+             <string>错误</string>
             </property>
            </item>
            <item>
@@ -271,17 +271,17 @@
            </item>
            <item>
             <property name="text">
-             <string>Debug</string>
+             <string>调试</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Debug1</string>
+             <string>调试1</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Debug2</string>
+             <string>调试2</string>
             </property>
            </item>
           </widget>

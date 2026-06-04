@@ -15,11 +15,11 @@
 #include <QVBoxLayout>
 
 LogDock::LogDock(QWidget *parent)
-    : QDockWidget(tr("Log"), parent),
+    : QDockWidget(tr("日志"), parent),
       m_textLog{new LogWidget(this)},
       m_btnClose{new QPushButton(this)},
       m_btnFloat{new QPushButton(this)},
-      m_lblTitle{new QLabel(tr("Log"), this)},
+      m_lblTitle{new QLabel(tr("日志"), this)},
       m_searchWidget{new SearchWidget(this)}
 {
   connect(m_searchWidget, &SearchWidget::findNext, m_textLog, &LogWidget::findNext);
@@ -33,14 +33,14 @@ LogDock::LogDock(QWidget *parent)
   m_btnFloat->setFlat(true);
   m_btnFloat->setIcon(QIcon::fromTheme(QStringLiteral("window-minimize-pip")));
   m_btnFloat->setIconSize(iconSize);
-  m_btnFloat->setToolTip(tr("Detach from window"));
+  m_btnFloat->setToolTip(tr("脱离窗口"));
   connect(m_btnFloat, &QPushButton::toggled, this, &LogDock::setFloating);
 
   m_btnClose->setFixedSize(maxBtnSize);
   m_btnClose->setFlat(true);
   m_btnClose->setIcon(QIcon::fromTheme(QStringLiteral("view-close")));
   m_btnClose->setIconSize(iconSize);
-  m_btnClose->setToolTip(tr("Close Log"));
+  m_btnClose->setToolTip(tr("关闭日志"));
   connect(m_btnClose, &QPushButton::clicked, this, &QDockWidget::hide);
 
   auto titleWidget = new QWidget(this);
@@ -74,11 +74,11 @@ void LogDock::appendLine(const QString &msg)
 void LogDock::setFloating(bool floating)
 {
   if (floating) {
-    m_btnFloat->setToolTip(tr("Attach to window"));
+    m_btnFloat->setToolTip(tr("附加到窗口"));
     m_btnFloat->setIcon(QIcon::fromTheme(QStringLiteral("window-restore-pip")));
     setWindowFlags(Qt::Dialog);
   } else {
-    m_btnFloat->setToolTip(tr("Detach from window"));
+    m_btnFloat->setToolTip(tr("脱离窗口"));
     m_btnFloat->setIcon(QIcon::fromTheme(QStringLiteral("window-minimize-pip")));
     setWindowFlags(Qt::Widget);
   }
@@ -101,12 +101,12 @@ void LogDock::changeEvent(QEvent *e)
   if (e->type() != QEvent::LanguageChange)
     return;
 
-  setWindowTitle(tr("Log"));
-  m_lblTitle->setText(tr("Log"));
-  m_btnFloat->setToolTip(tr("Detach from window"));
-  m_btnClose->setToolTip(tr("Close Log"));
+  setWindowTitle(tr("日志"));
+  m_lblTitle->setText(tr("日志"));
+  m_btnFloat->setToolTip(tr("脱离窗口"));
+  m_btnClose->setToolTip(tr("关闭日志"));
   if (isFloating())
-    m_btnFloat->setToolTip(tr("Attach to window"));
+    m_btnFloat->setToolTip(tr("附加到窗口"));
   else
-    m_btnFloat->setToolTip(tr("Detach from window"));
+    m_btnFloat->setToolTip(tr("脱离窗口"));
 }

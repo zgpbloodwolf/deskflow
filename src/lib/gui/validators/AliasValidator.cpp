@@ -18,9 +18,9 @@ namespace validators {
 
 AliasValidator::AliasValidator(QLineEdit *parent, ValidationError *error) : LineEditValidator(parent, error)
 {
-  addValidator(std::make_unique<SpacesValidator>(tr("Computer name cannot contain spaces")));
-  addValidator(std::make_unique<IpAddressValidator>(tr("Aliases may not be ip addresses")));
-  addValidator(std::make_unique<ComputerNameValidator>(tr("Contains invalid characters or is too long")));
+  addValidator(std::make_unique<SpacesValidator>(tr("电脑名称不能包含空格")));
+  addValidator(std::make_unique<IpAddressValidator>(tr("别名不能是 IP 地址")));
+  addValidator(std::make_unique<ComputerNameValidator>(tr("包含无效字符或长度过长")));
 }
 
 } // namespace validators

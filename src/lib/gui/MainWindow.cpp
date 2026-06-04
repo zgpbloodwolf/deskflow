@@ -345,8 +345,8 @@ void MainWindow::coreProcessError(CoreProcess::Error error)
     );
   } else if (error == CoreProcess::Error::StartFailed) {
     show();
-    auto message = tr("The Core executable could not be started.\n"
-                      "Please check if you have sufficient permissions to run %1.")
+    auto message = tr("核心程序无法启动。\n"
+                      "请检查你是否有足够的权限运行 %1。")
                        .arg(kCoreBinName);
 
     if (Settings::value(Settings::Core::CoreMode) == Settings::CoreMode::Server) {
@@ -745,10 +745,9 @@ void MainWindow::handleConnectionRefused(deskflow::core::ConnectionRefusal reaso
   const auto address = Settings::value(Settings::Client::RemoteHost).toString();
   QMessageBox::warning(
       this, tr("%1 连接错误").arg(kAppName),
-      tr("<p>Failed to connect to the server '%1'.</p>"
-         "<p>A Client with your name is already connected to the server.</p>"
-         "Please ensure that you're using a unique name and that only a "
-         "single instance of the client process is running.</p>")
+      tr("<p>无法连接到服务器 '%1'。</p>"
+         "<p>已有同名客户端连接到该服务器。</p>"
+         "请确保你使用了唯一的名称，并且只有一个客户端进程在运行。</p>")
           .arg(address)
   );
 
@@ -1020,11 +1019,11 @@ void MainWindow::setHostName()
       body = tr("屏幕名称已存在");
     } else {
       body =
-          tr("The name you have chosen is invalid.\n\n"
-             "Valid names:\n"
-             "• Use letters and numbers\n"
-             "• May also use _ or -\n"
-             "• Are between 1 and 255 characters");
+          tr("你选择的名称无效。\n\n"
+             "有效名称规则：\n"
+             "• 使用字母和数字\n"
+             "• 也可使用 _ 或 -\n"
+             "• 长度为 1 到 255 个字符");
     }
     QMessageBox::information(this, title, body);
     return;

@@ -22,7 +22,7 @@ NewScreenWidget::NewScreenWidget(QWidget *parent) : QLabel(parent)
 void NewScreenWidget::mousePressEvent(QMouseEvent *)
 {
   //: Used as the hostname. Translation may not contain spaces
-  Screen newScreen(tr("Unnamed"));
+  Screen newScreen(tr("未命名"));
 
   QByteArray itemData;
   QDataStream dataStream(&itemData, QIODevice::WriteOnly);

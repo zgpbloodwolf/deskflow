@@ -17,43 +17,43 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Client Configuration</string>
+   <string>客户端配置</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QCheckBox" name="cbDynamicConnectTime">
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Allow the client to slow the rate it attempts to reconnect to the server when connections attempts are failing. The delay between connection attempts will  start at 1 second intervals and can be a maxium of 5 minutes between connection attempts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;允许客户端在连接失败时降低重连频率。重连间隔从 1 秒开始，最长可达 5 分钟。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
-      <string>Use dynamic reconnection time based on connection attempts</string>
+      <string>根据连接尝试次数使用动态重连时间</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QCheckBox" name="cbLanguageSync">
      <property name="text">
-      <string>Use server's keyboard language on this computer</string>
+      <string>在此电脑上使用服务端的键盘语言</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Scroll Modifiers</string>
+      <string>滚动修饰</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="5" column="2">
        <widget class="QCheckBox" name="cbYScrollInvert">
         <property name="text">
-         <string>Invert</string>
+         <string>反转</string>
         </property>
        </widget>
       </item>
       <item row="1" column="2">
        <widget class="QCheckBox" name="cbXScrollInvert">
         <property name="text">
-         <string>Invert</string>
+         <string>反转</string>
         </property>
        </widget>
       </item>
@@ -68,7 +68,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Scale</string>
+           <string>缩放</string>
           </property>
          </widget>
         </item>
@@ -113,7 +113,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Scale</string>
+           <string>缩放</string>
           </property>
          </widget>
         </item>
@@ -150,14 +150,14 @@
       <item row="1" column="0" colspan="2">
        <widget class="QLabel" name="lblHScroll">
         <property name="text">
-         <string>Horizontal Scroll</string>
+         <string>水平滚动</string>
         </property>
        </widget>
       </item>
       <item row="5" column="0" colspan="2">
        <widget class="QLabel" name="lblVScroll">
         <property name="text">
-         <string>Vertical Scroll</string>
+         <string>垂直滚动</string>
         </property>
        </widget>
       </item>

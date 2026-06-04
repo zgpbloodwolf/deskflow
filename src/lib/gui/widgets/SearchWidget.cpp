@@ -81,10 +81,10 @@ void SearchWidget::toggleVisible(bool visible)
 
 void SearchWidget::setText()
 {
-  m_btnToggle->setToolTip(tr("Search"));
-  m_btnNext->setToolTip(tr("Find next"));
-  m_btnPrev->setToolTip(tr("Find previous"));
-  m_searchLine->setPlaceholderText(tr("Find..."));
+  m_btnToggle->setToolTip(tr("搜索"));
+  m_btnNext->setToolTip(tr("查找下一个"));
+  m_btnPrev->setToolTip(tr("查找上一个"));
+  m_searchLine->setPlaceholderText(tr("查找..."));
 }
 
 void SearchWidget::next()

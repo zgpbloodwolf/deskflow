@@ -23,12 +23,12 @@ namespace validators {
 ScreenNameValidator::ScreenNameValidator(QLineEdit *lineEdit, ValidationError *error, const ScreenList *pScreens)
     : LineEditValidator(lineEdit, error)
 {
-  addValidator(std::make_unique<EmptyStringValidator>(tr("Computer name cannot be empty")));
-  addValidator(std::make_unique<SpacesValidator>(tr("Computer name cannot contain spaces")));
-  addValidator(std::make_unique<ComputerNameValidator>(tr("Contains invalid characters or is too long")));
+  addValidator(std::make_unique<EmptyStringValidator>(tr("电脑名称不能为空")));
+  addValidator(std::make_unique<SpacesValidator>(tr("电脑名称不能包含空格")));
+  addValidator(std::make_unique<ComputerNameValidator>(tr("包含无效字符或长度过长")));
   addValidator(
       std::make_unique<ScreenDuplicationsValidator>(
-          tr("A computer with this name already exists"), lineEdit ? lineEdit->text() : "", pScreens
+          tr("已存在同名电脑"), lineEdit ? lineEdit->text() : "", pScreens
       )
   );
 }

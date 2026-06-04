@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Computer settings</string>
+   <string>电脑设置</string>
   </property>
   <layout class="QVBoxLayout" name="_2">
    <item>
@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Computer Info</string>
+      <string>电脑信息</string>
      </property>
      <layout class="QVBoxLayout" name="_3">
       <item>
@@ -37,7 +37,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Name</string>
+           <string>名称</string>
           </property>
           <property name="buddy">
            <cstring>lineNameEdit</cstring>
@@ -91,7 +91,7 @@
        <item>
         <widget class="QGroupBox" name="groupModifers">
          <property name="title">
-          <string>Modifier Keys</string>
+          <string>修饰键</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
@@ -103,7 +103,7 @@
              </size>
             </property>
             <property name="text">
-             <string>M&amp;eta</string>
+             <string>Meta(&amp;M)</string>
             </property>
             <property name="buddy">
              <cstring>comboMeta</cstring>
@@ -113,7 +113,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>&amp;Ctrl</string>
+             <string>Ctrl(&amp;C)</string>
             </property>
             <property name="buddy">
              <cstring>comboCtrl</cstring>
@@ -123,7 +123,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>S&amp;uper</string>
+             <string>Super(&amp;S)</string>
             </property>
             <property name="buddy">
              <cstring>comboSuper</cstring>
@@ -133,7 +133,7 @@
           <item row="9" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Al&amp;t</string>
+             <string>Alt(&amp;T)</string>
             </property>
             <property name="buddy">
              <cstring>comboAlt</cstring>
@@ -172,7 +172,7 @@
             </item>
             <item>
              <property name="text">
-              <string>None</string>
+              <string>无</string>
              </property>
             </item>
            </widget>
@@ -206,7 +206,7 @@
             </item>
             <item>
              <property name="text">
-              <string>None</string>
+              <string>无</string>
              </property>
             </item>
            </widget>
@@ -220,7 +220,7 @@
              </size>
             </property>
             <property name="text">
-             <string>&amp;Shift</string>
+             <string>Shift(&amp;S)</string>
             </property>
             <property name="buddy">
              <cstring>comboShift</cstring>
@@ -259,7 +259,7 @@
             </item>
             <item>
              <property name="text">
-              <string>None</string>
+              <string>无</string>
              </property>
             </item>
            </widget>
@@ -296,7 +296,7 @@
             </item>
             <item>
              <property name="text">
-              <string>None</string>
+              <string>无</string>
              </property>
             </item>
            </widget>
@@ -333,7 +333,7 @@
             </item>
             <item>
              <property name="text">
-              <string>None</string>
+              <string>无</string>
              </property>
             </item>
            </widget>
@@ -344,7 +344,7 @@
        <item>
         <widget class="QGroupBox" name="groupDeadCorners">
          <property name="title">
-          <string>Dead Corners</string>
+          <string>死角</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="spacing">
@@ -364,7 +364,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>Top Left</string>
+               <string>左上角</string>
               </property>
               <property name="autoRepeatInterval">
                <number>100</number>
@@ -380,7 +380,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>Top Right</string>
+               <string>右上角</string>
               </property>
               <property name="layoutDirection">
                <enum>Qt::LayoutDirection::RightToLeft</enum>
@@ -400,7 +400,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Corner si&amp;ze</string>
+               <string>角落大小(&amp;Z)</string>
               </property>
               <property name="buddy">
                <cstring>sbSwitchCornerSize</cstring>
@@ -436,7 +436,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>Bottom Left</string>
+               <string>左下角</string>
               </property>
              </widget>
             </item>
@@ -449,7 +449,7 @@
                </size>
               </property>
               <property name="toolTip">
-               <string>Bottom Right</string>
+               <string>右下角</string>
               </property>
               <property name="layoutDirection">
                <enum>Qt::LayoutDirection::RightToLeft</enum>
@@ -468,7 +468,7 @@
        <item>
         <widget class="QGroupBox" name="groupFixes">
          <property name="title">
-          <string>Fixes</string>
+          <string>修复</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
@@ -480,7 +480,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>SCROLL LOCK key</string>
+             <string>Scroll Lock 键</string>
             </property>
            </widget>
           </item>
@@ -493,7 +493,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>CAPS LOCK key</string>
+             <string>Caps Lock 键</string>
             </property>
            </widget>
           </item>
@@ -506,7 +506,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>NUM LOCK key</string>
+             <string>Num Lock 键</string>
             </property>
            </widget>
           </item>
@@ -519,7 +519,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>XTest for Xinerama</string>
+             <string>XTest 用于 Xinerama</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -538,7 +538,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Aliases</string>
+          <string>别名</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -568,7 +568,7 @@
                <bool>true</bool>
               </property>
               <property name="text">
-               <string>&amp;Add</string>
+               <string>添加(&amp;A)</string>
               </property>
              </widget>
             </item>
@@ -633,7 +633,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>&amp;Remove</string>
+             <string>移除(&amp;R)</string>
             </property>
            </widget>
           </item>
