@@ -103,7 +103,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Meta(&amp;M)</string>
+             <string>⌘ Command(&amp;M)</string>
             </property>
             <property name="buddy">
              <cstring>comboMeta</cstring>
@@ -123,7 +123,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
-             <string>Super(&amp;S)</string>
+             <string>Win 键(&amp;W)</string>
             </property>
             <property name="buddy">
              <cstring>comboSuper</cstring>
@@ -162,12 +162,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Meta</string>
+              <string>⌘ Command</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Super</string>
+              <string>Win 键</string>
              </property>
             </item>
             <item>
@@ -196,12 +196,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Meta</string>
+              <string>⌘ Command</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Super</string>
+              <string>Win 键</string>
              </property>
             </item>
             <item>
@@ -249,12 +249,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Meta</string>
+              <string>⌘ Command</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Super</string>
+              <string>Win 键</string>
              </property>
             </item>
             <item>
@@ -286,12 +286,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Meta</string>
+              <string>⌘ Command</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Super</string>
+              <string>Win 键</string>
              </property>
             </item>
             <item>
@@ -323,12 +323,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Meta</string>
+              <string>⌘ Command</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Super</string>
+              <string>Win 键</string>
              </property>
             </item>
             <item>
