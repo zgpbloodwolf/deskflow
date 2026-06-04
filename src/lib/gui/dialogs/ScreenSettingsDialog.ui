@@ -91,7 +91,7 @@
        <item>
         <widget class="QGroupBox" name="groupModifers">
          <property name="title">
-          <string>修饰键</string>
+          <string>按键映射</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
