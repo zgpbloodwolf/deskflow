@@ -97,6 +97,15 @@ elseif(APPLE)
       INSTALL_RPATH "@loader_path/../Libraries;@loader_path/../Frameworks"
       MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_BINARY_DIR}/deskflow.plist"
     )
+    # 开发模式下对 app bundle 进行深度 adhoc 签名
+    # 确保 deskflow-core 子进程能继承辅助功能权限
+    if (NOT APPLE_CODESIGN_DEV)
+      add_custom_command(
+        TARGET ${target} POST_BUILD
+        COMMAND codesign --force --deep --sign - $<TARGET_BUNDLE_DIR:${target}>
+        COMMENT "Codesign (adhoc deep) Deskflow.app for accessibility inheritance"
+      )
+    endif()
     if (APPLE_CODESIGN_DEV)
       configure_mac_codesign(${target})
     endif()
