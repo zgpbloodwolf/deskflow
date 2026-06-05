@@ -48,7 +48,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui{std::make_unique
 
 void AboutDialog::copyVersionText() const
 {
-  QString infoString = QStringLiteral("%1: %2 (%3)\nQt: %4\nSystem: %5")
+  QString infoString = QStringLiteral("%1: %2 (%3)\nQt 版本: %4\n系统: %5")
                            .arg(kAppName, kVersion, kVersionGitSha, qVersion(), QSysInfo::prettyProductName());
   QGuiApplication::clipboard()->setText(infoString);
 }

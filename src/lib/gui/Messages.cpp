@@ -40,8 +40,7 @@ void showErrorDialog(const QString &message, const QString &fileLine, QtMsgType 
   auto errorType = QtFatalMsg ? QObject::tr("致命错误") : QObject::tr("错误");
   auto title = QStringLiteral("%1 %2").arg(kAppName, errorType);
   auto text = QObject::tr(
-                  R"(<p>请<a href="%1">报告问题</a>)"
-                  " and copy/paste the following error:</p><pre>v%2\n%3\n%4</pre>"
+                  R"(<p>请<a href="%1">报告问题</a>，并复制粘贴以下错误信息：</p><pre>v%2\n%3\n%4</pre>)"
   )
                   .arg(kUrlHelp, kVersion, message, fileLine);
 
@@ -111,8 +110,8 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 void showCloseReminder(QWidget *parent)
 {
   auto message = QObject::tr(
-                     "<p>%1 will continue to run in the background and can be accessed via the %1 icon in your "
-                     "system notifications area. This setting can be disabled.</p>"
+                     "<p>%1 将继续在后台运行，可以通过系统通知区域的 %1 图标访问。"
+                     "此设置可以关闭。</p>"
   )
                      .arg(kAppName);
 

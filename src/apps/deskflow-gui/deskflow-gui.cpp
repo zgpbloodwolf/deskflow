@@ -59,9 +59,9 @@ int main(int argc, char *argv[])
   QTextStream(stdout) << "initial language: " << I18N::currentLanguage() << '\n';
 
   // Add Command Line Options
-  auto helpOption = QCommandLineOption({"h", "help"}, "Display Help on the command line");
-  auto versionOption = QCommandLineOption({"v", "version"}, "Display version information");
-  auto resetOption = QCommandLineOption("reset", "Reset all settings");
+  auto helpOption = QCommandLineOption({"h", "help"}, QObject::tr("显示命令行帮助"));
+  auto versionOption = QCommandLineOption({"v", "version"}, QObject::tr("显示版本信息"));
+  auto resetOption = QCommandLineOption("reset", QObject::tr("重置所有设置"));
 
   QCommandLineParser parser;
   parser.setSingleDashWordOptionMode(QCommandLineParser::ParseAsLongOptions);
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
   parser.parse(QCoreApplication::arguments());
 
   if (!parser.errorText().isEmpty()) {
-    qCritical().noquote() << parser.errorText() << "\nUse --help for more information.";
+    qCritical().noquote() << parser.errorText() << QObject::tr("\n使用 --help 获取更多信息。");
     return s_exitArgs;
   }
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
     if (!socket.waitForConnected()) {
       // If we can't connect to the other instance tell the user its running.
       // This should never happen but just incase we should show something
-      QMessageBox::information(nullptr, kAppName, QObject::tr("%1 is already running").arg(kAppName));
+      QMessageBox::information(nullptr, kAppName, QObject::tr("%1 已在运行").arg(kAppName));
     }
     socket.disconnectFromServer();
     return s_exitDuplicate;
@@ -126,10 +126,7 @@ int main(int argc, char *argv[])
 #if defined(Q_OS_MACOS)
 
   if (app.applicationDirPath().startsWith("/Volumes/")) {
-    QString msgBody = QStringLiteral(
-        "Please drag %1 to the Applications folder, "
-        "and open it from there."
-    );
+    QString msgBody = QObject::tr("请将 %1 拖到应用程序文件夹中，然后从那里打开。");
     QMessageBox::information(nullptr, kAppName, msgBody.arg(kAppName));
     return 1;
   }
