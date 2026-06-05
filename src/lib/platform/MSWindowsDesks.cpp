@@ -490,26 +490,35 @@ void MSWindowsDesks::deskEnter(Desk *desk)
 
   setCursorVisibility(true);
 
-  SetWindowPos(desk->m_window, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_HIDEWINDOW);
+  // 用 NULL 保护包裹所有窗口操作，防止桌面不可访问时使用无效 HWND
+  if (desk->m_window != nullptr) {
+    SetWindowPos(desk->m_window, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_HIDEWINDOW);
 
-  // restore the foreground window
-  // XXX -- this raises the window to the top of the Z-order.  we
-  // want it to stay wherever it was to properly support X-mouse
-  // (mouse over activation) but i've no idea how to do that.
-  // the obvious workaround of using SetWindowPos() to move it back
-  // after being raised doesn't work.
-  DWORD thisThread = GetWindowThreadProcessId(desk->m_window, nullptr);
-  DWORD thatThread = GetWindowThreadProcessId(desk->m_foregroundWindow, nullptr);
-  AttachThreadInput(thatThread, thisThread, TRUE);
-  SetForegroundWindow(desk->m_foregroundWindow);
-  AttachThreadInput(thatThread, thisThread, FALSE);
-  EnableWindow(desk->m_window, desk->m_lowLevel ? FALSE : TRUE);
+    // restore the foreground window
+    // XXX -- this raises the window to the top of the Z-order.  we
+    // want it to stay wherever it was to properly support X-mouse
+    // (mouse over activation) but i've no idea how to do that.
+    // the obvious workaround of using SetWindowPos() to move it back
+    // after being raised doesn't work.
+    DWORD thisThread = GetWindowThreadProcessId(desk->m_window, nullptr);
+    DWORD thatThread = GetWindowThreadProcessId(desk->m_foregroundWindow, nullptr);
+    AttachThreadInput(thatThread, thisThread, TRUE);
+    SetForegroundWindow(desk->m_foregroundWindow);
+    AttachThreadInput(thatThread, thisThread, FALSE);
+    EnableWindow(desk->m_window, desk->m_lowLevel ? FALSE : TRUE);
+  }
   desk->m_foregroundWindow = nullptr;
 }
 
 void MSWindowsDesks::deskLeave(Desk *desk, HKL keyLayout)
 {
   setCursorVisibility(false);
+
+  // 当桌面窗口无效时跳过（如安全桌面场景），防止后续使用 NULL HWND 导致未定义行为
+  if (desk->m_window == nullptr) {
+    LOG_DEBUG("skipping desk leave, no window available");
+    return;
+  }
 
   if (m_isPrimary) {
     // map a window to hide the cursor and to use whatever keyboard
@@ -760,6 +769,15 @@ void MSWindowsDesks::checkDesk()
   Desk *desk;
   HDESK hdesk = openInputDesktop();
   std::wstring name = getDesktopName(hdesk);
+
+  // 当桌面不可访问时（如 UAC 安全桌面），跳过本次检查。
+  // 保持当前活动桌面不变，避免创建无效的桌面条目导致所有输入消息被丢弃。
+  if (hdesk == nullptr) {
+    LOG_DEBUG("could not open input desktop, skipping desk check");
+    closeDesktop(hdesk);
+    return;
+  }
+
   Desks::const_iterator index = m_desks.find(name);
   if (index == m_desks.end()) {
     desk = addDesk(name, hdesk);
@@ -804,8 +822,6 @@ void MSWindowsDesks::checkDesk()
     if (syncKeys) {
       updateKeys();
     }
-  } else if (name != m_activeDeskName) {
-    // desk changed but not accessible; nothing to do
   }
 }
 
