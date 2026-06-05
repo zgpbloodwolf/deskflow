@@ -93,18 +93,6 @@ public:
   {
     return m_SwitchDoubleTap;
   }
-  bool switchCorner(int c) const
-  {
-    return m_SwitchCorners[c];
-  }
-  int switchCornerSize() const
-  {
-    return m_SwitchCornerSize;
-  }
-  const QList<bool> &switchCorners() const
-  {
-    return m_SwitchCorners;
-  }
   const HotkeyList &hotkeys() const
   {
     return m_Hotkeys;
@@ -199,14 +187,6 @@ private:
   {
     m_SwitchDoubleTap = val;
   }
-  void setSwitchCorner(int c, bool on)
-  {
-    m_SwitchCorners[c] = on;
-  }
-  void setSwitchCornerSize(int val)
-  {
-    m_SwitchCornerSize = val;
-  }
   void setDefaultLockToScreenState(bool on)
   {
     m_DefaultLockToScreenState = on;
@@ -222,10 +202,6 @@ private:
   void setConfigFile(const QString &configFile) const;
   void setUseExternalConfig(bool useExternalConfig) const;
   size_t setClipboardSharingSize(size_t size);
-  QList<bool> &switchCorners()
-  {
-    return m_SwitchCorners;
-  }
   HotkeyList &hotkeys()
   {
     return m_Hotkeys;
@@ -244,12 +220,10 @@ private:
   int m_SwitchDelay = 0;
   bool m_HasSwitchDoubleTap = false;
   int m_SwitchDoubleTap = 0;
-  int m_SwitchCornerSize = 0;
   bool m_DefaultLockToScreenState = false;
   bool m_DisableLockToScreen = false;
   bool m_ClipboardSharing = true;
   QString m_ClientAddress = "";
-  QList<bool> m_SwitchCorners;
   HotkeyList m_Hotkeys;
 
   ScreenList m_Screens;

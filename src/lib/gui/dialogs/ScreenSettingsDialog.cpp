@@ -17,7 +17,6 @@
 #include <QStandardItemModel>
 
 using enum ScreenConfig::Modifier;
-using enum ScreenConfig::SwitchCorner;
 using enum ScreenConfig::Fix;
 
 ScreenSettingsDialog::~ScreenSettingsDialog() = default;
@@ -49,12 +48,6 @@ ScreenSettingsDialog::ScreenSettingsDialog(QWidget *parent, Screen *screen, cons
   ui->comboAlt->setCurrentIndex(m_screen->modifier(static_cast<int>(Alt)));
   ui->comboMeta->setCurrentIndex(m_screen->modifier(static_cast<int>(Meta)));
   ui->comboSuper->setCurrentIndex(m_screen->modifier(static_cast<int>(Super)));
-
-  ui->chkDeadTopLeft->setChecked(m_screen->switchCorner(static_cast<int>(TopLeft)));
-  ui->chkDeadTopRight->setChecked(m_screen->switchCorner(static_cast<int>(TopRight)));
-  ui->chkDeadBottomLeft->setChecked(m_screen->switchCorner(static_cast<int>(BottomLeft)));
-  ui->chkDeadBottomRight->setChecked(m_screen->switchCorner(static_cast<int>(BottomRight)));
-  ui->sbSwitchCornerSize->setValue(m_screen->switchCornerSize());
 
   ui->chkFixCapsLock->setChecked(m_screen->fix(CapsLock));
   ui->chkFixNumLock->setChecked(m_screen->fix(NumLock));
@@ -122,12 +115,6 @@ void ScreenSettingsDialog::accept()
   m_screen->setModifier(Alt, ui->comboAlt->currentIndex());
   m_screen->setModifier(Meta, ui->comboMeta->currentIndex());
   m_screen->setModifier(Super, ui->comboSuper->currentIndex());
-
-  m_screen->setSwitchCorner(TopLeft, ui->chkDeadTopLeft->isChecked());
-  m_screen->setSwitchCorner(TopRight, ui->chkDeadTopRight->isChecked());
-  m_screen->setSwitchCorner(BottomLeft, ui->chkDeadBottomLeft->isChecked());
-  m_screen->setSwitchCorner(BottomRight, ui->chkDeadBottomRight->isChecked());
-  m_screen->setSwitchCornerSize(ui->sbSwitchCornerSize->value());
 
   m_screen->setFix(CapsLock, ui->chkFixCapsLock->isChecked());
   m_screen->setFix(NumLock, ui->chkFixNumLock->isChecked());

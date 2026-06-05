@@ -795,31 +795,6 @@ bool Server::isSwitchOkay(
     preventSwitch = true;
   }
 
-  // are we in a locked corner?  first check if screen has the option set
-  // and, if not, check the global options.
-  const Config::ScreenOptions *options = m_config->getOptions(getName(m_active));
-  if (options == nullptr || !options->contains(kOptionScreenSwitchCorners)) {
-    options = m_config->getOptions("");
-  }
-  if (options != nullptr && options->contains(kOptionScreenSwitchCorners)) {
-    // get corner mask and size
-    Config::ScreenOptions::const_iterator i = options->find(kOptionScreenSwitchCorners);
-    auto corners = static_cast<uint32_t>(i->second);
-    i = options->find(kOptionScreenSwitchCornerSize);
-    int32_t size = 0;
-    if (i != options->end()) {
-      size = i->second;
-    }
-
-    // see if we're in a locked corner
-    if ((getCorner(m_active, xActive, yActive, size) & corners) != 0) {
-      // yep, no switching
-      LOG_DEBUG1("locked in corner");
-      preventSwitch = true;
-      stopSwitch();
-    }
-  }
-
   // ignore if mouse is locked to screen and don't try to switch later
   if (!preventSwitch && isLockedToScreen()) {
     LOG_DEBUG1("locked to screen");
@@ -952,57 +927,6 @@ bool Server::isSwitchWaitStarted() const
   return (m_switchWaitTimer != nullptr);
 }
 
-uint32_t Server::getCorner(const BaseClientProxy *client, int32_t x, int32_t y, int32_t size) const
-{
-  assert(client != nullptr);
-
-  // get client screen shape
-  int32_t ax;
-  int32_t ay;
-  int32_t aw;
-  int32_t ah;
-  client->getShape(ax, ay, aw, ah);
-
-  // check for x,y on the left or right
-  int32_t xSide;
-  if (x <= ax) {
-    xSide = -1;
-  } else if (x >= ax + aw - 1) {
-    xSide = 1;
-  } else {
-    xSide = 0;
-  }
-
-  // check for x,y on the top or bottom
-  int32_t ySide;
-  if (y <= ay) {
-    ySide = -1;
-  } else if (y >= ay + ah - 1) {
-    ySide = 1;
-  } else {
-    ySide = 0;
-  }
-
-  // if against the left or right then check if y is within size
-  if (xSide != 0) {
-    if (y < ay + size) {
-      return (xSide < 0) ? s_topLeftCornerMask : s_topRightCornerMask;
-    } else if (y >= ay + ah - size) {
-      return (xSide < 0) ? s_bottomLeftCornerMask : s_bottomRightCornerMask;
-    }
-  }
-
-  // if against the left or right then check if y is within size
-  if (ySide != 0) {
-    if (x < ax + size) {
-      return (ySide < 0) ? s_topLeftCornerMask : s_bottomLeftCornerMask;
-    } else if (x >= ax + aw - size) {
-      return (ySide < 0) ? s_topRightCornerMask : s_bottomRightCornerMask;
-    }
-  }
-
-  return s_noCornerMask;
-}
 
 void Server::stopRelativeMoves()
 {

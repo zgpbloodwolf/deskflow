@@ -12,5 +12,3 @@ const char *ScreenConfig::m_ModifierNames[] = {"shift", "ctrl", "alt", "meta", "
 const char *ScreenConfig::m_FixNames[] = {
     "halfDuplexCapsLock", "halfDuplexNumLock", "halfDuplexScrollLock", "xtestIsXineramaUnaware"
 };
-
-const char *ScreenConfig::m_SwitchCornerNames[] = {"top-left", "top-right", "bottom-left", "bottom-right"};

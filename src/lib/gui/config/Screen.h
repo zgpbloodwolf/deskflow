@@ -30,14 +30,14 @@ class Screen : public ScreenConfig
 
   friend QDataStream &operator<<(QDataStream &outStream, const Screen &screen)
   {
-    return outStream << screen.name() << screen.switchCornerSize() << screen.aliases() << screen.modifiers()
-                     << screen.switchCorners() << screen.fixes() << screen.isServer();
+    return outStream << screen.name() << screen.aliases() << screen.modifiers() << screen.fixes()
+                     << screen.isServer();
   }
 
   friend QDataStream &operator>>(QDataStream &inStream, Screen &screen)
   {
-    return inStream >> screen.m_Name >> screen.m_SwitchCornerSize >> screen.m_Aliases >> screen.m_Modifiers >>
-           screen.m_SwitchCorners >> screen.m_Fixes >> screen.m_isServer;
+    return inStream >> screen.m_Name >> screen.m_Aliases >> screen.m_Modifiers >> screen.m_Fixes >>
+           screen.m_isServer;
   }
 
 public:
@@ -67,18 +67,6 @@ public:
   [[nodiscard]] const QList<int> &modifiers() const
   {
     return m_Modifiers;
-  }
-  [[nodiscard]] bool switchCorner(int c) const
-  {
-    return m_SwitchCorners[c];
-  }
-  [[nodiscard]] const QList<bool> &switchCorners() const
-  {
-    return m_SwitchCorners;
-  }
-  [[nodiscard]] int switchCornerSize() const
-  {
-    return m_SwitchCornerSize;
   }
   [[nodiscard]] bool fix(const Fix f) const
   {
@@ -131,18 +119,6 @@ protected:
   {
     m_Aliases.append(alias);
   }
-  void setSwitchCorner(const SwitchCorner c, const bool on)
-  {
-    m_SwitchCorners[static_cast<int8_t>(c)] = on;
-  }
-  QList<bool> &switchCorners()
-  {
-    return m_SwitchCorners;
-  }
-  void setSwitchCornerSize(const int val)
-  {
-    m_SwitchCornerSize = val;
-  }
   void setFix(const Fix f, const bool on)
   {
     m_Fixes[static_cast<int8_t>(f)] = on;
@@ -161,8 +137,6 @@ private:
   QString m_Name = {};
   QStringList m_Aliases = {};
   QList<int> m_Modifiers = {0, 1, 2, 3, 4, 5};
-  QList<bool> m_SwitchCorners = {false, false, false, false};
-  int m_SwitchCornerSize = 0;
   QList<bool> m_Fixes{false, false, false, false};
   bool m_Swapped = false;
   bool m_isServer = false;

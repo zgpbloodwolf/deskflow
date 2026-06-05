@@ -15,7 +15,6 @@
 #include <QPushButton>
 
 using enum ScreenConfig::Modifier;
-using enum ScreenConfig::SwitchCorner;
 using enum ScreenConfig::Fix;
 
 static const struct
@@ -64,8 +63,6 @@ bool ServerConfig::operator==(const ServerConfig &sc) const
          m_SwitchDelay == sc.m_SwitchDelay &&                           //
          m_HasSwitchDoubleTap == sc.m_HasSwitchDoubleTap &&             //
          m_SwitchDoubleTap == sc.m_SwitchDoubleTap &&                   //
-         m_SwitchCornerSize == sc.m_SwitchCornerSize &&                 //
-         m_SwitchCorners == sc.m_SwitchCorners &&                       //
          m_Hotkeys == sc.m_Hotkeys &&                                   //
          m_DefaultLockToScreenState == sc.m_DefaultLockToScreenState && //
          m_DisableLockToScreen == sc.m_DisableLockToScreen &&           //
@@ -81,13 +78,8 @@ void ServerConfig::save(QFile &file) const
 
 void ServerConfig::setupScreens()
 {
-  switchCorners().clear();
   screens().clear();
   hotkeys().clear();
-
-  // m_NumSwitchCorners is used as a fixed size array. See Screen::init()
-  for (int i = 0; i < static_cast<int>(NumSwitchCorners); i++)
-    switchCorners() << false;
 
   // There must always be screen objects for each cell in the screens QList.
   // Unused screens are identified by having an empty name.
@@ -113,13 +105,10 @@ void ServerConfig::commit()
   settings().setValue("switchDelay", switchDelay());
   settings().setValue("hasSwitchDoubleTap", hasSwitchDoubleTap());
   settings().setValue("switchDoubleTap", switchDoubleTap());
-  settings().setValue("switchCornerSize", switchCornerSize());
   settings().setValue("defaultLockToScreenState", defaultLockToScreenState());
   settings().setValue("disableLockToScreen", disableLockToScreen());
   settings().setValue("clipboardSharing", clipboardSharing());
   settings().setValue("clipboardSharingSize", QVariant::fromValue(clipboardSharingSize()));
-
-  writeSettings(settings(), switchCorners(), "switchCorner");
 
   settings().beginWriteArray("screens");
   for (int i = 0; i < screens().size(); i++) {
@@ -165,15 +154,12 @@ void ServerConfig::recall()
   setSwitchDelay(settings().value("switchDelay", 250).toInt());
   haveSwitchDoubleTap(settings().value("hasSwitchDoubleTap", false).toBool());
   setSwitchDoubleTap(settings().value("switchDoubleTap", 250).toInt());
-  setSwitchCornerSize(settings().value("switchCornerSize").toInt());
   setDefaultLockToScreenState(settings().value("defaultLockToScreenState", false).toBool());
   setDisableLockToScreen(settings().value("disableLockToScreen", false).toBool());
   setClipboardSharingSize(
       settings().value("clipboardSharingSize", (int)ServerConfig::defaultClipboardSharingSize()).toULongLong()
   );
   setClipboardSharing(settings().value("clipboardSharing", true).toBool());
-
-  readSettings(settings(), switchCorners(), "switchCorner", false, static_cast<int>(NumSwitchCorners));
 
   int numScreens = settings().beginReadArray("screens");
   Q_ASSERT(numScreens <= screens().size());
@@ -281,16 +267,6 @@ QTextStream &operator<<(QTextStream &outStream, const ServerConfig &config)
   if (config.hasSwitchDoubleTap())
     outStream << "\t"
               << "switchDoubleTap = " << config.switchDoubleTap() << Qt::endl;
-
-  outStream << "\t"
-            << "switchCorners = none ";
-  for (int i = 0; i < config.switchCorners().size(); i++)
-    if (config.switchCorners()[i])
-      outStream << "+" << ServerConfig::switchCornerName(i) << " ";
-  outStream << Qt::endl;
-
-  outStream << "\t"
-            << "switchCornerSize = " << config.switchCornerSize() << Qt::endl;
 
   for (const Hotkey &hotkey : config.hotkeys())
     outStream << hotkey;

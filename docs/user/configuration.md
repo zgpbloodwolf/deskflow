@@ -194,12 +194,6 @@ screens\10\modifierArray\5\modifier=4
 screens\10\modifierArray\6\modifier=5
 screens\10\modifierArray\size=6
 screens\10\name=null
-screens\10\switchCornerArray\1\switchCorner=false
-screens\10\switchCornerArray\2\switchCorner=false
-screens\10\switchCornerArray\3\switchCorner=false
-screens\10\switchCornerArray\4\switchCorner=false
-screens\10\switchCornerArray\size=4
-screens\10\switchCornerSize=0
 screens\11\name=
 screens\12\name=
 screens\13\name=
@@ -224,12 +218,6 @@ screens\7\modifierArray\5\modifier=4
 screens\7\modifierArray\6\modifier=5
 screens\7\modifierArray\size=6
 screens\7\name=void
-screens\7\switchCornerArray\1\switchCorner=false
-screens\7\switchCornerArray\2\switchCorner=false
-screens\7\switchCornerArray\3\switchCorner=false
-screens\7\switchCornerArray\4\switchCorner=false
-screens\7\switchCornerArray\size=4
-screens\7\switchCornerSize=0
 screens\8\aliasArray\size=0
 screens\8\fixArray\1\fix=false
 screens\8\fixArray\2\fix=false
@@ -244,12 +232,6 @@ screens\8\modifierArray\5\modifier=4
 screens\8\modifierArray\6\modifier=5
 screens\8\modifierArray\size=6
 screens\8\name=chris-Precision-5570
-screens\8\switchCornerArray\1\switchCorner=false
-screens\8\switchCornerArray\2\switchCorner=false
-screens\8\switchCornerArray\3\switchCorner=false
-screens\8\switchCornerArray\4\switchCorner=false
-screens\8\switchCornerArray\size=4
-screens\8\switchCornerSize=0
 screens\9\aliasArray\size=0
 screens\9\fixArray\1\fix=false
 screens\9\fixArray\2\fix=false
@@ -264,19 +246,7 @@ screens\9\modifierArray\5\modifier=4
 screens\9\modifierArray\6\modifier=5
 screens\9\modifierArray\size=6
 screens\9\name=abyss.lan
-screens\9\switchCornerArray\1\switchCorner=false
-screens\9\switchCornerArray\2\switchCorner=false
-screens\9\switchCornerArray\3\switchCorner=false
-screens\9\switchCornerArray\4\switchCorner=false
-screens\9\switchCornerArray\size=4
-screens\9\switchCornerSize=0
 screens\size=15
-switchCornerArray\1\switchCorner=false
-switchCornerArray\2\switchCorner=false
-switchCornerArray\3\switchCorner=false
-switchCornerArray\4\switchCorner=false
-switchCornerArray\size=4
-switchCornerSize=0
 switchDelay=250
 switchDoubleTap=250
 win32KeepForeground=false
@@ -330,8 +300,6 @@ A computer can have the following options:
 |halfDuplexScrollLock| `true` or `false`| This computer has a ''Scroll Lock'' key that doesn't report a press and a release event when the user presses it but instead reports a press event when it's turned on and a release event when it's turned off. If ''Scroll Lock'' acts strangely on all computers then you may need to set this option to true on the server. If it acts strangely on one computer then that computer may need the option set to true.|
 |xtestIsXineramaUnaware| `true` or `false`| This option works around a bug in the XTest extension when used in combination with Xinerama. It affects X11 clients only. Not all versions of the XTest extension are aware of the Xinerama extension. As a result, they do not move the mouse correctly when using multiple Xinerama screens. This option is currently ''true'' by default. If you know your XTest extension is Xinerama aware then set this option to ''false''.|
 |preserveFocus| `true` or `false` | When true don't drop focus when switching computers
-|switchCorners| corners |See <a href="#switch-corners">switchCorners</a> below.|
-|switchCornerSize | integer | see switchCornerSize below.|
 |shift | shift ctrl alt meta super none | Map the server's shift modifer to different key on a client computer|
 |ctrl  | shift ctrl alt meta super none | Map the server's ctrl modifer to different key on a client computer|
 |alt | shift ctrl alt meta super none | Map the server's alt modifer to different key on a client computer|
@@ -400,8 +368,6 @@ end
 | Options | Value Values| Description|
 |:--------|:-----------:|:-----------|
 |heartbeat| integer (N) | The server will expect each client to send a message no less than every `N` milliseconds. If no message arrives from a client within `3N` seconds the server forces that client to disconnect. If deskflow fails to detect clients disconnecting while the server is sleeping or vice versa, try using this option. |
-|switchCorners | none top-left top-right bottom-left bottom-right left right top bottom all | Deskflow won't switch computers when the mouse reaches the edge of the computer if it's in a listed corner. The size of all corners is given by the `switchCornerSize` option. The first name in the list is one of the above names and defines the initial set of corners. Subsequent names are prefixed with + or - to add the corner to or remove the corner from the set, respectively. For example: `all -left +top-left` starts will all corners, removes the left corners (top and bottom) then adds the top-left back in, resulting in the top-left, bottom-left and bottom-right corners.|
-|switchCornerSize | integer (N) | Sets the size of all corners in pixels. The cursor must be within `N` pixels of the corner to be considered to be in the corner.|
 |switchDelay | integer| Deskflow won't switch computers when the mouse reaches edge of a computer unless it stays on the edge for `N` milliseconds. This helps prevent unintentional switching when working near an edge.|
 |switchDoubleTap| integer(N) | Deskflow won't switch computers when the mouse reaches the edge of a computer unless it's moved away from the edge and then back to the edge within `N` milliseconds. With the option you have to quickly tap the edge twice to switch. This helps prevent unintentional switching when working near the edge.|
 |screenSaverSync| `true` or `false`| ''Note: Removed in v1.14.1'' If set to ''false'' then Deskflow won't synchronize screen savers. Client screen savers will start according to their individual configurations. The server screen saver won't start if there is input, even if that input is directed toward a client computer.|

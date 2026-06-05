@@ -28,14 +28,6 @@ public:
     None,
     NumModifiers
   };
-  enum class SwitchCorner : int8_t
-  {
-    TopLeft,
-    TopRight,
-    BottomLeft,
-    BottomRight,
-    NumSwitchCorners
-  };
   enum class Fix : int8_t
   {
     CapsLock,
@@ -94,13 +86,8 @@ public:
   {
     return m_FixNames[idx];
   }
-  static const char *switchCornerName(int idx)
-  {
-    return m_SwitchCornerNames[idx];
-  }
 
 private:
   static const char *m_ModifierNames[];
   static const char *m_FixNames[];
-  static const char *m_SwitchCornerNames[];
 };

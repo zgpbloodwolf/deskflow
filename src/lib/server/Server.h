@@ -289,10 +289,6 @@ private:
   // returns true iff the delay switch timer is started
   bool isSwitchWaitStarted() const;
 
-  // returns the corner (EScreenSwitchCornerMasks) where x,y is on the
-  // given client.  corners have the given size.
-  uint32_t getCorner(const BaseClientProxy *, int32_t x, int32_t y, int32_t size) const;
-
   // stop relative mouse moves
   void stopRelativeMoves();
 

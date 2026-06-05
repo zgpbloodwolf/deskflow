@@ -10,7 +10,6 @@
 #include "config/ScreenConfig.h"
 
 using enum ScreenConfig::Modifier;
-using enum ScreenConfig::SwitchCorner;
 using enum ScreenConfig::Fix;
 
 Screen::Screen(const QString &name)
@@ -25,11 +24,8 @@ void Screen::loadSettings(QSettingsProxy &settings)
   if (name().isEmpty())
     return;
 
-  setSwitchCornerSize(settings.value("switchCornerSize").toInt());
-
   readSettings(settings, aliases(), "alias", QString(""));
   readSettings(settings, modifiers(), "modifier", static_cast<int>(DefaultMod), static_cast<int>(NumModifiers));
-  readSettings(settings, switchCorners(), "switchCorner", false, static_cast<int>(NumSwitchCorners));
   readSettings(settings, fixes(), "fix", 0, static_cast<int>(NumFixes));
 }
 
@@ -40,11 +36,8 @@ void Screen::saveSettings(QSettingsProxy &settings) const
   if (name().isEmpty())
     return;
 
-  settings.setValue("switchCornerSize", switchCornerSize());
-
   writeSettings(settings, aliases(), "alias");
   writeSettings(settings, modifiers(), "modifier");
-  writeSettings(settings, switchCorners(), "switchCorner");
   writeSettings(settings, fixes(), "fix");
 }
 
@@ -60,15 +53,6 @@ QString Screen::screensSection() const
 
   for (int i = 0; i < fixes().size(); i++)
     out.append(lineTemplate.arg(fixName(i), fixes().at(i) ? QStringLiteral("true") : QStringLiteral("false")));
-
-  auto corners = QStringLiteral("none");
-  for (int i = 0; i < switchCorners().size(); i++) {
-    if (switchCorners()[i])
-      corners.append(QStringLiteral(" +%1 ").arg(switchCornerName(i)));
-  }
-  out.append(lineTemplate.arg(QStringLiteral("switchCorners"), corners));
-
-  out.append(lineTemplate.arg(QStringLiteral("switchCornerSize"), QString::number(switchCornerSize())));
 
   return out;
 }
@@ -88,6 +72,5 @@ QString Screen::aliasesSection() const
 bool Screen::operator==(const Screen &screen) const
 {
   return m_Name == screen.m_Name && m_Aliases == screen.m_Aliases && m_Modifiers == screen.m_Modifiers &&
-         m_SwitchCorners == screen.m_SwitchCorners && m_SwitchCornerSize == screen.m_SwitchCornerSize &&
          m_Fixes == screen.m_Fixes && m_Swapped == screen.m_Swapped && m_isServer == screen.m_isServer;
 }

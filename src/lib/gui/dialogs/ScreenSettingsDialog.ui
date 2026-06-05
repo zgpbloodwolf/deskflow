@@ -388,126 +388,6 @@
          </layout>
         </widget>
        </item>
-       <item>
-        <widget class="QGroupBox" name="groupDeadCorners">
-         <property name="title">
-          <string>死角</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
-          <property name="spacing">
-           <number>20</number>
-          </property>
-          <property name="sizeConstraint">
-           <enum>QLayout::SizeConstraint::SetMinAndMaxSize</enum>
-          </property>
-          <item>
-           <layout class="QHBoxLayout" name="layoutDeadCornersTop">
-            <item>
-             <widget class="QCheckBox" name="chkDeadTopLeft">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>左上角</string>
-              </property>
-              <property name="autoRepeatInterval">
-               <number>100</number>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="chkDeadTopRight">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>右上角</string>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LayoutDirection::RightToLeft</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="layoutCornerSize">
-            <item>
-             <widget class="QLabel" name="label">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="text">
-               <string>角落大小(&amp;Z)</string>
-              </property>
-              <property name="buddy">
-               <cstring>sbSwitchCornerSize</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="sbSwitchCornerSize">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>70</width>
-                <height>0</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="layoutDeadCornersBottom">
-            <item>
-             <widget class="QCheckBox" name="chkDeadBottomLeft">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>左下角</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="chkDeadBottomRight">
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string>右下角</string>
-              </property>
-              <property name="layoutDirection">
-               <enum>Qt::LayoutDirection::RightToLeft</enum>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
@@ -717,11 +597,6 @@
   <tabstop>comboCtrl</tabstop>
   <tabstop>comboSuper</tabstop>
   <tabstop>comboAlt</tabstop>
-  <tabstop>chkDeadTopLeft</tabstop>
-  <tabstop>chkDeadTopRight</tabstop>
-  <tabstop>sbSwitchCornerSize</tabstop>
-  <tabstop>chkDeadBottomLeft</tabstop>
-  <tabstop>chkDeadBottomRight</tabstop>
   <tabstop>chkFixScrollLock</tabstop>
   <tabstop>chkFixCapsLock</tabstop>
   <tabstop>chkFixNumLock</tabstop>

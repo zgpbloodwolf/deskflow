@@ -44,8 +44,6 @@ static const OptionID kOptionModifierMapForAltGr = OPTION_CODE("MMFG");
 static const OptionID kOptionModifierMapForMeta = OPTION_CODE("MMFM");
 static const OptionID kOptionModifierMapForSuper = OPTION_CODE("MMFR");
 static const OptionID kOptionHeartbeat = OPTION_CODE("HART");
-static const OptionID kOptionScreenSwitchCorners = OPTION_CODE("SSCM");
-static const OptionID kOptionScreenSwitchCornerSize = OPTION_CODE("SSCS");
 static const OptionID kOptionScreenSwitchDelay = OPTION_CODE("SSWT");
 static const OptionID kOptionScreenSwitchTwoTap = OPTION_CODE("SSTT");
 static const OptionID kOptionScreenSwitchNeedsShift = OPTION_CODE("SSNS");
@@ -59,16 +57,6 @@ static const OptionID kOptionDefaultLockToScreenState = OPTION_CODE("LTSS");
 static const OptionID kOptionDisableLockToScreen = OPTION_CODE("DLTS");
 static const OptionID kOptionClipboardSharing = OPTION_CODE("CLPS");
 static const OptionID kOptionClipboardSharingSize = OPTION_CODE("CLSZ");
-//@}
-
-//! @name Screen switch corner masks
-//@{
-inline static const auto s_noCornerMask = 0;
-inline static const auto s_topLeftCornerMask = 1 << 0;
-inline static const auto s_topRightCornerMask = 1 << 1;
-inline static const auto s_bottomLeftCornerMask = 1 << 2;
-inline static const auto s_bottomRightCornerMask = 1 << 3;
-inline static const auto s_allCornersMask = 1 << 0 | 1 << 1 | 1 << 2 | 1 << 3;
 //@}
 
 #undef OPTION_CODE
