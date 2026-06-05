@@ -85,18 +85,15 @@ I18N::I18N(QObject *parent) : QObject{parent}
   m_currentLang = QStringLiteral("zh_CN");
   Settings::setValue(Settings::Core::Language, m_currentLang);
 
-  // 加载 Qt 内部翻译（QMessageBox 按钮等标准控件）
-  const auto translations = m_translations.value(m_currentLang);
-  for (const auto &translation : translations) {
+  // 直接从 Qt 翻译目录加载中文翻译，不依赖应用翻译文件是否存在
+  if (!m_qtTrPath.isEmpty()) {
+    const auto qtTrFile = QStringLiteral("%1/qt_zh_CN.qm").arg(m_qtTrPath);
     auto translator = new QTranslator(this);
-    if (translator->load(translation)) {
-      // 跳过 deskflow 自己的翻译文件，只加载 qt_ 开头的
-      if (translation.contains(QStringLiteral("/qt_"))) {
-        m_currentTranslations.append(translator);
-        QCoreApplication::installTranslator(translator);
-      } else {
-        delete translator;
-      }
+    if (translator->load(qtTrFile)) {
+      m_currentTranslations.append(translator);
+      QCoreApplication::installTranslator(translator);
+    } else {
+      delete translator;
     }
   }
 }
