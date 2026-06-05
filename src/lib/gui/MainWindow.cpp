@@ -185,6 +185,8 @@ void MainWindow::setupControls()
 
   ui->serverOptions->setVisible(false);
   ui->clientOptions->setVisible(false);
+  ui->m_pLabelServerName->setVisible(false);
+  ui->lineHostname->setVisible(false);
 
   const auto coreMode = Settings::value(Settings::Core::CoreMode).value<Settings::CoreMode>();
   ui->rbModeClient->setChecked(coreMode == Settings::CoreMode::Client);
@@ -485,6 +487,8 @@ void MainWindow::updateModeControls()
   ui->serverOptions->setVisible(isServer);
   ui->lblIpAddresses->setVisible(isServer);
   ui->clientOptions->setVisible(isClient);
+  ui->m_pLabelServerName->setVisible(isClient);
+  ui->lineHostname->setVisible(isClient);
   ui->lblNoMode->setVisible(!isServer && !isClient);
   toggleCanRunCore(canRunCore());
 

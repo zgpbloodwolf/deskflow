@@ -309,6 +309,35 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="m_pLabelServerName">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>连接到：</string>
+            </property>
+            <property name="indent">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="lineHostname">
+            <property name="toolTip">
+             <string>&lt;html&gt;服务端计算机的主机名或 IP 地址。&lt;br/&gt;可用逗号分隔多个地址。&lt;/html&gt;</string>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="lblNoMode">
             <property name="text">
              <string>请选择一个模式</string>
@@ -363,51 +392,6 @@
                 <string>配置客户端</string>
                </property>
               </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="m_pLabelServerName">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>连接到：</string>
-                 </property>
-                 <property name="indent">
-                  <number>0</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="lineHostname">
-                 <property name="toolTip">
-                  <string>&lt;html&gt;服务端计算机的主机名或 IP 地址。&lt;br/&gt;可用逗号分隔多个地址。&lt;/html&gt;</string>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>200</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
              </item>
             </layout>
            </widget>
