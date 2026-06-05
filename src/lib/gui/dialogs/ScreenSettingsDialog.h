@@ -11,6 +11,7 @@
 
 class QWidget;
 class QString;
+class QStandardItemModel;
 
 class Screen;
 class ScreenList;
@@ -41,6 +42,9 @@ private Q_SLOTS:
 private:
   void updatePresetLabel();
   void setModifierCombosVisible(bool showMeta, bool showSuper);
+  void updateComboItemTexts(bool isMacTarget);
+  void restoreComboDefaults();
+  void setComboItemEnabled(QStandardItemModel *model, int index, bool enabled);
   std::unique_ptr<Ui::ScreenSettingsDialog> ui;
   Screen *m_screen;
   bool m_updatingFromPreset = false;

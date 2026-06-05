@@ -14,6 +14,7 @@
 #include "validators/ValidationError.h"
 
 #include <QMessageBox>
+#include <QStandardItemModel>
 
 using enum ScreenConfig::Modifier;
 using enum ScreenConfig::SwitchCorner;
@@ -163,15 +164,18 @@ void ScreenSettingsDialog::aliasSelected()
 
 void ScreenSettingsDialog::onPresetSelected(int index)
 {
-  // index 0 = "自定义"，显示所有修饰键
+  // index 0 = "自定义"，恢复所有修饰键、标签和下拉选项
   if (index == 0) {
     setModifierCombosVisible(true, true);
+    ui->label_3->setText(QStringLiteral("Ctrl(&C)"));
+    ui->label_4->setText(QStringLiteral("Alt(&T)"));
+    restoreComboDefaults();
     ui->labelPresetDesc->hide();
     return;
   }
 
   // 预设定义：{shift, ctrl, alt, meta, super} 的 combo index 值
-  // combo index: 0=Shift, 1=Ctrl, 2=Alt, 3=⌘ Command, 4=Win 键, 5=无
+  // combo index: 0=Shift, 1=Ctrl/⌃ Control, 2=Alt/⌥ Option, 3=⌘ Command, 4=Win 键, 5=无
   struct Preset
   {
     int shift;
@@ -179,17 +183,19 @@ void ScreenSettingsDialog::onPresetSelected(int index)
     int alt;
     int meta;
     int super;
-    bool showMeta;  // 显示 ⌘ Command 行
-    bool showSuper; // 显示 Win 键 行
+    bool showMeta;    // 显示 ⌘ Command 行
+    bool showSuper;   // 显示 Win 键 行
+    bool isMacSource; // 源端是 Mac（影响左侧标签名称）
+    bool isMacTarget; // 目标端是 Mac（影响下拉选项名称）
   };
 
-  // index 1: 不映射（全部显示）
-  // index 2: Mac → Windows（隐藏 Win 键，Mac 上没有）
-  // index 3: Windows → Mac（隐藏 ⌘ Command，Windows 上没有）
+  // index 1: 不映射（全部显示，默认键名）
+  // index 2: Mac → Windows（隐藏 Win 键行；标签 Mac 键名，下拉 Windows 键名）
+  // index 3: Windows → Mac（隐藏 ⌘ Command 行；标签 Windows 键名，下拉 Mac 键名）
   static const Preset presets[] = {
-      {0, 1, 2, 3, 4, true, true},  // 1: 不映射
-      {0, 4, 2, 1, 3, true, false}, // 2: Mac → Windows
-      {0, 3, 2, 4, 1, false, true}, // 3: Windows → Mac
+      {0, 1, 2, 3, 4, true, true, false, false},  // 1: 不映射
+      {0, 4, 2, 1, 3, true, false, true, false},  // 2: Mac → Windows
+      {0, 3, 2, 4, 1, false, true, false, true},  // 3: Windows → Mac
   };
 
   const int presetIndex = index - 1;
@@ -204,6 +210,22 @@ void ScreenSettingsDialog::onPresetSelected(int index)
   ui->comboMeta->setCurrentIndex(p.meta);
   ui->comboSuper->setCurrentIndex(p.super);
   m_updatingFromPreset = false;
+
+  // 更新标签：源端 Mac 用 Mac 键名
+  if (p.isMacSource) {
+    ui->label_3->setText(QStringLiteral("⌃ Control(&C)"));
+    ui->label_4->setText(QStringLiteral("⌥ Option(&T)"));
+  } else {
+    ui->label_3->setText(QStringLiteral("Ctrl(&C)"));
+    ui->label_4->setText(QStringLiteral("Alt(&T)"));
+  }
+
+  // 更新下拉框选项文字：不映射时恢复默认，否则根据目标平台
+  if (presetIndex == 0) {
+    restoreComboDefaults();
+  } else {
+    updateComboItemTexts(p.isMacTarget);
+  }
 
   // 根据预设控制哪些修饰键行可见
   setModifierCombosVisible(p.showMeta, p.showSuper);
@@ -267,4 +289,58 @@ void ScreenSettingsDialog::setModifierCombosVisible(bool showMeta, bool showSupe
   // Win 键 行：Windows 特有
   ui->label_6->setVisible(showSuper);
   ui->comboSuper->setVisible(showSuper);
+}
+
+void ScreenSettingsDialog::updateComboItemTexts(bool isMacTarget)
+{
+  // combo index: 0=Shift, 1=Ctrl/⌃ Control, 2=Alt/⌥ Option,
+  //              3=⌘ Command, 4=Win 键, 5=无
+  QList<QComboBox *> combos = {ui->comboShift, ui->comboCtrl, ui->comboAlt, ui->comboMeta, ui->comboSuper};
+
+  for (auto *combo : combos) {
+    auto *model = qobject_cast<QStandardItemModel *>(combo->model());
+    if (!model)
+      continue;
+
+    if (isMacTarget) {
+      // 目标 Mac：用 Mac 键名，禁用 Win 键（index 4）
+      combo->setItemText(1, QStringLiteral("⌃ Control"));
+      combo->setItemText(2, QStringLiteral("⌥ Option"));
+      setComboItemEnabled(model, 3, true);  // ⌘ Command 可选
+      setComboItemEnabled(model, 4, false); // Win 键 禁用
+    } else {
+      // 目标 Windows：用 Windows 键名，禁用 ⌘ Command（index 3）
+      combo->setItemText(1, QStringLiteral("Ctrl"));
+      combo->setItemText(2, QStringLiteral("Alt"));
+      setComboItemEnabled(model, 3, false); // ⌘ Command 禁用
+      setComboItemEnabled(model, 4, true);  // Win 键 可选
+    }
+  }
+}
+
+void ScreenSettingsDialog::restoreComboDefaults()
+{
+  QList<QComboBox *> combos = {ui->comboShift, ui->comboCtrl, ui->comboAlt, ui->comboMeta, ui->comboSuper};
+
+  for (auto *combo : combos) {
+    combo->setItemText(1, QStringLiteral("Ctrl"));
+    combo->setItemText(2, QStringLiteral("Alt"));
+    auto *model = qobject_cast<QStandardItemModel *>(combo->model());
+    if (model) {
+      setComboItemEnabled(model, 3, true); // ⌘ Command 可选
+      setComboItemEnabled(model, 4, true); // Win 键 可选
+    }
+  }
+}
+
+void ScreenSettingsDialog::setComboItemEnabled(QStandardItemModel *model, int index, bool enabled)
+{
+  QStandardItem *item = model->item(index);
+  if (!item)
+    return;
+  if (enabled) {
+    item->setFlags(item->flags() | Qt::ItemIsEnabled);
+  } else {
+    item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
+  }
 }
