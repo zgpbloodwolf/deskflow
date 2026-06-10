@@ -17,6 +17,7 @@
 #include "net/IListenSocket.h"
 #include "net/ISocketFactory.h"
 #include "net/SocketException.h"
+#include "common/Settings.h"
 #include "server/ClientProxy.h"
 #include "server/ClientProxyUnknown.h"
 
@@ -72,7 +73,13 @@ ClientProxy *ClientListener::getNextClient()
 
 void ClientListener::start()
 {
-  m_listen = m_socketFactory->createListen(ARCH->getAddrFamily(m_address.getAddress()));
+  // 蓝牙模式下跳过地址族检测，直接创建监听 socket
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+  if (transport == QStringLiteral("bluetooth")) {
+    m_listen = m_socketFactory->createListen();
+  } else {
+    m_listen = m_socketFactory->createListen(ARCH->getAddrFamily(m_address.getAddress()));
+  }
 
   // setup event handler
   m_events->addHandler(EventTypes::ListenSocketConnecting, m_listen, [this](const auto &) {

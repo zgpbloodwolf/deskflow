@@ -301,7 +301,10 @@ void MSWindowsDesks::fakeMouseWheel(int32_t xDelta, int32_t yDelta) const
 
 void MSWindowsDesks::sendMessage(UINT msg, WPARAM wParam, LPARAM lParam) const
 {
-  if (m_activeDesk != nullptr && m_activeDesk->m_window != nullptr) {
+  // 使用线程 ID 而非窗口句柄判断，确保即使桌面窗口未创建（如安全桌面场景），
+  // 消息仍能发送到桌面线程进行处理。
+  // 桌面线程的消息循环始终运行，可以处理 SendInput 调用等无需窗口的操作。
+  if (m_activeDesk != nullptr && m_activeDesk->m_threadID != 0) {
     PostThreadMessage(m_activeDesk->m_threadID, msg, wParam, lParam);
     waitForDesk();
   }

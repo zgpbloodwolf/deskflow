@@ -13,6 +13,7 @@
 #include "common/Settings.h"
 #include "gui/Messages.h"
 #include "gui/core/NetworkMonitor.h"
+#include "gui/dialogs/BtDeviceDiscoveryDialog.h"
 
 #include <QComboBox>
 #include <QDir>
@@ -98,6 +99,13 @@ void SettingsDialog::initConnections() const
   connect(ui->groupLogToFile, &QGroupBox::toggled, this, &SettingsDialog::setButtonBoxEnabledButtons);
   connect(ui->groupService, &QGroupBox::toggled, this, &SettingsDialog::setButtonBoxEnabledButtons);
   connect(ui->lineLogFilename, &QLineEdit::textChanged, this, &SettingsDialog::setButtonBoxEnabledButtons);
+
+  // 蓝牙传输相关控件
+  connect(ui->comboTransport, &QComboBox::currentIndexChanged, this, &SettingsDialog::transportChanged);
+  connect(ui->comboTransport, &QComboBox::currentIndexChanged, this, &SettingsDialog::setButtonBoxEnabledButtons);
+  connect(ui->lineBtAddress, &QLineEdit::textChanged, this, &SettingsDialog::setButtonBoxEnabledButtons);
+  connect(ui->sbBtChannel, &QSpinBox::valueChanged, this, &SettingsDialog::setButtonBoxEnabledButtons);
+  connect(ui->btnBtScan, &QPushButton::clicked, this, &SettingsDialog::browseBtDevice);
 }
 
 void SettingsDialog::browseLogPath()
@@ -149,6 +157,12 @@ void SettingsDialog::accept()
 {
   Settings::setValue(Settings::Core::Port, ui->sbPort->value());
   Settings::setValue(Settings::Core::Interface, ui->comboInterface->currentData());
+
+  // 传输方式和蓝牙设置
+  const auto isBluetooth = ui->comboTransport->currentIndex() == 1;
+  Settings::setValue(Settings::Core::Transport, isBluetooth ? "bluetooth" : "tcp");
+  Settings::setValue(Settings::Client::BtTargetAddress, ui->lineBtAddress->text());
+  Settings::setValue(Settings::Server::BtChannel, ui->sbBtChannel->value());
   Settings::setValue(Settings::Log::Level, ui->comboLogLevel->currentIndex());
   Settings::setValue(Settings::Log::ToFile, ui->groupLogToFile->isChecked());
   Settings::setValue(Settings::Log::File, ui->lineLogFilename->text());
@@ -200,6 +214,13 @@ void SettingsDialog::loadFromConfig()
     m_interfaceSetOnLoad = true;
   }
 
+  // 传输方式和蓝牙设置
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+  ui->comboTransport->setCurrentIndex(transport == "bluetooth" ? 1 : 0);
+  ui->lineBtAddress->setText(Settings::value(Settings::Client::BtTargetAddress).toString());
+  ui->sbBtChannel->setValue(Settings::value(Settings::Server::BtChannel).toInt());
+  updateTransportVisibility();
+
   qDebug() << "load from config done";
 
   updateControls();
@@ -239,6 +260,11 @@ void SettingsDialog::updateControls()
   }
 
   ui->widgetLogFilename->setEnabled(writable && logToFile);
+
+  // 蓝牙传输控件
+  ui->comboTransport->setEnabled(writable);
+  const bool isBluetooth = ui->comboTransport->currentIndex() == 1;
+  ui->groupBluetooth->setEnabled(writable && isBluetooth);
 }
 
 void SettingsDialog::logLevelChanged()
@@ -264,6 +290,13 @@ bool SettingsDialog::isModified() const
 
   if (!ignoreInterface)
     modified = modified || ui->comboInterface->currentText() != Settings::value(Settings::Core::Interface).toString();
+
+  // 蓝牙传输相关字段
+  const auto currentTransport = ui->comboTransport->currentIndex() == 1 ? QString("bluetooth") : QString("tcp");
+  modified = modified || (currentTransport != Settings::value(Settings::Core::Transport).toString());
+  modified = modified || (ui->lineBtAddress->text() != Settings::value(Settings::Client::BtTargetAddress).toString());
+  modified = modified || (ui->sbBtChannel->value() != Settings::value(Settings::Server::BtChannel).toInt());
+
   return modified;
 }
 
@@ -282,7 +315,10 @@ bool SettingsDialog::isDefault() const
       (ui->cbElevateDaemon->isChecked() == Settings::defaultValue(Settings::Daemon::Elevate).toBool()) &&
       (ui->cbAutoUpdate->isChecked() == Settings::defaultValue(Settings::Gui::AutoUpdateCheck).toBool()) &&
       (ui->groupService->isChecked() == (processMode == Settings::ProcessMode::Service)) &&
-      (ui->comboInterface->currentIndex() == 0)
+      (ui->comboInterface->currentIndex() == 0) &&
+      (ui->comboTransport->currentIndex() == 0) && // 默认 TCP
+      (ui->lineBtAddress->text().isEmpty()) &&
+      (ui->sbBtChannel->value() == Settings::defaultValue(Settings::Server::BtChannel).toInt())
   );
 }
 
@@ -312,6 +348,11 @@ void SettingsDialog::resetToDefault()
 
   ui->comboInterface->setCurrentIndex(0);
 
+  // 蓝牙传输设置重置
+  ui->comboTransport->setCurrentIndex(0); // 默认 TCP
+  ui->lineBtAddress->clear();
+  ui->sbBtChannel->setValue(Settings::defaultValue(Settings::Server::BtChannel).toInt());
+
   qDebug() << "reset to default values";
   updateControls();
   setButtonBoxEnabledButtons();
@@ -326,3 +367,32 @@ void SettingsDialog::setButtonBoxEnabledButtons() const
 }
 
 SettingsDialog::~SettingsDialog() = default;
+
+void SettingsDialog::transportChanged()
+{
+  updateTransportVisibility();
+  updateControls();
+}
+
+void SettingsDialog::updateTransportVisibility()
+{
+  const bool isBluetooth = ui->comboTransport->currentIndex() == 1;
+
+  // 蓝牙模式下隐藏 TCP 相关控件，显示蓝牙控件
+  ui->groupBluetooth->setVisible(isBluetooth);
+  ui->lblNetworkIp->setVisible(!isBluetooth);
+  ui->comboInterface->setVisible(!isBluetooth);
+  ui->lblPort->setVisible(!isBluetooth);
+  ui->sbPort->setVisible(!isBluetooth);
+}
+
+void SettingsDialog::browseBtDevice()
+{
+  BtDeviceDiscoveryDialog dlg(this);
+  if (dlg.exec() == QDialog::Accepted) {
+    const auto address = dlg.selectedAddress();
+    if (!address.isEmpty()) {
+      ui->lineBtAddress->setText(address);
+    }
+  }
+}

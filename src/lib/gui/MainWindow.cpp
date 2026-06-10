@@ -490,6 +490,25 @@ void MainWindow::updateModeControls()
   ui->m_pLabelServerName->setVisible(isClient);
   ui->lineHostname->setVisible(isClient);
   ui->lblNoMode->setVisible(!isServer && !isClient);
+
+  // 根据传输类型切换客户端连接标签
+  if (isClient) {
+    const auto transport = Settings::value(Settings::Core::Transport).toString();
+    if (transport == QStringLiteral("bluetooth")) {
+      ui->m_pLabelServerName->setText(tr("蓝牙设备地址："));
+      ui->lineHostname->setToolTip(tr("目标蓝牙设备的 MAC 地址（如 AA:BB:CC:DD:EE:FF）"));
+      // 蓝牙模式下显示蓝牙地址而非主机名
+      const auto btAddr = Settings::value(Settings::Client::BtTargetAddress).toString();
+      if (!btAddr.isEmpty()) {
+        ui->lineHostname->setText(btAddr);
+      }
+    } else {
+      ui->m_pLabelServerName->setText(tr("连接到："));
+      ui->lineHostname->setToolTip(
+          tr("<html>服务端计算机的主机名或 IP 地址。<br/>可用逗号分隔多个地址。</html>")
+      );
+    }
+  }
   toggleCanRunCore(canRunCore());
 
   if (isServer) {
@@ -1067,10 +1086,17 @@ void MainWindow::remoteHostChanged(const QString &newRemoteHost)
 {
   m_coreProcess.setAddress(newRemoteHost);
   toggleCanRunCore(!newRemoteHost.isEmpty() && ui->rbModeClient->isChecked());
-  if (newRemoteHost.isEmpty()) {
-    Settings::setValue(Settings::Client::RemoteHost);
+
+  // 根据传输方式保存到不同的设置键
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+  if (transport == QStringLiteral("bluetooth")) {
+    Settings::setValue(Settings::Client::BtTargetAddress, newRemoteHost);
   } else {
-    Settings::setValue(Settings::Client::RemoteHost, newRemoteHost);
+    if (newRemoteHost.isEmpty()) {
+      Settings::setValue(Settings::Client::RemoteHost);
+    } else {
+      Settings::setValue(Settings::Client::RemoteHost, newRemoteHost);
+    }
   }
 }
 

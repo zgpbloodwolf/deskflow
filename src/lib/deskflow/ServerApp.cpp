@@ -20,6 +20,7 @@
 #include "deskflow/ScreenException.h"
 #include "deskflow/ipc/CoreIpc.h"
 #include "net/AsioTCPSocketFactory.h"
+#include "net/BtSocketFactory.h"
 #include "net/SocketException.h"
 #include "net/SocketMultiplexer.h"
 #include "server/ClientListener.h"
@@ -448,7 +449,14 @@ void ServerApp::handleScreenSwitched() const
 
 std::unique_ptr<ISocketFactory> ServerApp::getSocketFactory() const
 {
-  // 使用 AsioTCPSocketFactory，服务端不启用自动重连
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+
+  if (transport == QStringLiteral("bluetooth")) {
+    LOG_INFO("使用蓝牙传输模式");
+    return std::make_unique<BtSocketFactory>(getEvents(), false);
+  }
+
+  // 默认使用 TCP 传输
   return std::make_unique<AsioTCPSocketFactory>(getEvents(), false);
 }
 

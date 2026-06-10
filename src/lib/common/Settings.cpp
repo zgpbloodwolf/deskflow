@@ -206,6 +206,12 @@ QVariant Settings::defaultValue(const QString &key)
   if (key == Server::Protocol)
     return QVariant::fromValue(NetworkProtocol::Barrier);
 
+  if (key == Core::Transport)
+    return QStringLiteral("tcp");
+
+  if (key == Server::BtChannel)
+    return 10; // 避免常用通道 1
+
   return QVariant();
 }
 

@@ -24,6 +24,8 @@
 #include "deskflow/ipc/CoreIpc.h"
 #include "net/IDataSocket.h"
 #include "net/ISocketFactory.h"
+#include "net/BtAddress.h"
+#include "net/BtDataSocket.h"
 
 #include <QMetaEnum>
 
@@ -80,6 +82,45 @@ void Client::connect(size_t addressIndex)
   }
 
   try {
+    // 蓝牙传输模式：跳过 DNS 解析，直接连接蓝牙设备
+    const auto transport = Settings::value(Settings::Core::Transport).toString();
+    if (transport == QStringLiteral("bluetooth")) {
+      const auto btAddrStr = Settings::value(Settings::Client::BtTargetAddress).toString().toStdString();
+      const auto btChannel = Settings::value(Settings::Server::BtChannel).toInt();
+
+      BtAddress btAddr = BtAddress::parse(btAddrStr, btChannel);
+      if (!btAddr.isValid()) {
+        LOG_ERR("无效的蓝牙地址: %s 通道 %d", btAddrStr.c_str(), btChannel);
+        sendConnectionFailedEvent("invalid bluetooth address");
+        return;
+      }
+
+      LOG_DEBUG("蓝牙模式：连接到 %s", btAddr.toString().c_str());
+      ipcSendConnectionState(deskflow::core::ConnectionState::Connecting);
+
+      // 创建蓝牙 socket
+      auto *btSocket = m_socketFactory->create();
+      auto *btDataSocket = dynamic_cast<BtDataSocket *>(btSocket);
+      bindNetworkInterface(btSocket);
+
+      // filter socket messages
+      m_stream = new PacketStreamFilter(m_events, btSocket, true);
+
+      // 连接蓝牙设备
+      LOG_DEBUG1("connecting to bluetooth device");
+      setupConnecting();
+      setupTimer();
+      if (btDataSocket) {
+        btDataSocket->connectBt(btAddr);
+      } else {
+        LOG_ERR("蓝牙模式下工厂未返回 BtDataSocket");
+        sendConnectionFailedEvent("bluetooth socket creation failed");
+        return;
+      }
+      return;
+    }
+
+    // TCP 传输模式：原有逻辑
     // resolve the server hostname.  do this every time we connect
     // in case we couldn't resolve the address earlier or the address
     // has changed (which can happen frequently if this is a laptop

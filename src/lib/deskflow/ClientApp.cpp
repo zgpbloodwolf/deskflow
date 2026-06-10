@@ -19,6 +19,7 @@
 #include "deskflow/ScreenException.h"
 #include "deskflow/ipc/CoreIpc.h"
 #include "net/AsioTCPSocketFactory.h"
+#include "net/BtSocketFactory.h"
 #include "net/NetworkAddress.h"
 #include "net/SocketException.h"
 #include "net/SocketMultiplexer.h"
@@ -362,7 +363,15 @@ void ClientApp::startNode()
 
 ISocketFactory *ClientApp::getSocketFactory() const
 {
-  // WR-06 修复：使用 make_unique + release()，异常安全
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+
+  if (transport == QStringLiteral("bluetooth")) {
+    LOG_INFO("使用蓝牙传输模式");
+    auto factory = std::make_unique<BtSocketFactory>(getEvents(), true);
+    return factory.release();
+  }
+
+  // 默认使用 TCP 传输
   auto factory = std::make_unique<AsioTCPSocketFactory>(getEvents(), true);
   return factory.release();
 }

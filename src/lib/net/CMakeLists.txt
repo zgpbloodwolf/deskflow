@@ -12,6 +12,15 @@ add_library(net STATIC
   AsioTCPListenSocket.h
   AsioTCPSocketFactory.cpp
   AsioTCPSocketFactory.h
+  BtAddress.cpp
+  BtAddress.h
+  BtBackend.h
+  BtDataSocket.cpp
+  BtDataSocket.h
+  BtListenSocket.cpp
+  BtListenSocket.h
+  BtSocketFactory.cpp
+  BtSocketFactory.h
   InputEventBuffer.cpp
   InputEventBuffer.h
   KeyStateTable.cpp
@@ -36,6 +45,19 @@ add_library(net STATIC
   TCPSocketFactory.h
   TSocketMultiplexerMethodJob.h
 )
+
+# 蓝牙平台特定后端
+if(WIN32)
+  target_sources(net PRIVATE
+    BtBackendWindows.cpp
+    BtBackendWindows.h
+  )
+elseif(APPLE)
+  target_sources(net PRIVATE
+    BtBackendMacOS.mm
+    BtBackendMacOS.h
+  )
+endif()
 
 target_link_libraries(
   net

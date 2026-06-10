@@ -41,6 +41,7 @@ public:
     inline static const auto XScrollScale = QStringLiteral("client/xScrollScale");
     inline static const auto LanguageSync = QStringLiteral("client/languageSync");
     inline static const auto RemoteHost = QStringLiteral("client/remoteHost");
+    inline static const auto BtTargetAddress = QStringLiteral("client/btTargetAddress");
     inline static const auto XdpRestoreToken = QStringLiteral("client/xdpRestoreToken");
   };
   struct Core
@@ -59,6 +60,7 @@ public:
     inline static const auto ScreenEnterCommand = QStringLiteral("core/enterCommand");
     inline static const auto EnableExitCommand = QStringLiteral("core/enableExitCommand");
     inline static const auto ScreenExitCommand = QStringLiteral("core/exitCommand");
+    inline static const auto Transport = QStringLiteral("core/transport");
 
     // TODO: REMOVE In 2.0
     inline static const auto ScreenName = QStringLiteral("core/screenName"); // Replaced By ComputerName
@@ -98,6 +100,7 @@ public:
     inline static const auto ExternalConfig = QStringLiteral("server/externalConfig");
     inline static const auto ExternalConfigFile = QStringLiteral("server/externalConfigFile");
     inline static const auto Protocol = QStringLiteral("server/protocol");
+    inline static const auto BtChannel = QStringLiteral("server/btChannel");
     inline static const auto XdpRestoreToken = QStringLiteral("server/xdpRestoreToken");
   };
 
@@ -196,6 +199,7 @@ private:
     , Settings::Client::InvertXScroll
     , Settings::Client::LanguageSync
     , Settings::Client::RemoteHost
+    , Settings::Client::BtTargetAddress
     , Settings::Client::YScrollScale
     , Settings::Client::XScrollScale
     , Settings::Client::XdpRestoreToken
@@ -214,6 +218,7 @@ private:
     , Settings::Core::Display
     , Settings::Core::UseHooks
     , Settings::Core::Language
+    , Settings::Core::Transport
     , Settings::Daemon::ConfigFile
     , Settings::Daemon::Elevate
     , Settings::Daemon::LogFile
@@ -237,6 +242,7 @@ private:
     , Settings::Server::ExternalConfig
     , Settings::Server::ExternalConfigFile
     , Settings::Server::Protocol
+    , Settings::Server::BtChannel
     , Settings::Server::XdpRestoreToken
   };
 

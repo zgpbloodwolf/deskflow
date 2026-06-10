@@ -57,6 +57,15 @@ private:
   /// @brief update if the log level warning is shown
   void logLevelChanged();
 
+  /// @brief 传输方式变更时切换 TCP/蓝牙界面
+  void transportChanged();
+
+  /// @brief 根据传输方式显示/隐藏蓝牙设置
+  void updateTransportVisibility();
+
+  /// @brief 打开蓝牙设备扫描对话框
+  void browseBtDevice();
+
   /**
    * @brief isModified
    * @return true when any client settings in the gui do not match the stored settings values.

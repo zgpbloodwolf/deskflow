@@ -70,6 +70,8 @@ add_library(${target} STATIC
   dialogs/SettingsDialog.cpp
   dialogs/SettingsDialog.h
   dialogs/SettingsDialog.ui
+  dialogs/BtDeviceDiscoveryDialog.cpp
+  dialogs/BtDeviceDiscoveryDialog.h
   ipc/IpcClient.cpp
   ipc/IpcClient.h
   ipc/DaemonIpcClient.cpp
@@ -120,7 +122,8 @@ target_link_libraries(
   platform
   Qt6::Core
   Qt6::Widgets
-  Qt6::Network)
+  Qt6::Network
+  Qt6::Bluetooth)
 
 if(WIN32)
   target_link_libraries(
