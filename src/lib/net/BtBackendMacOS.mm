@@ -25,9 +25,6 @@ std::unique_ptr<BtBackend> createBtBackend()
 }
 
 //! Objective-C++ 内部实现类
-/*!
-封装 IOBluetooth API 调用，对 C++ 层隐藏 Objective-C 类型。
-*/
 @interface BtBackendImpl : NSObject <IOBluetoothRFCOMMChannelDelegate>
 {
   @public
@@ -40,6 +37,15 @@ std::unique_ptr<BtBackend> createBtBackend()
   std::mutex m_bufferMutex;
   std::condition_variable m_bufferCV;
   std::deque<uint8_t> m_readBuffer;
+
+  // 服务端：等待传入连接
+  std::mutex m_acceptMutex;
+  std::condition_variable m_acceptCV;
+  IOBluetoothRFCOMMChannel *m_pendingChannel;
+  BOOL m_hasPendingConnection;
+
+  // SDP 服务记录（监听模式）
+  IOBluetoothSDPServiceRecord *m_sdpRecord;
 }
 
 - (BOOL)connectToDevice:(NSString *)address channel:(int)channel;
@@ -49,6 +55,7 @@ std::unique_ptr<BtBackend> createBtBackend()
 - (int)writeData:(const void *)buf length:(size_t)len;
 - (void)closeConnection;
 - (BOOL)isConnected;
+- (BOOL)isListening;
 - (BOOL)pollRead:(int)timeoutMs;
 
 // IOBluetoothRFCOMMChannelDelegate
@@ -59,8 +66,11 @@ std::unique_ptr<BtBackend> createBtBackend()
                dataLength:(NSUInteger)dataLength;
 - (void)rfcommChannelClosed:(IOBluetoothRFCOMMChannel *)rfcommChannel;
 - (void)rfcommChannelWriteComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel
-                         refCon:(void *)refCon
-                          status:(IOReturn)status;
+                           refCon:(void *)refCon
+                            status:(IOReturn)status;
+
+// 新连接通知
+- (void)newRFCOMMChannelOpened:(IOBluetoothRFCOMMChannel *)newChannel;
 
 @end
 
@@ -74,6 +84,9 @@ std::unique_ptr<BtBackend> createBtBackend()
     m_device = nil;
     m_connected = NO;
     m_listening = NO;
+    m_pendingChannel = nil;
+    m_hasPendingConnection = NO;
+    m_sdpRecord = nil;
   }
   return self;
 }
@@ -87,7 +100,6 @@ std::unique_ptr<BtBackend> createBtBackend()
 {
   LOG_INFO("蓝牙后端：正在连接到 %s 通道 %d", [address UTF8String], channel);
 
-  // 通过地址字符串查找设备
   BluetoothDeviceAddress btAddr;
   if (IOBluetoothNSStringToDeviceAddress(address, &btAddr) != kIOReturnSuccess) {
     LOG_ERR("蓝牙后端：无法解析蓝牙地址: %s", [address UTF8String]);
@@ -100,7 +112,6 @@ std::unique_ptr<BtBackend> createBtBackend()
     return NO;
   }
 
-  // 打开 RFCOMM 通道
   IOBluetoothRFCOMMChannel *newChannel = nil;
   IOReturn result = [m_device openRFCOMMChannelSync:&newChannel
                                          withChannelID:channel
@@ -122,42 +133,64 @@ std::unique_ptr<BtBackend> createBtBackend()
 {
   LOG_INFO("蓝牙后端：正在通道 %d 上监听", channel);
 
-  // SPP UUID: 0x1101
-  const uint8_t sppUUIDBytes[] = {0x11, 0x01};
-  IOBluetoothSDPUUID *sppUUID = [IOBluetoothSDPUUID uuidWithBytes:sppUUIDBytes length:2];
+  @try {
+    // 使用 IOBluetoothRFCOMMChannel 的服务端注册
+    // 注册 RFCOMM 通道回调通知
+    [[IOBluetoothRFCOMMChannel registerForChannelOpenNotifications:self
+                                                        selector:@selector(newRFCOMMChannelOpened:)
+                                                      withChannelID:channel
+                                                      direction:kIOBluetoothUserNotificationChannelDirectionIncoming]
+      retain];
 
-  // L2CAP UUID: 0x0100, RFCOMM UUID: 0x0003
-  const uint8_t l2capUUIDBytes[] = {0x01, 0x00};
-  const uint8_t rfcommUUIDBytes[] = {0x00, 0x03};
-  IOBluetoothSDPUUID *l2capUUID = [IOBluetoothSDPUUID uuidWithBytes:l2capUUIDBytes length:2];
-  IOBluetoothSDPUUID *rfcommUUID = [IOBluetoothSDPUUID uuidWithBytes:rfcommUUIDBytes length:2];
-
-  NSDictionary *serviceDict = @{
-    @"ServiceClassIDList" : @[ sppUUID ],
-    @"ProtocolDescriptorList" : @[
-      @[ l2capUUID ],
-      @[ rfcommUUID, [NSNumber numberWithInt:channel] ]
-    ],
-    @"ServiceName" : @"Deskflow KVM"
-  };
-
-  // 使用 publishedServiceRecordWithDictionary 注册 SDP 服务
-  IOBluetoothSDPServiceRecord *sdpRecord = [IOBluetoothSDPServiceRecord publishedServiceRecordWithDictionary:serviceDict];
-  if (sdpRecord == nil) {
-    LOG_ERR("蓝牙后端：注册 SDP 服务失败");
+    m_listening = YES;
+    LOG_INFO("蓝牙后端：已在通道 %d 上监听（回调模式）", channel);
+    return YES;
+  } @catch (NSException *exception) {
+    LOG_ERR("蓝牙后端：注册 RFCOMM 通道监听失败: %s", [[exception description] UTF8String]);
     return NO;
   }
+}
 
-  m_listening = YES;
-  LOG_INFO("蓝牙后端：已在通道 %d 上监听", channel);
-  return YES;
+- (void)newRFCOMMChannelOpened:(IOBluetoothRFCOMMChannel *)newChannel
+{
+  LOG_INFO("蓝牙后端：收到新的蓝牙连接");
+
+  std::lock_guard<std::mutex> lock(m_acceptMutex);
+  if (m_hasPendingConnection && m_pendingChannel != nil) {
+    // 已有待处理的连接，拒绝新连接
+    [newChannel closeChannel];
+    LOG_WARN("蓝牙后端：已有待处理连接，拒绝新连接");
+    return;
+  }
+
+  m_pendingChannel = newChannel;
+  [m_pendingChannel setDelegate:self];
+  m_hasPendingConnection = YES;
+  m_acceptCV.notify_one();
 }
 
 - (std::unique_ptr<BtBackend>)acceptConnection
 {
-  // macOS 的 IOBluetooth 通道接受通过 delegate 回调处理
-  // 这里使用简化的同步等待模式
-  LOG_ERR("蓝牙后端：macOS 暂不支持同步 accept，请使用回调模式");
+  // 等待传入连接（超时 500ms，以便线程可以检查 m_running）
+  std::unique_lock<std::mutex> lock(m_acceptMutex);
+  if (m_acceptCV.wait_for(lock, std::chrono::milliseconds(500), [&] { return m_hasPendingConnection; })) {
+    if (m_pendingChannel != nil) {
+      // 创建新的 impl 对象并设置通道
+      BtBackendImpl *newImpl = [[BtBackendImpl alloc] init];
+      newImpl->m_channel = m_pendingChannel;
+      newImpl->m_connected = YES;
+      [newImpl->m_channel setDelegate:newImpl];
+
+      m_pendingChannel = nil;
+      m_hasPendingConnection = NO;
+
+      // 创建 C++ 后端实例，通过私有构造函数传入 impl
+      std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)newImpl));
+
+      LOG_INFO("蓝牙后端：已接受蓝牙连接");
+      return backend;
+    }
+  }
   return nullptr;
 }
 
@@ -202,7 +235,6 @@ std::unique_ptr<BtBackend> createBtBackend()
   m_connected = NO;
   m_listening = NO;
 
-  // 唤醒可能在等待读取的线程
   std::lock_guard<std::mutex> lock(m_bufferMutex);
   m_bufferCV.notify_all();
 }
@@ -210,6 +242,11 @@ std::unique_ptr<BtBackend> createBtBackend()
 - (BOOL)isConnected
 {
   return m_connected;
+}
+
+- (BOOL)isListening
+{
+  return m_listening;
 }
 
 - (BOOL)pollRead:(int)timeoutMs
@@ -243,6 +280,7 @@ std::unique_ptr<BtBackend> createBtBackend()
   LOG_INFO("蓝牙后端：RFCOMM 通道已关闭");
   m_connected = NO;
   m_bufferCV.notify_all();
+  m_acceptCV.notify_all();
 }
 
 - (void)rfcommChannelWriteComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel
@@ -263,14 +301,17 @@ std::unique_ptr<BtBackend> createBtBackend()
 BtBackendMacOS::BtBackendMacOS()
 {
   m_impl = (__bridge void *)[[BtBackendImpl alloc] init];
-  // 手动 retain 以持有所有权
   CFRetain(m_impl);
+}
+
+BtBackendMacOS::BtBackendMacOS(void *impl) : m_impl(impl), m_connected(true)
+{
+  // 从已接受的连接构造，impl 已被 retain
 }
 
 BtBackendMacOS::~BtBackendMacOS()
 {
   if (m_impl != nullptr) {
-    // 释放 Objective-C 对象
     CFRelease(m_impl);
     m_impl = nullptr;
   }
@@ -321,6 +362,12 @@ bool BtBackendMacOS::isConnected() const
 {
   auto *impl = (__bridge BtBackendImpl *)m_impl;
   return [impl isConnected];
+}
+
+bool BtBackendMacOS::isListening() const
+{
+  auto *impl = (__bridge BtBackendImpl *)m_impl;
+  return [impl isListening];
 }
 
 bool BtBackendMacOS::pollRead(int timeoutMs)

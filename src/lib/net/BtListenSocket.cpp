@@ -79,7 +79,7 @@ void BtListenSocket::acceptThreadFunc()
   LOG_DEBUG("蓝牙接受线程启动");
 
   while (m_running) {
-    if (!m_backend || !m_backend->isConnected()) {
+    if (!m_backend || !m_backend->isListening()) {
       // 等待后端就绪
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       continue;
@@ -100,8 +100,7 @@ void BtListenSocket::acceptThreadFunc()
       sendEvent(EventTypes::ListenSocketConnecting);
     }
 
-    // 短暂休眠避免 CPU 空转
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    // accept() 已包含超时等待，无需额外休眠
   }
 
   LOG_DEBUG("蓝牙接受线程退出");

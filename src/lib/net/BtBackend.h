@@ -55,6 +55,9 @@ public:
   //! 连接是否已建立
   virtual bool isConnected() const = 0;
 
+  //! 是否正在监听（服务端模式）
+  virtual bool isListening() const { return false; }
+
   //! 检查是否有数据可读（非阻塞轮询）
   /*!
   \param timeoutMs 超时时间（毫秒），0 表示立即返回

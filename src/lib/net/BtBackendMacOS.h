@@ -35,10 +35,13 @@ public:
   int write(const void *buf, size_t len) override;
   void close() override;
   bool isConnected() const override;
+  bool isListening() const override;
   bool pollRead(int timeoutMs) override;
 
+  // acceptConnection 内部使用
+  explicit BtBackendMacOS(void *impl);
+
 private:
-  //! 内部实现上下文（隐藏 Objective-C 类型）
   void *m_impl = nullptr;
   bool m_connected = false;
   bool m_listening = false;
