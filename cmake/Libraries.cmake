@@ -19,7 +19,7 @@ macro(configure_libs)
     )
   endif()
 
-  find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Widgets Network Bluetooth)
+  find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED COMPONENTS Core Widgets Network)
 
   # 修复：macOS 13+ 移除了 AGL 框架，Qt6 的 FindWrapOpenGL 会错误地链接 -framework AGL
   if(APPLE AND TARGET WrapOpenGL::WrapOpenGL)

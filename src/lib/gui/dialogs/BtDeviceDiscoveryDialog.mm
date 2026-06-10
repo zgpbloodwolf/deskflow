@@ -6,9 +6,11 @@
 
 #include "BtDeviceDiscoveryDialog.h"
 
-#include <QBluetoothDeviceDiscoveryAgent>
-#include <QBluetoothDeviceInfo>
-#include <QMessageBox>
+#ifdef __APPLE__
+#import <IOBluetooth/IOBluetooth.h>
+#endif
+
+#include <QApplication>
 
 BtDeviceDiscoveryDialog::BtDeviceDiscoveryDialog(QWidget *parent) : QDialog(parent)
 {
@@ -64,42 +66,52 @@ void BtDeviceDiscoveryDialog::startDiscovery()
   m_btnScan->setEnabled(false);
   m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-  auto *discoveryAgent = new QBluetoothDeviceDiscoveryAgent(this);
+#ifdef __APPLE__
+  // 使用原生 IOBluetooth API 获取已配对设备
+  @autoreleasepool {
+    IOBluetoothDevice *device = nil;
+    NSEnumerator *enumerator = [[IOBluetoothDevice pairedDevices] objectEnumerator];
 
-  connect(discoveryAgent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this,
-          [this](const QBluetoothDeviceInfo &device) {
-            // 只添加有名称的设备
-            QString name = device.name();
-            QString address = device.address().toString();
-            if (name.isEmpty()) {
-              name = address;
-            }
-            m_deviceList->addItem(QString("%1 (%2)").arg(name, address));
-            m_addresses.append(address);
-            m_lblStatus->setText(tr("已发现 %1 个设备...").arg(m_addresses.size()));
-          });
+    while ((device = [enumerator nextObject]) != nil) {
+      NSString *name = [device nameOrAddress];
+      NSString *address = [device addressString];
 
-  connect(discoveryAgent, &QBluetoothDeviceDiscoveryAgent::finished, this,
-          [this, discoveryAgent]() {
-            m_lblStatus->setText(tr("扫描完成，共发现 %1 个设备").arg(m_addresses.size()));
-            m_btnScan->setEnabled(true);
-            if (!m_addresses.isEmpty()) {
-              m_deviceList->setCurrentRow(0);
-              m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-            }
-            discoveryAgent->deleteLater();
-          });
+      if (address == nil || [address length] == 0) {
+        continue;
+      }
 
-  connect(discoveryAgent, &QBluetoothDeviceDiscoveryAgent::errorOccurred, this,
-          [this, discoveryAgent](QBluetoothDeviceDiscoveryAgent::Error error) {
-            m_lblStatus->setText(tr("扫描出错: %1").arg(discoveryAgent->errorString()));
-            m_btnScan->setEnabled(true);
-            discoveryAgent->deleteLater();
-          });
+      QString deviceName = QString::fromNSString(name);
+      QString deviceAddr = QString::fromNSString(address).toUpper();
+
+      // 格式化为 AA:BB:CC:DD:EE:FF
+      deviceAddr = deviceAddr.replace("-", ":");
+
+      if (deviceName.isEmpty()) {
+        deviceName = deviceAddr;
+      }
+
+      m_deviceList->addItem(QString("%1 (%2)").arg(deviceName, deviceAddr));
+      m_addresses.append(deviceAddr);
+    }
+  }
+
+  m_lblStatus->setText(tr("扫描完成，共发现 %1 个已配对设备").arg(m_addresses.size()));
+  m_btnScan->setEnabled(true);
+
+  if (!m_addresses.isEmpty()) {
+    m_deviceList->setCurrentRow(0);
+    m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+  } else {
+    m_lblStatus->setText(tr("未发现已配对的蓝牙设备，请先在系统设置中配对设备"));
+  }
+#else
+  // Windows: 使用 WinRT Bluetooth API
+  // TODO: 实现Windows蓝牙扫描
+  m_lblStatus->setText(tr("当前平台暂不支持扫描，请手动输入蓝牙地址"));
+  m_btnScan->setEnabled(true);
+#endif
 
   connect(m_deviceList, &QListWidget::itemSelectionChanged, this, [this]() {
     m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_deviceList->currentRow() >= 0);
   });
-
-  discoveryAgent->start(QBluetoothDeviceDiscoveryAgent::ClassicMethod);
 }

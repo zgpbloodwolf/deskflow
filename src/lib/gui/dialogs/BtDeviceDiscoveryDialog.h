@@ -17,7 +17,7 @@
 //! 蓝牙设备扫描对话框
 /*!
 扫描附近已配对的蓝牙设备，让用户选择目标设备。
-返回选中设备的 MAC 地址。
+使用平台原生 API 扫描，避免 Qt Bluetooth 兼容性问题。
 */
 class BtDeviceDiscoveryDialog : public QDialog
 {
@@ -33,12 +33,6 @@ public:
 private:
   //! 开始扫描蓝牙设备
   void startDiscovery();
-
-  //! 停止扫描
-  void stopDiscovery();
-
-  //! 扫描完成
-  void onDiscoveryFinished();
 
   QListWidget *m_deviceList = nullptr;
   QPushButton *m_btnScan = nullptr;
