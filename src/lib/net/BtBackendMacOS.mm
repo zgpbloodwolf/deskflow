@@ -53,6 +53,7 @@ std::unique_ptr<BtBackend> createBtBackend()
 
 - (BOOL)connectToDevice:(NSString *)address channel:(int)channel;
 - (BOOL)listenOnChannel:(int)channel;
+- (BOOL)publishSDPServiceRecord:(int)channel;
 - (std::unique_ptr<BtBackend>)acceptConnection;
 - (int)readData:(void *)buf length:(size_t)len;
 - (int)writeData:(const void *)buf length:(size_t)len;
@@ -152,25 +153,60 @@ std::unique_ptr<BtBackend> createBtBackend()
 
   LOG_INFO("蓝牙后端：蓝牙适配器已就绪");
 
-  // 注意：macOS 不支持 fork() without exec() 模式，在多线程
-  // Objective-C 进程中 fork 后调用 IOBluetooth API 会导致 SIGABRT。
-  // 因此直接尝试注册通知，根据返回值判断是否可用。
+  // 注册 RFCOMM 通道通知，监听传入连接
   m_channelNotification = [IOBluetoothRFCOMMChannel
       registerForChannelOpenNotifications:self
                                 selector:@selector(rfcommChannelOpened:channel:)
                               withChannelID:channel
                                 direction:kIOBluetoothUserNotificationChannelDirectionIncoming];
 
-  if (m_channelNotification != nil) {
-    m_listening = YES;
-    LOG_INFO("蓝牙后端：已在通道 %d 上监听（通知模式）", channel);
-    return YES;
+  if (m_channelNotification == nil) {
+    LOG_ERR("蓝牙后端：注册 RFCOMM 通道通知失败");
+    return NO;
   }
 
-  LOG_WARN("蓝牙后端：注册 RFCOMM 通道通知失败，使用兼容模式");
-  // 仍然标记为监听状态，等待外部连接
+  // 发布 SDP 服务记录，使 Windows 等平台客户端能够发现并连接
+  // Windows 蓝牙栈依赖 SDP 来发现 RFCOMM 服务，缺少 SDP 记录会导致连接失败
+  if (![self publishSDPServiceRecord:channel]) {
+    LOG_WARN("蓝牙后端：发布 SDP 服务记录失败，连接可能受限");
+    // 不返回 NO，因为通知注册已成功，某些客户端仍可能直接连接
+  }
+
   m_listening = YES;
-  LOG_INFO("蓝牙后端：已在通道 %d 上监听（兼容模式，无通知注册）", channel);
+  LOG_INFO("蓝牙后端：已在通道 %d 上监听", channel);
+  return YES;
+}
+
+- (BOOL)publishSDPServiceRecord:(int)channel
+{
+  // 使用标准 SPP UUID: 00001101-0000-1000-8000-00805F9B34FB
+  uint8_t sppUUIDBytes[] = {
+      0x00, 0x00, 0x11, 0x01, 0x00, 0x00, 0x10, 0x00,
+      0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB
+  };
+  IOBluetoothSDPUUID *sppUUID = [IOBluetoothSDPUUID uuidWithBytes:sppUUIDBytes length:16];
+  if (sppUUID == nil) {
+    LOG_ERR("蓝牙后端：创建 SPP UUID 失败");
+    return NO;
+  }
+
+  // 直接使用原始类型构建 SDP 服务字典
+  NSDictionary *serviceDict = @{
+      @"0001" : @[ sppUUID ],
+      @"0004" : @[
+          @[ [IOBluetoothSDPUUID uuid16:kBluetoothSDPUUID16L2CAP] ],
+          @[ [IOBluetoothSDPUUID uuid16:kBluetoothSDPUUID16RFCOMM], @(channel) ],
+      ],
+      @"0100" : @"Deskflow",
+  };
+
+  m_sdpRecord = [IOBluetoothSDPServiceRecord publishedServiceRecordWithDictionary:serviceDict];
+  if (m_sdpRecord == nil) {
+    LOG_ERR("蓝牙后端：创建 SDP 服务记录失败");
+    return NO;
+  }
+
+  LOG_INFO("蓝牙后端：已发布 SDP 服务记录，通道 %d", channel);
   return YES;
 }
 
@@ -207,7 +243,11 @@ std::unique_ptr<BtBackend> createBtBackend()
       m_pendingChannel = nil;
       m_hasPendingConnection = NO;
 
-      // 创建 C++ 后端实例，通过私有构造函数传入 impl
+      // 必须显式 retain，防止 ARC 在当前 autorelease pool 释放 newImpl
+      // BtBackendMacOS 的析构函数会通过 CFRelease 释放
+      CFRetain((__bridge CFTypeRef)newImpl);
+
+      // 创建 C++ 后端实例，转移所有权
       std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)newImpl));
 
       LOG_INFO("蓝牙后端：已接受蓝牙连接");
@@ -255,6 +295,12 @@ std::unique_ptr<BtBackend> createBtBackend()
   if (m_channelNotification != nil) {
     [m_channelNotification unregister];
     m_channelNotification = nil;
+  }
+
+  // 移除 SDP 服务记录
+  if (m_sdpRecord != nil) {
+    [m_sdpRecord removeServiceRecord];
+    m_sdpRecord = nil;
   }
 
   if (m_channel != nil) {
