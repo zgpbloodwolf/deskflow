@@ -13,6 +13,19 @@ if(APPLE)
   )
 endif()
 
+# 蓝牙设备扫描对话框：按平台选择实现文件
+if(WIN32)
+  set(bt_discovery_sources
+    dialogs/BtDeviceDiscoveryDialog_win.cpp
+    dialogs/BtDeviceDiscoveryDialog.h
+  )
+else()
+  set(bt_discovery_sources
+    dialogs/BtDeviceDiscoveryDialog.mm
+    dialogs/BtDeviceDiscoveryDialog.h
+  )
+endif()
+
 add_library(${target} STATIC
   ${platform_sources}
   Action.cpp
@@ -70,8 +83,7 @@ add_library(${target} STATIC
   dialogs/SettingsDialog.cpp
   dialogs/SettingsDialog.h
   dialogs/SettingsDialog.ui
-  dialogs/BtDeviceDiscoveryDialog.mm
-  dialogs/BtDeviceDiscoveryDialog.h
+  ${bt_discovery_sources}
   ipc/IpcClient.cpp
   ipc/IpcClient.h
   ipc/DaemonIpcClient.cpp
@@ -130,5 +142,6 @@ if(WIN32)
     base
     arch
     net
+    Bthprops
   )
 endif()
