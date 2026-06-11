@@ -43,6 +43,15 @@ ClientApp::ClientApp(IEventQueue *events, const QString &processName) : App(even
 
 void ClientApp::parseArgs()
 {
+  // 蓝牙模式下不需要解析 TCP 地址
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+  if (transport == QStringLiteral("bluetooth")) {
+    LOG_INFO("蓝牙传输模式，跳过 TCP 地址解析");
+    // 添加一个占位地址，蓝牙模式下 connect() 会使用 connectBt() 代替
+    m_serverAddresses.append(NetworkAddress(Settings::value(Settings::Core::Port).toInt()));
+    return;
+  }
+
   // save server addresses (comma-separated list supported)
   if (const auto addressList = Settings::value(Settings::Client::RemoteHost).toString(); !addressList.isEmpty()) {
     const int port = Settings::value(Settings::Core::Port).toInt();

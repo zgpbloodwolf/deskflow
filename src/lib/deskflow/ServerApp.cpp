@@ -56,6 +56,15 @@ ServerApp::ServerApp(IEventQueue *events, const QString &processName) : App(even
 
 void ServerApp::parseArgs()
 {
+  // 蓝牙模式下不需要 TCP 地址解析
+  const auto transport = Settings::value(Settings::Core::Transport).toString();
+  if (transport == QStringLiteral("bluetooth")) {
+    LOG_INFO("蓝牙传输模式，跳过 TCP 地址解析");
+    // 使用默认端口构造一个占位地址，蓝牙模式下不实际使用
+    *m_deskflowAddress = NetworkAddress(Settings::value(Settings::Core::Port).toInt());
+    return;
+  }
+
   if (const auto address = Settings::value(Settings::Core::Interface).toString(); !address.isEmpty()) {
     *m_deskflowAddress = NetworkAddress(address.toStdString(), Settings::value(Settings::Core::Port).toInt());
   } else {

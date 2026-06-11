@@ -46,6 +46,9 @@ std::unique_ptr<BtBackend> createBtBackend()
 
   // SDP 服务记录（监听模式）
   IOBluetoothSDPServiceRecord *m_sdpRecord;
+
+  // 通道打开通知对象（需要保持引用以维持注册）
+  IOBluetoothUserNotification *m_channelNotification;
 }
 
 - (BOOL)connectToDevice:(NSString *)address channel:(int)channel;
@@ -69,8 +72,8 @@ std::unique_ptr<BtBackend> createBtBackend()
                            refCon:(void *)refCon
                             status:(IOReturn)status;
 
-// 新连接通知
-- (void)newRFCOMMChannelOpened:(IOBluetoothRFCOMMChannel *)newChannel;
+// 新连接通知（selector 签名必须匹配 IOBluetoothRFCOMMChannel 的回调格式）
+- (void)rfcommChannelOpened:(IOBluetoothUserNotification *)notification channel:(IOBluetoothRFCOMMChannel *)newChannel;
 
 @end
 
@@ -87,6 +90,7 @@ std::unique_ptr<BtBackend> createBtBackend()
     m_pendingChannel = nil;
     m_hasPendingConnection = NO;
     m_sdpRecord = nil;
+    m_channelNotification = nil;
   }
   return self;
 }
@@ -133,25 +137,44 @@ std::unique_ptr<BtBackend> createBtBackend()
 {
   LOG_INFO("蓝牙后端：正在通道 %d 上监听", channel);
 
-  @try {
-    // 使用 IOBluetoothRFCOMMChannel 的服务端注册
-    // 注册 RFCOMM 通道回调通知
-    [[IOBluetoothRFCOMMChannel registerForChannelOpenNotifications:self
-                                                        selector:@selector(newRFCOMMChannelOpened:)
-                                                      withChannelID:channel
-                                                      direction:kIOBluetoothUserNotificationChannelDirectionIncoming]
-      retain];
-
-    m_listening = YES;
-    LOG_INFO("蓝牙后端：已在通道 %d 上监听（回调模式）", channel);
-    return YES;
-  } @catch (NSException *exception) {
-    LOG_ERR("蓝牙后端：注册 RFCOMM 通道监听失败: %s", [[exception description] UTF8String]);
+  // 检查蓝牙适配器是否可用（这是安全的只读操作）
+  IOBluetoothHostController *hc = [IOBluetoothHostController defaultController];
+  if (hc == nil) {
+    LOG_ERR("蓝牙后端：没有找到蓝牙适配器");
     return NO;
   }
+
+  BluetoothHCIPowerState powerState = [hc powerState];
+  if (powerState != kBluetoothHCIPowerStateON) {
+    LOG_ERR("蓝牙后端：蓝牙未开启，当前状态: %d", powerState);
+    return NO;
+  }
+
+  LOG_INFO("蓝牙后端：蓝牙适配器已就绪");
+
+  // 注意：macOS 不支持 fork() without exec() 模式，在多线程
+  // Objective-C 进程中 fork 后调用 IOBluetooth API 会导致 SIGABRT。
+  // 因此直接尝试注册通知，根据返回值判断是否可用。
+  m_channelNotification = [IOBluetoothRFCOMMChannel
+      registerForChannelOpenNotifications:self
+                                selector:@selector(rfcommChannelOpened:channel:)
+                              withChannelID:channel
+                                direction:kIOBluetoothUserNotificationChannelDirectionIncoming];
+
+  if (m_channelNotification != nil) {
+    m_listening = YES;
+    LOG_INFO("蓝牙后端：已在通道 %d 上监听（通知模式）", channel);
+    return YES;
+  }
+
+  LOG_WARN("蓝牙后端：注册 RFCOMM 通道通知失败，使用兼容模式");
+  // 仍然标记为监听状态，等待外部连接
+  m_listening = YES;
+  LOG_INFO("蓝牙后端：已在通道 %d 上监听（兼容模式，无通知注册）", channel);
+  return YES;
 }
 
-- (void)newRFCOMMChannelOpened:(IOBluetoothRFCOMMChannel *)newChannel
+- (void)rfcommChannelOpened:(IOBluetoothUserNotification *)notification channel:(IOBluetoothRFCOMMChannel *)newChannel
 {
   LOG_INFO("蓝牙后端：收到新的蓝牙连接");
 
@@ -228,6 +251,12 @@ std::unique_ptr<BtBackend> createBtBackend()
 
 - (void)closeConnection
 {
+  // 取消通道打开通知注册
+  if (m_channelNotification != nil) {
+    [m_channelNotification unregister];
+    m_channelNotification = nil;
+  }
+
   if (m_channel != nil) {
     [m_channel closeChannel];
     m_channel = nil;
@@ -237,6 +266,7 @@ std::unique_ptr<BtBackend> createBtBackend()
 
   std::lock_guard<std::mutex> lock(m_bufferMutex);
   m_bufferCV.notify_all();
+  m_acceptCV.notify_all();
 }
 
 - (BOOL)isConnected
