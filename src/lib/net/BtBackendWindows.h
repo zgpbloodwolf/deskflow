@@ -37,8 +37,7 @@ public:
   bool isConnected() const override;
   bool pollRead(int timeoutMs) override;
 
-private:
-  //! 从已接受的 socket 构造（服务端用）
+  // 从已接受的 socket 构造（服务端用）
   explicit BtBackendWindows(void *acceptedSocket);
 
   //! 将 "AA:BB:CC:DD:EE:FF" 格式地址转换为 Windows BTH_ADDR

@@ -54,6 +54,7 @@ unsigned long long BtBackendWindows::parseMacAddress(const std::string &btAddres
 void BtBackendWindows::connect(const std::string &btAddress, int channel)
 {
   LOG_INFO("蓝牙后端：正在连接到 %s 通道 %d", btAddress.c_str(), channel);
+  LOG_INFO("蓝牙后端：m_connected=%d, m_socket=%p", m_connected, m_socket);
 
   SOCKET sock = socket(AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM);
   if (sock == INVALID_SOCKET) {
@@ -61,6 +62,7 @@ void BtBackendWindows::connect(const std::string &btAddress, int channel)
     return;
   }
   m_socket = reinterpret_cast<void *>(sock);
+  LOG_INFO("蓝牙后端：创建 socket 成功，sock=%d", sock);
 
   SOCKADDR_BTH remoteAddr = {};
   remoteAddr.addressFamily = AF_BTH;
@@ -68,15 +70,20 @@ void BtBackendWindows::connect(const std::string &btAddress, int channel)
   remoteAddr.port = channel;
   remoteAddr.serviceClassId = GUID_NULL;
 
+  LOG_INFO("蓝牙后端：调用 connect()");
   if (::connect(sock, (SOCKADDR *)&remoteAddr, sizeof(remoteAddr)) == SOCKET_ERROR) {
-    LOG_ERR("蓝牙后端：连接失败，错误码: %d", WSAGetLastError());
+    int err = WSAGetLastError();
+    LOG_ERR("蓝牙后端：连接失败，错误码: %d", err);
     closesocket(sock);
     m_socket = nullptr;
+    m_connected = false;
+    LOG_INFO("蓝牙后端：连接失败后 m_connected=%d", m_connected);
     return;
   }
 
   m_connected = true;
   LOG_INFO("蓝牙后端：已连接到 %s", btAddress.c_str());
+  LOG_INFO("蓝牙后端：连接成功后 m_connected=%d", m_connected);
 }
 
 void BtBackendWindows::listen(int channel)
@@ -135,19 +142,33 @@ std::unique_ptr<BtBackend> BtBackendWindows::accept()
 int BtBackendWindows::read(void *buf, size_t len)
 {
   if (!m_connected || m_socket == nullptr) {
+    LOG_INFO("蓝牙后端：read 失败 - m_connected=%d, m_socket=%p", m_connected, m_socket);
     return -1;
   }
 
+  LOG_INFO("蓝牙后端：read 开始读取...");
   int result = recv(reinterpret_cast<SOCKET>(m_socket), static_cast<char *>(buf), static_cast<int>(len), 0);
   if (result == SOCKET_ERROR) {
     int err = WSAGetLastError();
+    // WSAEWOULDBLOCK: 非阻塞模式下无数据可读（正常）
+    // WSAENOTSOCK: socket 已关闭（连接断开）
     if (err == WSAEWOULDBLOCK) {
       return 0; // 无数据可读
+    }
+    if (err == WSAENOTSOCK) {
+      LOG_INFO("蓝牙后端：read 返回 WSAENOTSOCK，连接已关闭");
+      m_connected = false;
+      return -1;
     }
     LOG_ERR("蓝牙后端：读取失败，错误码: %d", err);
     m_connected = false;
     return -1;
+  } else if (result == 0) {
+    LOG_INFO("蓝牙后端：read 返回 0，连接已关闭");
+    m_connected = false;
+    return -1;
   }
+  LOG_INFO("蓝牙后端：read 成功读取 %d 字节", result);
   return result;
 }
 

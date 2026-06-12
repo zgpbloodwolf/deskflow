@@ -212,7 +212,7 @@ std::unique_ptr<BtBackend> createBtBackend()
 
 - (void)rfcommChannelOpened:(IOBluetoothUserNotification *)notification channel:(IOBluetoothRFCOMMChannel *)newChannel
 {
-  LOG_INFO("蓝牙后端：收到新的蓝牙连接");
+  LOG_INFO("蓝牙后端：收到新的蓝牙连接，channel=%p", newChannel);
 
   std::lock_guard<std::mutex> lock(m_acceptMutex);
   if (m_hasPendingConnection && m_pendingChannel != nil) {
@@ -225,6 +225,14 @@ std::unique_ptr<BtBackend> createBtBackend()
   m_pendingChannel = newChannel;
   [m_pendingChannel setDelegate:self];
   m_hasPendingConnection = YES;
+
+  // 打印连接信息
+  IOBluetoothDevice *device = [newChannel getDevice];
+  if (device != nil) {
+    NSString *addr = [device addressString];
+    LOG_INFO("蓝牙后端：连接设备地址: %s", [addr UTF8String]);
+  }
+
   m_acceptCV.notify_one();
 }
 
