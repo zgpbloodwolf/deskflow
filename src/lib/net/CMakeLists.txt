@@ -17,7 +17,7 @@ add_library(net STATIC
   BtBackend.h
   BtDataSocket.cpp
   BtDataSocket.h
-  BtListenSocket.cpp
+  BtListenSocket.mm
   BtListenSocket.h
   BtSocketFactory.cpp
   BtSocketFactory.h

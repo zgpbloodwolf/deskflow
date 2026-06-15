@@ -50,6 +50,9 @@ private:
   //! 接受线程主循环
   void acceptThreadFunc();
 
+  //! 蓝牙接受线程主循环（在 accept 线程内运行 NSRunLoop 以派发 IOBluetooth 回调）
+  void acceptThreadFuncBt();
+
   //! 发送事件到 EventQueue
   void sendEvent(deskflow::EventTypes type);
 
@@ -61,4 +64,7 @@ private:
   std::thread m_acceptThread;
   std::atomic<bool> m_running{false};
   std::atomic<bool> m_accepting{false};
+
+  // 蓝牙监听参数（传递给 accept 线程）
+  int m_btChannel = 10;
 };

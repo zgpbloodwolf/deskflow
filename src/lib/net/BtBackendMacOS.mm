@@ -49,6 +49,9 @@ std::unique_ptr<BtBackend> createBtBackend()
 
   // 通道打开通知对象（需要保持引用以维持注册）
   IOBluetoothUserNotification *m_channelNotification;
+
+  // 数据转发：监听 impl 作为 delegate 接收数据后转发给数据 impl
+  BtBackendImpl *m_dataChild;
 }
 
 - (BOOL)connectToDevice:(NSString *)address channel:(int)channel;
@@ -92,6 +95,7 @@ std::unique_ptr<BtBackend> createBtBackend()
     m_hasPendingConnection = NO;
     m_sdpRecord = nil;
     m_channelNotification = nil;
+    m_dataChild = nil;
   }
   return self;
 }
@@ -222,8 +226,14 @@ std::unique_ptr<BtBackend> createBtBackend()
     return;
   }
 
+  // 设置当前 impl 为 channel 的 delegate，使读写都通过当前 impl 进行
+  // writeSync 要求 channel 已设置 delegate 才能正常工作
+  [newChannel setDelegate:self];
+
+  // retain channel，由当前 impl 的 m_channel 持有
   m_pendingChannel = newChannel;
-  [m_pendingChannel setDelegate:self];
+  CFRetain((__bridge CFTypeRef)m_pendingChannel);
+
   m_hasPendingConnection = YES;
 
   // 打印连接信息
@@ -242,23 +252,20 @@ std::unique_ptr<BtBackend> createBtBackend()
   std::unique_lock<std::mutex> lock(m_acceptMutex);
   if (m_acceptCV.wait_for(lock, std::chrono::milliseconds(500), [&] { return m_hasPendingConnection; })) {
     if (m_pendingChannel != nil) {
-      // 创建新的 impl 对象并设置通道
-      BtBackendImpl *newImpl = [[BtBackendImpl alloc] init];
-      newImpl->m_channel = m_pendingChannel;
-      newImpl->m_connected = YES;
-      [newImpl->m_channel setDelegate:newImpl];
+      // 复用当前 impl：将 m_pendingChannel 赋给 m_channel
+      // 这样 writeData 和 rfcommChannelData: 回调都通过当前 impl
+      m_channel = m_pendingChannel;
+      m_connected = YES;
 
       m_pendingChannel = nil;
       m_hasPendingConnection = NO;
 
-      // 必须显式 retain，防止 ARC 在当前 autorelease pool 释放 newImpl
-      // BtBackendMacOS 的析构函数会通过 CFRelease 释放
-      CFRetain((__bridge CFTypeRef)newImpl);
+      // retain self 给 C++ 后端（BtBackendMacOS 析构时 CFRelease）
+      CFRetain((__bridge CFTypeRef)self);
 
-      // 创建 C++ 后端实例，转移所有权
-      std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)newImpl));
+      std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)self));
 
-      LOG_INFO("蓝牙后端：已接受蓝牙连接");
+      LOG_INFO("蓝牙后端：已接受蓝牙连接（复用 impl）");
       return backend;
     }
   }
@@ -351,8 +358,20 @@ std::unique_ptr<BtBackend> createBtBackend()
                      data:(void *)dataPointer
                dataLength:(NSUInteger)dataLength
 {
-  std::lock_guard<std::mutex> lock(m_bufferMutex);
   auto *bytes = static_cast<const uint8_t *>(dataPointer);
+
+  // 如果是监听模式且有数据子节点，转发数据给子节点（已接受的连接）
+  if (m_dataChild != nil) {
+    std::lock_guard<std::mutex> lock(m_dataChild->m_bufferMutex);
+    for (NSUInteger i = 0; i < dataLength; ++i) {
+      m_dataChild->m_readBuffer.push_back(bytes[i]);
+    }
+    m_dataChild->m_bufferCV.notify_one();
+    return;
+  }
+
+  // 否则写入自己的缓冲区
+  std::lock_guard<std::mutex> lock(m_bufferMutex);
   for (NSUInteger i = 0; i < dataLength; ++i) {
     m_readBuffer.push_back(bytes[i]);
   }
