@@ -31,16 +31,36 @@ BtDataSocket::BtDataSocket(IEventQueue *events, std::unique_ptr<BtBackend> backe
   // 服务端已接受的连接，启动 I/O 线程
   m_running = true;
   m_ioThread = std::thread(&BtDataSocket::ioThreadFunc, this);
+
+  // 启动重连守护线程（即便服务端默认不自动重连，也常驻以便析构时统一 join）
+  m_reconnectThread = std::thread(&BtDataSocket::reconnectLoop, this);
 }
 
 BtDataSocket::~BtDataSocket()
 {
-  close();
+  // 标记析构，阻止重连与断连事件
+  m_destroying = true;
+  m_running = false;
+
+  // 持锁关闭 backend（避免与重连线程并发操作 backend），唤醒 ioThread 上阻塞的 recv/select
+  {
+    std::lock_guard<std::mutex> lk(m_reconnectMutex);
+    if (m_backend) {
+      m_backend->close();
+    }
+    m_connected = false;
+    m_writable = false;
+  }
+  // 唤醒重连线程的 wait/wait_for，使其检测 m_destroying 并退出
+  m_reconnectCV.notify_all();
 
   // 等待 I/O 线程结束
-  m_running = false;
   if (m_ioThread.joinable()) {
     m_ioThread.join();
+  }
+  // 等待重连线程结束（若它正卡在 doReconnect 的 connect，需等待其返回后释放 m_reconnectMutex）
+  if (m_reconnectThread.joinable()) {
+    m_reconnectThread.join();
   }
 }
 
@@ -61,7 +81,7 @@ void BtDataSocket::connectBt(const BtAddress &address)
 
   if (!m_backend->isConnected()) {
     LOG_ERR("蓝牙 socket：连接失败");
-    sendEvent(EventTypes::DataSocketConnectionFailed);
+    sendConnectionFailed("bluetooth connect failed");
     return;
   }
 
@@ -72,6 +92,11 @@ void BtDataSocket::connectBt(const BtAddress &address)
   // 启动 I/O 线程
   m_running = true;
   m_ioThread = std::thread(&BtDataSocket::ioThreadFunc, this);
+
+  // 启动重连守护线程
+  if (!m_reconnectThread.joinable()) {
+    m_reconnectThread = std::thread(&BtDataSocket::reconnectLoop, this);
+  }
 
   // 发送连接成功事件
   sendEvent(EventTypes::DataSocketConnected);
@@ -86,12 +111,14 @@ void BtDataSocket::bind(const NetworkAddress &)
 
 void BtDataSocket::close()
 {
+  // 主动关闭：让 ioThread 退出循环，并持锁关闭 backend 避免与重连线程并发
+  m_running = false;
+  std::lock_guard<std::mutex> lk(m_reconnectMutex);
   if (m_backend) {
     m_backend->close();
   }
   m_connected = false;
   m_writable = false;
-  m_running = false;
 }
 
 void *BtDataSocket::getEventTarget() const
@@ -230,8 +257,23 @@ void BtDataSocket::sendEvent(EventTypes type)
   m_events->addEvent(Event(type, getEventTarget()));
 }
 
+void BtDataSocket::sendConnectionFailed(const char *reason)
+{
+  // 必须携带 ConnectionFailedInfo：Client::handleConnectionFailed 会读取 event data
+  // 并 delete，缺失会导致空指针解引用（与 AsioTCPSocket/TCPSocket 行为对齐）。
+  // 用 DontFreeData，由上层 Client 负责 delete。
+  auto *info = new IDataSocket::ConnectionFailedInfo(reason);
+  m_events->addEvent(Event(EventTypes::DataSocketConnectionFailed, getEventTarget(), info,
+                           Event::EventFlags::DontFreeData));
+}
+
 void BtDataSocket::handleDisconnect()
 {
+  // 析构触发的关闭不再通知断连，也不重连
+  if (m_destroying) {
+    return;
+  }
+
   if (m_disconnectNotified.exchange(true)) {
     return; // 防止重复发送断连事件
   }
@@ -245,9 +287,11 @@ void BtDataSocket::handleDisconnect()
   sendEvent(EventTypes::SocketDisconnected);
   LOG_INFO("蓝牙 socket：连接已断开");
 
-  // 自动重连
+  // 自动重连：通知独立的重连守护线程（ioThread 不能在自己线程内 join 自己去重连）
   if (m_autoReconnect && m_targetAddress.isValid()) {
-    scheduleReconnect();
+    std::lock_guard<std::mutex> lk(m_reconnectMutex);
+    m_reconnectRequested = true;
+    m_reconnectCV.notify_one();
   }
 }
 
@@ -257,42 +301,85 @@ void BtDataSocket::releaseAllKeys()
   m_keyState.releaseAll();
 }
 
-void BtDataSocket::scheduleReconnect()
+void BtDataSocket::reconnectLoop()
 {
-  if (m_reconnectAttempts >= kMaxReconnectAttempts) {
-    LOG_ERR("蓝牙 socket：已达最大重连次数 (%d)", kMaxReconnectAttempts);
-    return;
+  while (true) {
+    int delaySec = 0;
+    {
+      // 等待重连请求或析构信号
+      std::unique_lock<std::mutex> lk(m_reconnectMutex);
+      m_reconnectCV.wait(lk, [this] { return m_destroying.load() || m_reconnectRequested.load(); });
+      if (m_destroying) {
+        return;
+      }
+      m_reconnectRequested = false;
+
+      // 指数退避：0s -> 1s -> 2s -> 4s -> ... -> 30s
+      delaySec = m_reconnectAttempts == 0 ? 0 : std::min(1 << (m_reconnectAttempts - 1), kMaxReconnectDelaySec);
+      m_reconnectAttempts++;
+      LOG_INFO("蓝牙 socket：将在 %d 秒后重连（第 %d 次）", delaySec, m_reconnectAttempts);
+
+      // 退避等待，析构时可被提前唤醒
+      if (delaySec > 0) {
+        m_reconnectCV.wait_for(lk, std::chrono::seconds(delaySec), [this] { return m_destroying.load(); });
+      }
+      if (m_destroying) {
+        return;
+      }
+    } // 释放锁，doReconnect 内部自行加锁，避免递归加锁
+
+    doReconnect();
   }
-
-  // 指数退避：0s -> 1s -> 2s -> 4s -> ... -> 30s
-  int delaySec = m_reconnectAttempts == 0 ? 0 : std::min(1 << (m_reconnectAttempts - 1), kMaxReconnectDelaySec);
-  m_reconnectAttempts++;
-
-  LOG_INFO("蓝牙 socket：将在 %d 秒后重连（第 %d 次）", delaySec, m_reconnectAttempts);
-
-  std::this_thread::sleep_for(std::chrono::seconds(delaySec));
-  doReconnect();
 }
 
 void BtDataSocket::doReconnect()
 {
+  // 由重连守护线程调用（而非 ioThread 自身），因此 join m_ioThread 不会发生自 join 死锁
+  std::lock_guard<std::mutex> lk(m_reconnectMutex);
   LOG_INFO("蓝牙 socket：正在重连...");
 
-  // 关闭旧连接
+  // 1. 回收旧 I/O 线程（此时它已退出，join 立即返回）
+  m_running = false;
+  if (m_ioThread.joinable()) {
+    m_ioThread.join();
+  }
+
+  // 2. 关闭并释放旧 backend
   if (m_backend) {
     m_backend->close();
+    m_backend.reset();
   }
   m_connected = false;
   m_writable = false;
   m_disconnectNotified = false;
 
-  // 重新连接
+  // 析构竞争：拿锁前若对象已开始析构，放弃重连
+  if (m_destroying) {
+    return;
+  }
+
+  // 3. 重新创建后端并连接
   m_backend = createBtBackend();
   m_backend->connect(m_targetAddress.address(), m_targetAddress.channel());
 
+  // connect 阻塞期间若对象开始析构，放弃重连
+  if (m_destroying) {
+    if (m_backend) {
+      m_backend->close();
+      m_backend.reset();
+    }
+    return;
+  }
+
   if (!m_backend->isConnected()) {
     LOG_ERR("蓝牙 socket：重连失败");
-    scheduleReconnect();
+    if (m_reconnectAttempts < kMaxReconnectAttempts) {
+      // 排队下一次重连（循环会立即重新检查并按退避等待）
+      m_reconnectRequested = true;
+    } else {
+      LOG_ERR("蓝牙 socket：已达最大重连次数 (%d)", kMaxReconnectAttempts);
+      sendConnectionFailed("bluetooth reconnect exhausted");
+    }
     return;
   }
 
@@ -300,14 +387,9 @@ void BtDataSocket::doReconnect()
   m_writable = true;
   m_reconnectAttempts = 0;
 
-  // 重新启动 I/O 线程
-  if (!m_running) {
-    m_running = true;
-    if (m_ioThread.joinable()) {
-      m_ioThread.join();
-    }
-    m_ioThread = std::thread(&BtDataSocket::ioThreadFunc, this);
-  }
+  // 4. 启动新的 I/O 线程
+  m_running = true;
+  m_ioThread = std::thread(&BtDataSocket::ioThreadFunc, this);
 
   sendEvent(EventTypes::DataSocketConnected);
   LOG_INFO("蓝牙 socket：重连成功");

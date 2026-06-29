@@ -376,7 +376,9 @@ ISocketFactory *ClientApp::getSocketFactory() const
 
   if (transport == QStringLiteral("bluetooth")) {
     LOG_INFO("使用蓝牙传输模式");
-    auto factory = std::make_unique<BtSocketFactory>(getEvents(), true);
+    // 蓝牙 socket 为裸指针模型，自治重连会被 Client::handleDisconnected 销毁 socket 打断；
+    // 断连统一交由上层 ClientApp 的重试机制（见 retryTime()）处理。
+    auto factory = std::make_unique<BtSocketFactory>(getEvents(), false);
     return factory.release();
   }
 

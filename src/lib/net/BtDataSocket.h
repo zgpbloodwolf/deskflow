@@ -16,6 +16,7 @@
 #include "net/NetworkAddress.h"
 
 #include <atomic>
+#include <condition_variable>
 #include <memory>
 #include <mutex>
 #include <thread>
@@ -87,16 +88,19 @@ private:
   //! 发送事件到 EventQueue
   void sendEvent(EventTypes type);
 
+  //! 发送连接失败事件，携带 ConnectionFailedInfo（Client::handleConnectionFailed 会读取并 delete）
+  void sendConnectionFailed(const char *reason);
+
   //! 统一断连处理
   void handleDisconnect();
 
   //! 释放所有按下的键
   void releaseAllKeys();
 
-  //! 自动重连调度
-  void scheduleReconnect();
+  //! 自动重连守护线程主循环（独立于 ioThread，避免线程内自 join）
+  void reconnectLoop();
 
-  //! 执行重连
+  //! 执行重连（由 reconnectLoop 调用，不可由 ioThread 直接调用）
   void doReconnect();
 
   IEventQueue *m_events;
@@ -104,6 +108,11 @@ private:
 
   std::unique_ptr<BtBackend> m_backend;
   std::thread m_ioThread;
+  std::thread m_reconnectThread; // 重连守护线程，负责 join 旧 ioThread 并重建连接
+  std::mutex m_reconnectMutex;
+  std::condition_variable m_reconnectCV;
+  std::atomic<bool> m_reconnectRequested{false};
+  std::atomic<bool> m_destroying{false};
   std::atomic<bool> m_running{false};
   std::atomic<bool> m_shutdownInput{false};
   std::atomic<bool> m_shutdownOutput{false};

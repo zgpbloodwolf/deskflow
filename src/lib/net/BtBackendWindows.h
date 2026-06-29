@@ -46,6 +46,18 @@ public:
   void *m_socket = nullptr; // SOCKET 句柄（void* 避免头文件依赖）
   bool m_connected = false;
   bool m_listening = false;
+
+  // SDP 服务记录句柄（仅监听端持有），用于注销
+  void *m_sdpRecordHandle = nullptr;
+
+private:
+  // 为阻塞 recv 设置接收超时（SO_RCVTIMEO），使 read() 无数据时能定时返回而非永久阻塞
+  void applyRecvTimeout();
+
+  // 通过 WSASetService 注册 SDP 服务记录，使 Windows BT 栈视为合法 RFCOMM 服务，
+  // 否则未挂载 SDP 的监听 socket 在客户端连接约 1 秒后会被本机 BT 栈主动 abort（WSAECONNABORTED）。
+  bool registerSdpService(int channel);
+  void unregisterSdpService();
 };
 
 #endif // _WIN32
