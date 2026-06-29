@@ -12,7 +12,7 @@
 #include "net/BtDataSocket.h"
 
 #ifdef __APPLE__
-#import <Foundation/Foundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 #endif
 
 //
@@ -118,7 +118,6 @@ void BtListenSocket::acceptThreadFuncBt()
 #ifdef __APPLE__
   // macOS：在 accept 线程内创建 backend 并注册通知
   // IOBluetooth 通知回调依赖注册线程的 RunLoop 派发
-  // 将 listen() 放在此线程确保回调能正确触发
   m_backend = createBtBackend();
   m_backend->listen(m_btChannel);
 
@@ -129,10 +128,14 @@ void BtListenSocket::acceptThreadFuncBt()
 
   LOG_INFO("蓝牙监听 socket：已在通道 %d 上监听", m_btChannel);
 
+  LOG_DEBUG("蓝牙监听 socket：进入 accept 循环");
+  int loopCount = 0;
   while (m_running) {
-    // 使用 NSRunLoop 派发 IOBluetooth 回调（必须在注册通知的同一线程）
-    [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
-                             beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+    // CFRunLoopRunInMode: mode=default, timeout=0.1s, returnAfterSourceHandled=true
+    // returnAfterSourceHandled=true 表示处理完一个 source 后立即返回，避免阻塞
+    LOG_DEBUG("蓝牙监听 socket：即将调用 CFRunLoopRunInMode");
+    SInt32 rlResult = CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, true);
+    LOG_DEBUG("蓝牙监听 socket：CFRunLoopRunInMode 返回 %d", (int)rlResult);
 
     auto clientBackend = m_backend->accept();
     if (clientBackend && clientBackend->isConnected()) {
@@ -147,10 +150,13 @@ void BtListenSocket::acceptThreadFuncBt()
 
       sendEvent(EventTypes::ListenSocketConnecting);
     }
+
+    if (++loopCount % 100 == 0) {
+      LOG_DEBUG("蓝牙监听 socket：accept 线程心跳 #%d", loopCount);
+    }
   }
 #else
-  // 非 macOS 平台：使用原有的 acceptThreadFunc 逻辑
-  // Windows 等平台不需要 NSRunLoop，直接在主线程创建 backend
+  // 非 macOS 平台
   m_backend = createBtBackend();
   m_backend->listen(m_btChannel);
 

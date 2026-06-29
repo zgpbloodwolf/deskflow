@@ -216,7 +216,7 @@ std::unique_ptr<BtBackend> createBtBackend()
 
 - (void)rfcommChannelOpened:(IOBluetoothUserNotification *)notification channel:(IOBluetoothRFCOMMChannel *)newChannel
 {
-  LOG_INFO("蓝牙后端：收到新的蓝牙连接，channel=%p", newChannel);
+  LOG_INFO("蓝牙后端：收到新的蓝牙连接，channel=%p, thread=%p", newChannel, [[NSThread currentThread] description].UTF8String);
 
   std::lock_guard<std::mutex> lock(m_acceptMutex);
   if (m_hasPendingConnection && m_pendingChannel != nil) {
