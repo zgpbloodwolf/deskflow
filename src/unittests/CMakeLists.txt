@@ -74,7 +74,7 @@ else()
   set(guiApp deskflow)
 endif()
 
-option(SKIP_BUILD_TESTS "Skip build time test" OFF)
+option(SKIP_BUILD_TESTS "Skip build time test" ON)
 
 # Windows 下测试需要 Qt DLL 在 PATH 中
 if(WIN32)

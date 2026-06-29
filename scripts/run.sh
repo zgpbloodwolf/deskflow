@@ -6,9 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 
 if [ "$(uname)" = "Darwin" ]; then
-  CORE="$PROJECT_DIR/build/bin/Deskflow.app/Contents/MacOS/deskflow-core"
+  CORE="${DESKFLOW_CORE:-$PROJECT_DIR/build/bin/Deskflow.app/Contents/MacOS/deskflow-core}"
 else
-  CORE="$PROJECT_DIR/build/bin/deskflow-core"
+  CORE="${DESKFLOW_CORE:-$PROJECT_DIR/build/bin/deskflow-core}"
 fi
 
 # 杀掉旧进程

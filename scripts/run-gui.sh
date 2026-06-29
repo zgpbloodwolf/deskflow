@@ -6,9 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 
 if [ "$(uname)" = "Darwin" ]; then
-  APP="$PROJECT_DIR/build/bin/Deskflow.app"
+  APP="${DESKFLOW_APP:-$PROJECT_DIR/build/bin/Deskflow.app}"
 else
-  APP="$PROJECT_DIR/build/bin/Deskflow"
+  APP="${DESKFLOW_APP:-$PROJECT_DIR/build/bin/deskflow}"
 fi
 
 # 杀掉旧进程

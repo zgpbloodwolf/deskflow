@@ -207,21 +207,33 @@ install(
 if(WIN32)
   set(RUN_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run.bat)
   set(RUN_GUI_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run-gui.bat)
+  set(RUN_GUI_TARGET deskflow)
 else()
   set(RUN_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run.sh)
   set(RUN_GUI_SCRIPT ${CMAKE_SOURCE_DIR}/scripts/run-gui.sh)
+  if(APPLE)
+    set(RUN_GUI_TARGET Deskflow)
+  else()
+    set(RUN_GUI_TARGET deskflow)
+  endif()
 endif()
 
 add_custom_target(run
-  COMMAND ${RUN_SCRIPT}
+  COMMAND ${CMAKE_COMMAND} -E env DESKFLOW_CORE=$<TARGET_FILE:deskflow-core> ${RUN_SCRIPT}
   DEPENDS deskflow-core
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "构建并启动 deskflow-core server (调试模式)"
 )
 
+if(APPLE)
+  set(RUN_GUI_APP $<TARGET_BUNDLE_DIR:${RUN_GUI_TARGET}>)
+else()
+  set(RUN_GUI_APP $<TARGET_FILE:${RUN_GUI_TARGET}>)
+endif()
+
 add_custom_target(run-gui
-  COMMAND ${RUN_GUI_SCRIPT}
-  DEPENDS Deskflow
+  COMMAND ${CMAKE_COMMAND} -E env DESKFLOW_APP=${RUN_GUI_APP} ${RUN_GUI_SCRIPT}
+  DEPENDS ${RUN_GUI_TARGET}
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   COMMENT "构建并启动 Deskflow GUI"
 )
