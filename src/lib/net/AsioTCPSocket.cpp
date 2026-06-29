@@ -367,7 +367,10 @@ void AsioTCPSocket::onReadComplete(const std::error_code &ec, size_t bytesTransf
 
 void AsioTCPSocket::startAsyncWrite()
 {
-  std::vector<uint8_t> dataToSend;
+  // 用 shared_ptr 持有待写数据：asio::buffer(*dataToSend) 持有的是指向 vector 内存的裸指针，
+  // async_write 异步返回后该内存必须存活到 IOCP 写完成。把 dataToSend 提到堆上并由
+  // lambda 捕获 shared_ptr，使 vector 生命周期延伸到 async_write 完成（lambda 析构时释放）。
+  auto dataToSend = std::make_shared<std::vector<uint8_t>>();
   {
     std::lock_guard<std::mutex> lock(m_mutex);
     if (m_outputBuffer.getSize() == 0) {
@@ -378,12 +381,12 @@ void AsioTCPSocket::startAsyncWrite()
     }
     uint32_t size = m_outputBuffer.getSize();
     const void *data = m_outputBuffer.peek(size);
-    dataToSend.assign(static_cast<const uint8_t *>(data), static_cast<const uint8_t *>(data) + size);
+    dataToSend->assign(static_cast<const uint8_t *>(data), static_cast<const uint8_t *>(data) + size);
   }
 
   auto self = shared_from_this();
   asio::async_write(
-      m_socket, asio::buffer(dataToSend),
+      m_socket, asio::buffer(*dataToSend),
       asio::bind_executor(
           m_strand,
           [this, self, dataToSend](const std::error_code &ec, size_t bytesTransferred) {
