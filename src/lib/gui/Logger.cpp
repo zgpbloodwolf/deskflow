@@ -50,6 +50,42 @@ QString printLine(FILE *out, const QString &type, const QString &message, const 
 
 void Logger::handleMessage(const QtMsgType type, const QString &fileLine, const QString &message)
 {
+  // 重入保护：emit newLine 后下游 GUI 槽（QPlainTextEdit::appendPlainText）在
+  // 内部布局时会再次触发 Qt 自身的 qWarning（例如
+  // "QTextLayout::beginLayout: Called while already doing layout"），这些 qWarning
+  // 会再次进入 messageHandler → handleMessage → emit newLine → appendPlainText，
+  // 形成无限递归直至 Qt 内部状态损坏、GUI 闪退。
+  // 重入时仅执行 printLine（输出到 stderr/OutputDebugString），跳过 emit，
+  // 从而打断递归链路；m_handlingMessage 由最外层调用负责清理。
+  if (m_handlingMessage) {
+    auto mutatedType = type;
+    if (kForceDebugMessages.contains(message)) {
+      mutatedType = QtDebugMsg;
+    }
+    switch (mutatedType) {
+    case QtDebugMsg:
+      if (!m_guiDebug)
+        return;
+      printLine(stdout, QStringLiteral("DEBUG"), message, fileLine);
+      break;
+    case QtInfoMsg:
+      printLine(stdout, QStringLiteral("INFO"), message, fileLine);
+      break;
+    case QtWarningMsg:
+      printLine(stderr, QStringLiteral("WARNING"), message, fileLine);
+      break;
+    case QtCriticalMsg:
+      printLine(stderr, QStringLiteral("CRITICAL"), message, fileLine);
+      break;
+    case QtFatalMsg:
+      printLine(stderr, QStringLiteral("FATAL"), message, fileLine);
+      break;
+    }
+    return;
+  }
+
+  m_handlingMessage = true;
+
   auto mutatedType = type;
   if (kForceDebugMessages.contains(message)) {
     mutatedType = QtDebugMsg;
@@ -59,8 +95,10 @@ void Logger::handleMessage(const QtMsgType type, const QString &fileLine, const 
   auto out = stdout;
   switch (mutatedType) {
   case QtDebugMsg:
-    if (!m_guiDebug)
+    if (!m_guiDebug) {
+      m_handlingMessage = false;
       return;
+    }
     typeString = "DEBUG";
     break;
   case QtInfoMsg:
@@ -82,6 +120,7 @@ void Logger::handleMessage(const QtMsgType type, const QString &fileLine, const 
 
   const auto logLine = printLine(out, typeString, message, fileLine);
   Q_EMIT newLine(logLine);
+  m_handlingMessage = false;
 }
 
 Logger::Logger()
