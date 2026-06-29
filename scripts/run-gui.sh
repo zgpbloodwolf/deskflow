@@ -5,6 +5,11 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$SCRIPT_DIR/.."
 
+if [ -z "${DESKFLOW_APP:-}" ]; then
+  echo "构建 Deskflow GUI..."
+  cmake --build "$PROJECT_DIR/build" --target Deskflow || exit 1
+fi
+
 if [ "$(uname)" = "Darwin" ]; then
   APP="${DESKFLOW_APP:-$PROJECT_DIR/build/bin/Deskflow.app}"
 else

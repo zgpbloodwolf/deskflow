@@ -102,7 +102,7 @@ elseif(APPLE)
     if (NOT APPLE_CODESIGN_DEV)
       add_custom_command(
         TARGET ${target} POST_BUILD
-        COMMAND codesign --force --deep --sign - $<TARGET_BUNDLE_DIR:${target}>
+        COMMAND codesign --force --deep --entitlements ${CMAKE_CURRENT_SOURCE_DIR}/../res/entitlements-dev.plist --sign - $<TARGET_BUNDLE_DIR:${target}>
         COMMENT "Codesign (adhoc deep) Deskflow.app for accessibility inheritance"
       )
     endif()

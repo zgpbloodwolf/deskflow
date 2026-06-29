@@ -42,7 +42,7 @@ function(_finalize_mac_codesign)
             --sign "${APPLE_CODESIGN_DEV}"
             "$<TARGET_BUNDLE_DIR:${CMAKE_PROJECT_PROPER_NAME}>"
     COMMAND ${CMAKE_COMMAND} -E touch ${stamp_file}
-    DEPENDS ${depends}
+    DEPENDS ${depends} "${CMAKE_SOURCE_DIR}/src/apps/res/entitlements-dev.plist"
     COMMENT "Codesigning ${CMAKE_PROJECT_PROPER_NAME}"
     VERBATIM
   )
