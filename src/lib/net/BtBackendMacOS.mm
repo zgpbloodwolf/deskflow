@@ -257,20 +257,17 @@ std::unique_ptr<BtBackend> createBtBackend()
     return nullptr;
   }
 
-  // 复用当前 impl：将 m_pendingChannel 赋给 m_channel
-  // 这样 writeData 和 rfcommChannelData: 回调都通过当前 impl
-  m_channel = m_pendingChannel;
-  m_connected = YES;
+  BtBackendImpl *child = [[BtBackendImpl alloc] init];
+  child->m_channel = m_pendingChannel;
+  child->m_connected = YES;
+  [child->m_channel setDelegate:child];
 
   m_pendingChannel = nil;
   m_hasPendingConnection = NO;
 
-  // retain self 给 C++ 后端（BtBackendMacOS 析构时 CFRelease）
-  CFRetain((__bridge CFTypeRef)self);
+  std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)child));
 
-  std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)self));
-
-  LOG_INFO("蓝牙后端：已接受蓝牙连接（复用 impl）");
+  LOG_INFO("蓝牙后端：已接受蓝牙连接");
   return backend;
 }
 
