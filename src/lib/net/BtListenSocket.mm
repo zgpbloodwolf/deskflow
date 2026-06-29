@@ -113,11 +113,12 @@ void BtListenSocket::acceptThreadFunc()
 
 void BtListenSocket::acceptThreadFuncBt()
 {
-  LOG_DEBUG("蓝牙接受线程启动（含 NSRunLoop）");
+  LOG_DEBUG("蓝牙接受线程启动（RunLoop + 定时器）");
 
 #ifdef __APPLE__
-  // macOS：在 accept 线程内创建 backend 并注册通知
-  // IOBluetooth 通知回调依赖注册线程的 RunLoop 派发
+  // macOS：在 accept 线程内创建 backend 并注册通知。
+  // IOBluetooth 的连接通知回调（rfcommChannelOpened:）只会被注册线程上
+  // “持续运行”的 RunLoop 派发；若 RunLoop 只跑很短片段，回调会延迟甚至丢失。
   m_backend = createBtBackend();
   m_backend->listen(m_btChannel);
 
@@ -128,32 +129,36 @@ void BtListenSocket::acceptThreadFuncBt()
 
   LOG_INFO("蓝牙监听 socket：已在通道 %d 上监听", m_btChannel);
 
-  LOG_DEBUG("蓝牙监听 socket：进入 accept 循环");
-  int loopCount = 0;
+  CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+
+  // 定时器：每 50ms 在 RunLoop 线程上非阻塞检查待处理连接。
+  // RunLoop 持续运行，保证 IOBluetooth 通知源能正常派发；accept 改为非阻塞，
+  // 不再占用线程导致 RunLoop 停摆。
+  CFRunLoopTimerContext ctx{};
+  ctx.version = 0;
+  ctx.info = this;
+  CFRunLoopTimerRef timer = CFRunLoopTimerCreate(
+      kCFAllocatorDefault, 0.0, 0.05, 0, 0,
+      reinterpret_cast<CFRunLoopTimerCallBack>(&BtListenSocket::acceptTimerCb), &ctx);
+  if (timer != nullptr) {
+    m_acceptTimer = timer;
+    CFRunLoopAddTimer(runLoop, timer, kCFRunLoopDefaultMode);
+  } else {
+    LOG_WARN("蓝牙监听 socket：创建 RunLoop 定时器失败");
+  }
+
+  // 持续运行 RunLoop：IOBluetooth 通知源与定时器都在此 RunLoop 上派发。
+  // returnInAfterSourceHandled=false：处理完一个 source 后继续运行直至 timeout，
+  // 确保 IOBluetooth 通知不会被“处理一次就退出”打断。
   while (m_running) {
-    // CFRunLoopRunInMode: mode=default, timeout=0.1s, returnAfterSourceHandled=true
-    // returnAfterSourceHandled=true 表示处理完一个 source 后立即返回，避免阻塞
-    LOG_DEBUG("蓝牙监听 socket：即将调用 CFRunLoopRunInMode");
-    SInt32 rlResult = CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.1, true);
-    LOG_DEBUG("蓝牙监听 socket：CFRunLoopRunInMode 返回 %d", (int)rlResult);
+    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.5, false);
+  }
 
-    auto clientBackend = m_backend->accept();
-    if (clientBackend && clientBackend->isConnected()) {
-      LOG_INFO("蓝牙监听 socket：已接受新连接");
-
-      auto socket = std::make_shared<BtDataSocket>(m_events, std::move(clientBackend));
-
-      {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        m_pendingSocket = socket;
-      }
-
-      sendEvent(EventTypes::ListenSocketConnecting);
-    }
-
-    if (++loopCount % 100 == 0) {
-      LOG_DEBUG("蓝牙监听 socket：accept 线程心跳 #%d", loopCount);
-    }
+  // 清理定时器
+  if (timer != nullptr) {
+    CFRunLoopRemoveTimer(runLoop, timer, kCFRunLoopDefaultMode);
+    CFRelease(timer);
+    m_acceptTimer = nullptr;
   }
 #else
   // 非 macOS 平台
@@ -169,6 +174,36 @@ void BtListenSocket::acceptThreadFuncBt()
 #endif
 
   LOG_DEBUG("蓝牙接受线程退出");
+}
+
+void BtListenSocket::acceptTimerCb(struct __CFRunLoopTimer * /*timer*/, void *info)
+{
+  // RunLoop 定时器回调：非阻塞尝试接受蓝牙连接
+  auto *self = static_cast<BtListenSocket *>(info);
+  if (self != nullptr) {
+    self->tryAcceptBt();
+  }
+}
+
+void BtListenSocket::tryAcceptBt()
+{
+  // 非阻塞尝试接受连接（acceptConnection 内部不再 wait_for）
+  auto clientBackend = m_backend->accept();
+  if (!clientBackend || !clientBackend->isConnected()) {
+    return;
+  }
+
+  LOG_INFO("蓝牙监听 socket：已接受新连接");
+
+  auto socket = std::make_shared<BtDataSocket>(m_events, std::move(clientBackend));
+
+  {
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_pendingSocket = socket;
+  }
+
+  // 通知上层有新连接
+  sendEvent(EventTypes::ListenSocketConnecting);
 }
 
 void BtListenSocket::sendEvent(EventTypes type)

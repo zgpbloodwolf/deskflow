@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 #import <IOBluetooth/IOBluetooth.h>
 
+#include <algorithm>
 #include <cstring>
 #include <mutex>
 #include <condition_variable>
@@ -103,6 +104,7 @@ std::unique_ptr<BtBackend> createBtBackend()
 - (void)dealloc
 {
   [self closeConnection];
+  [super dealloc];
 }
 
 - (BOOL)connectToDevice:(NSString *)address channel:(int)channel
@@ -248,28 +250,28 @@ std::unique_ptr<BtBackend> createBtBackend()
 
 - (std::unique_ptr<BtBackend>)acceptConnection
 {
-  // 等待传入连接（超时 500ms，以便线程可以检查 m_running）
-  std::unique_lock<std::mutex> lock(m_acceptMutex);
-  if (m_acceptCV.wait_for(lock, std::chrono::milliseconds(500), [&] { return m_hasPendingConnection; })) {
-    if (m_pendingChannel != nil) {
-      // 复用当前 impl：将 m_pendingChannel 赋给 m_channel
-      // 这样 writeData 和 rfcommChannelData: 回调都通过当前 impl
-      m_channel = m_pendingChannel;
-      m_connected = YES;
-
-      m_pendingChannel = nil;
-      m_hasPendingConnection = NO;
-
-      // retain self 给 C++ 后端（BtBackendMacOS 析构时 CFRelease）
-      CFRetain((__bridge CFTypeRef)self);
-
-      std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)self));
-
-      LOG_INFO("蓝牙后端：已接受蓝牙连接（复用 impl）");
-      return backend;
-    }
+  // 非阻塞：仅检查是否有待处理连接。由 BtListenSocket 的 RunLoop 定时器周期性调用，
+  // 不能在此等待，否则会阻塞 RunLoop 线程导致 IOBluetooth 回调无法派发。
+  std::lock_guard<std::mutex> lock(m_acceptMutex);
+  if (!m_hasPendingConnection || m_pendingChannel == nil) {
+    return nullptr;
   }
-  return nullptr;
+
+  // 复用当前 impl：将 m_pendingChannel 赋给 m_channel
+  // 这样 writeData 和 rfcommChannelData: 回调都通过当前 impl
+  m_channel = m_pendingChannel;
+  m_connected = YES;
+
+  m_pendingChannel = nil;
+  m_hasPendingConnection = NO;
+
+  // retain self 给 C++ 后端（BtBackendMacOS 析构时 CFRelease）
+  CFRetain((__bridge CFTypeRef)self);
+
+  std::unique_ptr<BtBackendMacOS> backend(new BtBackendMacOS((__bridge void *)self));
+
+  LOG_INFO("蓝牙后端：已接受蓝牙连接（复用 impl）");
+  return backend;
 }
 
 - (int)readData:(void *)buf length:(size_t)len
@@ -295,13 +297,29 @@ std::unique_ptr<BtBackend> createBtBackend()
     return -1;
   }
 
-  IOReturn result = [m_channel writeSync:(void *)buf length:static_cast<UInt16>(len)];
-  if (result != kIOReturnSuccess) {
-    LOG_ERR("蓝牙后端：写入失败，错误码: %d", result);
-    m_connected = NO;
-    return -1;
+  // RFCOMM 单次写入受 MTU 限制，且 writeSync:length: 的 length 参数为 UInt16（上限 65535），
+  // 直接传入大于 MTU/64KB 的包会被截断，导致实际写入量与返回值不一致、协议流错位。
+  // 这里按实际 MTU 分片写入，保证全部字节可靠发送。
+  BluetoothRFCOMMMTU mtu = [m_channel getMTU];
+  if (mtu == 0) {
+    mtu = 127; // RFCOMM 默认最小 MTU
   }
-  return static_cast<int>(len);
+
+  const auto *p = static_cast<const uint8_t *>(buf);
+  size_t written = 0;
+  while (written < len) {
+    size_t chunk = std::min(static_cast<size_t>(mtu), len - written);
+    IOReturn result = [m_channel writeSync:const_cast<uint8_t *>(p + written)
+                                    length:static_cast<UInt16>(chunk)];
+    if (result != kIOReturnSuccess) {
+      LOG_ERR("蓝牙后端：写入失败（已写 %zu/%zu 字节），错误码: %d", written, len, result);
+      m_connected = NO;
+      return -1;
+    }
+    written += chunk;
+  }
+
+  return static_cast<int>(written);
 }
 
 - (void)closeConnection

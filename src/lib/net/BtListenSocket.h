@@ -19,6 +19,7 @@
 
 class IEventQueue;
 class BtDataSocket;
+struct __CFRunLoopTimer; // macOS CFRunLoopTimerRef 前向声明
 
 //! 蓝牙 RFCOMM 监听套接字
 /*!
@@ -50,8 +51,14 @@ private:
   //! 接受线程主循环
   void acceptThreadFunc();
 
-  //! 蓝牙接受线程主循环（在 accept 线程内运行 NSRunLoop 以派发 IOBluetooth 回调）
+  //! 蓝牙接受线程主循环（在 accept 线程内持续运行 RunLoop 以派发 IOBluetooth 回调）
   void acceptThreadFuncBt();
+
+  //! 非阻塞尝试接受蓝牙连接（由 RunLoop 定时器触发）
+  void tryAcceptBt();
+
+  //! RunLoop 定时器回调（静态，匹配 CFRunLoopTimerCallBack 签名）
+  static void acceptTimerCb(struct __CFRunLoopTimer *timer, void *info);
 
   //! 发送事件到 EventQueue
   void sendEvent(deskflow::EventTypes type);
@@ -64,6 +71,9 @@ private:
   std::thread m_acceptThread;
   std::atomic<bool> m_running{false};
   std::atomic<bool> m_accepting{false};
+
+  // macOS 蓝牙模式：RunLoop 定时器引用（CFRunLoopTimerRef，用 void* 避免头文件依赖 CoreFoundation）
+  void *m_acceptTimer = nullptr;
 
   // 蓝牙监听参数（传递给 accept 线程）
   int m_btChannel = 10;
