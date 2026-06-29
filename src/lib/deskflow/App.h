@@ -12,7 +12,6 @@
 #include "base/Log.h"
 #include "common/ExitCodes.h"
 #include "deskflow/IApp.h"
-#include "net/SocketMultiplexer.h"
 
 #if defined(Q_OS_WIN)
 #include "deskflow/win32/AppUtilWindows.h"
@@ -32,7 +31,6 @@ class Screen;
 
 class FileLogOutputter;
 class IEventQueue;
-class SocketMultiplexer;
 
 class App : public QObject, private IApp
 {
@@ -77,16 +75,6 @@ public:
   {
     m_events = &events;
   }
-  void setSocketMultiplexer(std::unique_ptr<SocketMultiplexer> &&sm)
-  {
-    m_socketMultiplexer = std::move(sm);
-  }
-
-  SocketMultiplexer *getSocketMultiplexer() const
-  {
-    return m_socketMultiplexer.get();
-  }
-
   static App &instance()
   {
     assert(s_instance != nullptr);
@@ -127,7 +115,6 @@ private:
   static App *s_instance;
   FileLogOutputter *m_fileLog = nullptr;
   ARCH_APP_UTIL m_appUtil;
-  std::unique_ptr<SocketMultiplexer> m_socketMultiplexer;
   QString m_pname;
   int m_exitCode = s_exitSuccess;
 };

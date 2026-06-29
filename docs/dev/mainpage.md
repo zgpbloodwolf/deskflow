@@ -5,7 +5,7 @@ and work seamlessly between them.
 Deskflow acts as a software KVM (without video) that allows you to:
 - Share keyboard and mouse input across multiple computers
 - Synchronize clipboard content between machines
-- Work seamlessly across different operating systems (Windows, macOS, Linux, BSD)
+- Work seamlessly across different operating systems (Windows, macOS)
 
 Deskflow software consists of a **server** (primary computer) that shares its input devices and **clients** (secondary computers) that receive and execute the input commands over a TCP network connection.
 

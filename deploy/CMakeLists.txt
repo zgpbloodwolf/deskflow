@@ -25,8 +25,6 @@ endif()
 
 if(WIN32)
   include(windows/deploy.cmake)
-elseif(UNIX AND NOT APPLE)
-  include(linux/deploy.cmake)
 elseif(APPLE)
   include(mac/deploy.cmake)
 else()

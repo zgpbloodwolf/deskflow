@@ -30,20 +30,10 @@ add_library(net STATIC
   IListenSocket.h
   ISocket.h
   ISocketFactory.h
-  ISocketMultiplexerJob.h
   NetworkAddress.cpp
   NetworkAddress.h
   SocketException.cpp
   SocketException.h
-  SocketMultiplexer.cpp
-  SocketMultiplexer.h
-  TCPListenSocket.cpp
-  TCPListenSocket.h
-  TCPSocket.cpp
-  TCPSocket.h
-  TCPSocketFactory.cpp
-  TCPSocketFactory.h
-  TSocketMultiplexerMethodJob.h
 )
 
 # 蓝牙平台特定后端

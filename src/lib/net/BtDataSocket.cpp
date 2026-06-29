@@ -260,7 +260,7 @@ void BtDataSocket::sendEvent(EventTypes type)
 void BtDataSocket::sendConnectionFailed(const char *reason)
 {
   // 必须携带 ConnectionFailedInfo：Client::handleConnectionFailed 会读取 event data
-  // 并 delete，缺失会导致空指针解引用（与 AsioTCPSocket/TCPSocket 行为对齐）。
+  // 并 delete，缺失会导致空指针解引用（与 AsioTCPSocket 行为对齐）。
   // 用 DontFreeData，由上层 Client 负责 delete。
   auto *info = new IDataSocket::ConnectionFailedInfo(reason);
   m_events->addEvent(Event(EventTypes::DataSocketConnectionFailed, getEventTarget(), info,

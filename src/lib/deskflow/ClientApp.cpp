@@ -22,7 +22,6 @@
 #include "net/BtSocketFactory.h"
 #include "net/NetworkAddress.h"
 #include "net/SocketException.h"
-#include "net/SocketMultiplexer.h"
 
 #if defined(Q_OS_WIN)
 #include "platform/MSWindowsScreen.h"
@@ -305,10 +304,6 @@ void ClientApp::stopClient()
 
 int ClientApp::mainLoop()
 {
-  // create socket multiplexer.  this must happen after daemonization
-  // on unix because threads evaporate across a fork().
-  setSocketMultiplexer(std::make_unique<SocketMultiplexer>());
-
   // start client, etc
   appUtil().startNode();
 

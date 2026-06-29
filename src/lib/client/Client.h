@@ -30,7 +30,6 @@ class IStream;
 }
 class IEventQueue;
 class Thread;
-class TCPSocket;
 
 //! Deskflow client
 /*!

@@ -8,15 +8,6 @@
 Deskflow will look for settings in several places depending on your operating system.
 The search order for a setting file depends on your operating system
 
-### Linux
-
-  1. `<XDG_CONFIG_HOME>/Deskflow/Deskflow.conf`
-  2. `~/.config/Deskflow/Deskflow.conf`
-  3. `/etc/Deskflow/Deskflow.conf`
- 
-A new settings file will be created in the user path if no settings file is found.
-The path of the settings file will be used as the base for all other config files.
-
 ### macOS
  
   1. `~/Library/Deskflow/Deskflow.conf`

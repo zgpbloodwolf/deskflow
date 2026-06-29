@@ -22,7 +22,6 @@
 #include "net/AsioTCPSocketFactory.h"
 #include "net/BtSocketFactory.h"
 #include "net/SocketException.h"
-#include "net/SocketMultiplexer.h"
 #include "server/ClientListener.h"
 #include "server/ClientProxy.h"
 #include "server/Config.h"
@@ -476,10 +475,6 @@ NetworkAddress ServerApp::getAddress(const NetworkAddress &address) const
 
 int ServerApp::mainLoop()
 {
-  // create socket multiplexer.  this must happen after daemonization
-  // on unix because threads evaporate across a fork().
-  setSocketMultiplexer(std::make_unique<SocketMultiplexer>());
-
   // if configuration has no screens then add this system
   // as the default
   if (m_config->begin() == m_config->end()) {
