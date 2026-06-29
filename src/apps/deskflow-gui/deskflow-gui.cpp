@@ -132,6 +132,7 @@ int main(int argc, char *argv[])
   }
 
   if (!checkMacAssistiveDevices()) {
+    qWarning("macOS Accessibility permission is not granted; allow Deskflow in System Settings > Privacy & Security > Accessibility.");
     return 1;
   }
 #endif
