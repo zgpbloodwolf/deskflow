@@ -53,3 +53,7 @@ target_link_libraries(
   net
   PUBLIC Qt6::Network common asio
   PRIVATE mt io)
+
+if(WIN32)
+  target_link_libraries(net PRIVATE Bthprops)
+endif()

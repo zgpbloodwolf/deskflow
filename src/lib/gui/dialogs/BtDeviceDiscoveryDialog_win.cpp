@@ -13,9 +13,10 @@
 #include <QThread>
 
 // Windows 蓝牙 API
+#include <winsock2.h>
+#include <ws2bth.h>
 #include <windows.h>
 #include <bluetoothapis.h>
-#include <ws2bth.h>
 
 // 链接蓝牙库
 #pragma comment(lib, "Bthprops.lib")
@@ -45,6 +46,9 @@ BtDeviceDiscoveryDialog::BtDeviceDiscoveryDialog(QWidget *parent) : QDialog(pare
   m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
   connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
   connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  connect(m_deviceList, &QListWidget::itemSelectionChanged, this, [this]() {
+    m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_deviceList->currentRow() >= 0);
+  });
   btnLayout->addWidget(m_buttonBox);
 
   mainLayout->addLayout(btnLayout);
@@ -96,9 +100,6 @@ void BtDeviceDiscoveryDialog::startDiscovery()
                                .arg(lastErr));
     }
     m_btnScan->setEnabled(true);
-    connect(m_deviceList, &QListWidget::itemSelectionChanged, this, [this]() {
-      m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_deviceList->currentRow() >= 0);
-    });
     return;
   }
 
@@ -154,10 +155,6 @@ void BtDeviceDiscoveryDialog::startDiscovery()
   }
 
   m_btnScan->setEnabled(true);
-
-  connect(m_deviceList, &QListWidget::itemSelectionChanged, this, [this]() {
-    m_buttonBox->button(QDialogButtonBox::Ok)->setEnabled(m_deviceList->currentRow() >= 0);
-  });
 }
 
 #endif // _WIN32
