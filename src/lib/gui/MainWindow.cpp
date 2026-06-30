@@ -39,6 +39,7 @@
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkInterface>
+#include <QProcess>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
@@ -52,6 +53,18 @@
 #endif
 
 using namespace deskflow::gui;
+
+namespace {
+void openExternalUrl(const QString &url)
+{
+#ifdef Q_OS_WIN
+  if (QProcess::startDetached(QStringLiteral("rundll32"), {QStringLiteral("url.dll,FileProtocolHandler"), url})) {
+    return;
+  }
+#endif
+  QDesktopServices::openUrl(QUrl(url));
+}
+} // namespace
 
 MainWindow::MainWindow()
     : ui{std::make_unique<Ui::MainWindow>()},
@@ -424,12 +437,12 @@ void MainWindow::openAboutDialog()
 
 void MainWindow::openHelpUrl() const
 {
-  QDesktopServices::openUrl(QUrl(kUrlHelp));
+  openExternalUrl(kUrlHelp);
 }
 
 void MainWindow::openGetNewVersionUrl() const
 {
-  QDesktopServices::openUrl(QUrl(kUrlDownload));
+  openExternalUrl(kUrlDownload);
 }
 
 void MainWindow::openSettings()

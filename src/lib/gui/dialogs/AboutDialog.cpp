@@ -13,6 +13,21 @@
 #include "common/VersionInfo.h"
 
 #include <QClipboard>
+#include <QDesktopServices>
+#include <QProcess>
+#include <QUrl>
+
+namespace {
+void openExternalUrl(const QString &url)
+{
+#ifdef Q_OS_WIN
+  if (QProcess::startDetached(QStringLiteral("rundll32"), {QStringLiteral("url.dll,FileProtocolHandler"), url})) {
+    return;
+  }
+#endif
+  QDesktopServices::openUrl(QUrl(url));
+}
+} // namespace
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui{std::make_unique<Ui::AboutDialog>()}
 {
@@ -44,6 +59,11 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui{std::make_unique
 
   ui->btnOk->setDefault(true);
   connect(ui->btnOk, &QPushButton::clicked, this, &AboutDialog::close);
+
+  for (auto *label : {ui->linkGpl, ui->linkContributors, ui->label_2}) {
+    label->setOpenExternalLinks(false);
+    connect(label, &QLabel::linkActivated, this, openExternalUrl);
+  }
 }
 
 void AboutDialog::copyVersionText() const
