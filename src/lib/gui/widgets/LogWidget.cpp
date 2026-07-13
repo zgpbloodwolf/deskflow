@@ -9,6 +9,7 @@
 
 #include <gui/Logger.h>
 
+#include <QFont>
 #include <QPlainTextEdit>
 #include <QScrollBar>
 #include <QVBoxLayout>
@@ -19,13 +20,20 @@ LogWidget::LogWidget(QWidget *parent) : QWidget{parent}, m_textLog{new QPlainTex
   m_textLog->setMaximumBlockCount(10000);
   m_textLog->setLineWrapMode(QPlainTextEdit::NoWrap);
 
-  // setup the log font
-  m_textLog->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
+  // 设置日志等宽字体。
+  // 不要使用 QFontDatabase::systemFont(FixedFont):Windows 上该 API 返回注册表
+  // HKEY_CURRENT_USER\Control Panel\Desktop\WindowMetrics 中的 FixedFont,常被解析为
+  // "Fixedsys" 等位图字体;Qt 6 默认使用 DirectWrite 渲染,DirectWrite 不支持位图字体,
+  // 会触发 "CreateFontFaceFromHDC() failed" 和 "QTextLayout::beginLayout: Called while
+  // already doing layout",Qt 内部布局状态被污染后会段错误。
+  // 这里显式指定一组矢量等宽字体作为 fallback 列表,Qt 会按顺序选用首个可用项。
+  QFont monoFont;
+  monoFont.setFamilies({"Consolas", "Menlo", "DejaVu Sans Mono", "Courier New"});
+  monoFont.setStyleHint(QFont::Monospace);
   if (deskflow::platform::isMac()) {
-    auto f = m_textLog->font();
-    f.setPixelSize(12);
-    m_textLog->setFont(f);
+    monoFont.setPixelSize(12);
   }
+  m_textLog->setFont(monoFont);
 
   auto layout = new QVBoxLayout;
   layout->setContentsMargins(0, 0, 0, 0);
@@ -34,7 +42,8 @@ LogWidget::LogWidget(QWidget *parent) : QWidget{parent}, m_textLog{new QPlainTex
   setLayout(layout);
 
   connect(
-      deskflow::gui::Logger::instance(), &deskflow::gui::Logger::newLine, m_textLog, &QPlainTextEdit::appendPlainText
+      deskflow::gui::Logger::instance(), &deskflow::gui::Logger::newLine, m_textLog, &QPlainTextEdit::appendPlainText,
+      Qt::QueuedConnection
   );
 }
 
