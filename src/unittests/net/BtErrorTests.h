@@ -6,13 +6,13 @@
 
 #pragma once
 
-#include <QObject>
+#include <QTest>
 
 //! 蓝牙错误码分类工具的单元测试（仅 Windows，classifyBtError 依赖 WSA 符号）
 class BtErrorTests : public QObject
 {
   Q_OBJECT
-private slots:
+private Q_SLOTS:
   void pairingFailedErrors();
   void stackUnavailableErrors();
   void retryableErrors();
