@@ -769,7 +769,36 @@ void MainWindow::handleUnrecognisedClient(const QString &clientName)
 
 void MainWindow::handleConnectionRefused(deskflow::core::ConnectionRefusal reason)
 {
-  if (reason != deskflow::core::ConnectionRefusal::AlreadyConnected)
+  using Refusal = deskflow::core::ConnectionRefusal;
+
+  // 蓝牙连接失败子类：给出针对性的中文提示
+  if (reason == Refusal::BluetoothPairingFailed || reason == Refusal::BluetoothUnavailable) {
+    if (!isVisible() || m_clientErrorVisible)
+      return;
+    m_clientErrorVisible = true;
+    showAndActivate();
+
+    if (reason == Refusal::BluetoothPairingFailed) {
+      QMessageBox::warning(
+          this, tr("%1 连接错误").arg(kAppName),
+          tr("<p>无法通过蓝牙连接到服务器。</p>"
+             "<p>这通常是因为蓝牙配对失效。请在两台电脑的「系统设置 → 蓝牙」中"
+             "<b>删除对方后重新配对</b>，然后重新启动连接。</p>")
+      );
+    } else {
+      QMessageBox::warning(
+          this, tr("%1 连接错误").arg(kAppName),
+          tr("<p>本机蓝牙当前不可用（错误 10051）。</p>"
+             "<p>请检查蓝牙开关是否开启、蓝牙驱动是否正常。"
+             "客户端将在蓝牙恢复后自动重试连接。</p>")
+      );
+    }
+
+    m_clientErrorVisible = false;
+    return;
+  }
+
+  if (reason != Refusal::AlreadyConnected)
     return;
 
   if (!isVisible() || m_clientErrorVisible)

@@ -8,7 +8,9 @@
 
 #pragma once
 
+#include "common/Enums.h"
 #include "deskflow/App.h"
+#include "net/BtError.h"
 #include "net/NetworkAddress.h"
 
 #include <QList>
@@ -89,6 +91,9 @@ private:
   NetworkAddress &getCurrentServerAddress();
   void tryNextServer();
 
+  //! 通过 IPC 通知 GUI 蓝牙连接被拒（触发 GUI 友好提示）
+  void notifyBluetoothRefused(deskflow::core::ConnectionRefusal reason);
+
   bool m_suspended = false;
   Client *m_client = nullptr;
   deskflow::Screen *m_clientScreen = nullptr;
@@ -96,4 +101,6 @@ private:
   size_t m_currentServerIndex = 0;
   size_t m_lastServerAddressIndex = 0;
   uint m_retryCount = 0;
+  // 蓝牙栈不可用提示是否已发送（避免每次长退避重试都弹窗骚扰用户），连接成功后重置
+  bool m_btUnavailableNotified = false;
 };

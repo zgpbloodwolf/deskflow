@@ -89,7 +89,7 @@ private:
   void sendEvent(EventTypes type);
 
   //! 发送连接失败事件，携带 ConnectionFailedInfo（Client::handleConnectionFailed 会读取并 delete）
-  void sendConnectionFailed(const char *reason);
+  void sendConnectionFailed(const char *reason, BtErrorCategory category = BtErrorCategory::Unknown);
 
   //! 统一断连处理
   void handleDisconnect();

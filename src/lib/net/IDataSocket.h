@@ -8,6 +8,7 @@
 #pragma once
 
 #include "io/IStream.h"
+#include "net/BtError.h"
 #include "net/ISocket.h"
 
 #include <string>
@@ -23,11 +24,17 @@ public:
   class ConnectionFailedInfo
   {
   public:
-    explicit ConnectionFailedInfo(const char *what) : m_what(what)
+    explicit ConnectionFailedInfo(
+        const char *what, BtErrorCategory category = BtErrorCategory::Unknown
+    )
+        : m_what(what),
+          m_category(category)
     {
       // do nothing
     }
     std::string m_what;
+    // 蓝牙连接失败的错误类别；TCP 路径取默认 Unknown，不影响 TCP 重连行为
+    BtErrorCategory m_category = BtErrorCategory::Unknown;
   };
 
   explicit IDataSocket([[maybe_unused]] const IEventQueue *events)

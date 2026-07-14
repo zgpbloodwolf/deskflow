@@ -28,6 +28,7 @@
 #endif
 
 #include <QFileInfo>
+#include <QMetaEnum>
 
 #if defined(Q_OS_MAC)
 #include "platform/OSXScreen.h"
@@ -161,6 +162,8 @@ void ClientApp::handleClientConnected()
   // Reset server index on successful connection
   m_currentServerIndex = 0;
   m_lastServerAddressIndex = 0;
+  // 连接成功，重置蓝牙不可用提示标志，以便下次故障时重新提示
+  m_btUnavailableNotified = false;
 }
 
 void ClientApp::handleClientFailed(const Event &e)
@@ -195,6 +198,31 @@ void ClientApp::handleClientRefused(const Event &e)
 {
   std::unique_ptr<Client::FailInfo> info(static_cast<Client::FailInfo *>(e.getData()));
 
+  // 蓝牙连接失败按错误类别分流（类别来自 BtBackend→BtDataSocket→Client 的传递链）
+  const auto category = info->m_category;
+  if (category == BtErrorCategory::PairingFailed) {
+    // 配对/认证失败：停止自动重试，提示用户去系统蓝牙重新配对
+    LOG_ERR("failed to connect to server: %s (蓝牙配对失败，需重新配对)", qPrintable(info->m_what));
+    notifyBluetoothRefused(deskflow::core::ConnectionRefusal::BluetoothPairingFailed);
+    getEvents()->addEvent(Event(EventTypes::Quit));
+    return;
+  }
+  if (category == BtErrorCategory::StackUnavailable) {
+    // 蓝牙栈/无线电不可用：长退避继续重试（等蓝牙自恢复），仅提示一次避免骚扰
+    LOG_WARN("failed to connect to server: %s (蓝牙栈不可用，30s 后重试)", qPrintable(info->m_what));
+    if (!m_btUnavailableNotified) {
+      notifyBluetoothRefused(deskflow::core::ConnectionRefusal::BluetoothUnavailable);
+      m_btUnavailableNotified = true;
+    }
+    if (!m_suspended) {
+      constexpr double kBluetoothStackRetrySec = 30.0;
+      scheduleClientRestart(kBluetoothStackRetrySec);
+      m_retryCount++;
+    }
+    return;
+  }
+
+  // 其他类别（Retryable/Unknown，含 TCP 与协议拒绝）：保持原有 m_retry 逻辑
   if (!info->m_retry) {
     LOG_ERR("failed to connect to server: %s", qPrintable(info->m_what));
     getEvents()->addEvent(Event(EventTypes::Quit));
@@ -205,6 +233,13 @@ void ClientApp::handleClientRefused(const Event &e)
       m_retryCount++;
     }
   }
+}
+
+void ClientApp::notifyBluetoothRefused(deskflow::core::ConnectionRefusal reason)
+{
+  // 复用 Client::refuseConnection 的 IPC 协议：GUI 侧 CoreProcess 解码 connectionRefused 命令并弹窗
+  const auto metaEnum = QMetaEnum::fromType<deskflow::core::ConnectionRefusal>();
+  ipcSendToClient("connectionRefused", metaEnum.valueToKey(static_cast<int>(reason)));
 }
 
 void ClientApp::handleClientDisconnected()

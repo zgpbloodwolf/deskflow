@@ -13,6 +13,7 @@
 #include "base/EventTypes.h"
 #include "common/Enums.h"
 #include "deskflow/IClipboard.h"
+#include "net/BtError.h"
 #include "net/NetworkAddress.h"
 
 #include <climits>
@@ -47,6 +48,8 @@ public:
     }
     bool m_retry = false;
     QString m_what;
+    // 蓝牙连接失败的错误类别（TCP 路径为默认 Unknown），供 ClientApp 决定重连策略
+    BtErrorCategory m_category = BtErrorCategory::Unknown;
   };
 
 public:
@@ -155,7 +158,7 @@ public:
 private:
   void sendClipboard(ClipboardID);
   void sendEvent(deskflow::EventTypes);
-  void sendConnectionFailedEvent(const char *msg);
+  void sendConnectionFailedEvent(const char *msg, BtErrorCategory category = BtErrorCategory::Unknown);
   void setupConnecting();
   void setupConnection();
   void setupScreen();

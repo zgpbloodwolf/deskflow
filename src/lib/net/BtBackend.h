@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include "net/BtError.h"
+
 #include <cstddef>
 #include <memory>
 #include <string>
@@ -54,6 +56,16 @@ public:
 
   //! 连接是否已建立
   virtual bool isConnected() const = 0;
+
+  //! 最近一次 connect 失败的错误类别
+  /*!
+  在 connect() 失败（isConnected()==false）后查询，用于上层决定重连策略。
+  默认返回 Unknown；各平台实现按底层错误码置位（见 BtError.h）。
+  */
+  virtual BtErrorCategory lastErrorCategory() const
+  {
+    return BtErrorCategory::Unknown;
+  }
 
   //! 是否正在监听（服务端模式）
   virtual bool isListening() const { return false; }

@@ -11,6 +11,7 @@
 
 #include <chrono>
 #include <cstring>
+#include <random>
 
 //
 // BtDataSocket
@@ -81,7 +82,8 @@ void BtDataSocket::connectBt(const BtAddress &address)
 
   if (!m_backend->isConnected()) {
     LOG_ERR("蓝牙 socket：连接失败");
-    sendConnectionFailed("bluetooth connect failed");
+    // 携带后端归类的错误类别，供上层 ClientApp 决定重连策略
+    sendConnectionFailed("bluetooth connect failed", m_backend->lastErrorCategory());
     return;
   }
 
@@ -257,12 +259,12 @@ void BtDataSocket::sendEvent(EventTypes type)
   m_events->addEvent(Event(type, getEventTarget()));
 }
 
-void BtDataSocket::sendConnectionFailed(const char *reason)
+void BtDataSocket::sendConnectionFailed(const char *reason, BtErrorCategory category)
 {
   // 必须携带 ConnectionFailedInfo：Client::handleConnectionFailed 会读取 event data
   // 并 delete，缺失会导致空指针解引用（与 AsioTCPSocket 行为对齐）。
   // 用 DontFreeData，由上层 Client 负责 delete。
-  auto *info = new IDataSocket::ConnectionFailedInfo(reason);
+  auto *info = new IDataSocket::ConnectionFailedInfo(reason, category);
   m_events->addEvent(Event(EventTypes::DataSocketConnectionFailed, getEventTarget(), info,
                            Event::EventFlags::DontFreeData));
 }
@@ -301,6 +303,18 @@ void BtDataSocket::releaseAllKeys()
   m_keyState.releaseAll();
 }
 
+// 退避间隔 ±20% 抖动，避免多个客户端在同一时刻同步重连（惊群）
+static int btReconnectJitter(int baseSec)
+{
+  if (baseSec <= 1)
+    return baseSec;
+  static std::mt19937 gen{std::random_device{}()};
+  const int lo = static_cast<int>(baseSec * 0.8);
+  const int hi = static_cast<int>(baseSec * 1.2);
+  std::uniform_int_distribution<int> dist(lo, hi);
+  return dist(gen);
+}
+
 void BtDataSocket::reconnectLoop()
 {
   while (true) {
@@ -314,14 +328,26 @@ void BtDataSocket::reconnectLoop()
       }
       m_reconnectRequested = false;
 
-      // 指数退避：0s -> 1s -> 2s -> 4s -> ... -> 30s
-      delaySec = m_reconnectAttempts == 0 ? 0 : std::min(1 << (m_reconnectAttempts - 1), kMaxReconnectDelaySec);
+      // 指数退避：0s -> 1s -> 2s -> 4s -> ... -> 30s（封顶）
+      // 用乘法推导而非 `1 << n`，避免大 n 时有符号 int 移位的未定义行为；首次立即重试
+      if (m_reconnectAttempts == 0) {
+        delaySec = 0;
+      } else {
+        delaySec = 1;
+        for (int i = 1; i < m_reconnectAttempts; ++i) {
+          delaySec = std::min(delaySec * 2, kMaxReconnectDelaySec);
+          if (delaySec >= kMaxReconnectDelaySec)
+            break;
+        }
+      }
       m_reconnectAttempts++;
       LOG_INFO("蓝牙 socket：将在 %d 秒后重连（第 %d 次）", delaySec, m_reconnectAttempts);
 
-      // 退避等待，析构时可被提前唤醒
+      // 退避等待（带 ±20% 抖动），析构时可被提前唤醒
       if (delaySec > 0) {
-        m_reconnectCV.wait_for(lk, std::chrono::seconds(delaySec), [this] { return m_destroying.load(); });
+        m_reconnectCV.wait_for(
+            lk, std::chrono::seconds(btReconnectJitter(delaySec)), [this] { return m_destroying.load(); }
+        );
       }
       if (m_destroying) {
         return;

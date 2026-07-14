@@ -395,10 +395,11 @@ void Client::sendEvent(EventTypes type)
   m_events->addEvent(Event(type, getEventTarget()));
 }
 
-void Client::sendConnectionFailedEvent(const char *msg)
+void Client::sendConnectionFailedEvent(const char *msg, BtErrorCategory category)
 {
   auto *info = new FailInfo(msg);
   info->m_retry = true;
+  info->m_category = category;
   Event event(EventTypes::ClientConnectionFailed, getEventTarget(), info, Event::EventFlags::DontFreeData);
   m_events->addEvent(std::move(event));
 }
@@ -538,7 +539,8 @@ void Client::handleConnectionFailed(const Event &event)
   cleanupConnecting();
   cleanupStream();
   LOG_DEBUG1("connection failed");
-  sendConnectionFailedEvent(info->m_what.c_str());
+  // 透传蓝牙错误类别，供 ClientApp 按类别决定重连策略
+  sendConnectionFailedEvent(info->m_what.c_str(), info->m_category);
   delete info;
 }
 

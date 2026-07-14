@@ -24,6 +24,37 @@ std::unique_ptr<BtBackend> createBtBackend()
   return std::make_unique<BtBackendWindows>();
 }
 
+// 把 Windows WSA 裸错误码归类为蓝牙错误类别（声明见 net/BtError.h）。
+// 分类依据：蓝牙 RFCOMM connect 失败时，不同 WSA 码对应不同故障层与处置方式，
+// 供上层 ClientApp 决定重连策略（停止重试 / 长退避 / 正常阶梯退避）。
+BtErrorCategory classifyBtError(int wsaErr)
+{
+  switch (wsaErr) {
+  // 配对/认证类：对端设备存在但拒绝连接或无响应——需用户重新配对
+  case WSAEHOSTDOWN:    // 10064 主机无响应（典型配对/链路密钥损坏）
+  case WSAECONNREFUSED: // 10061 连接被拒绝
+  case WSAEACCES:       // 10013 权限拒绝
+    return BtErrorCategory::PairingFailed;
+
+  // 本机蓝牙栈/无线电不可用——长退避等待蓝牙自恢复
+  case WSAENETUNREACH: // 10051 网络不可达（蓝牙无线电故障）
+  case WSAENETDOWN:    // 10050 网络已断
+  case WSAENETRESET:   // 10052 网络重置
+  case WSAESHUTDOWN:   // 10058 套接字已关闭
+    return BtErrorCategory::StackUnavailable;
+
+  // 可重试的临时错误——正常阶梯退避
+  case WSAETIMEDOUT:    // 10060 超时
+  case WSAECONNABORTED: // 10053 连接中止
+  case WSAECONNRESET:   // 10054 连接重置
+  case WSAEHOSTUNREACH: // 10065 主机不可达（设备临时掉线/超出范围）
+    return BtErrorCategory::Retryable;
+
+  default:
+    return BtErrorCategory::Unknown;
+  }
+}
+
 // Windows 蓝牙 RFCOMM socket 对 select() 的支持不可靠（不会报告可读就绪），
 // 因此 BtDataSocket 的读路径改为：pollRead 恒返回 true，read 直接阻塞 recv，
 // 由 SO_RCVTIMEO 提供超时——无数据时 recv 返回 WSAETIMEDOUT，read 视为"无数据"返回 0。
@@ -161,6 +192,8 @@ void BtBackendWindows::connect(const std::string &btAddress, int channel)
   LOG_INFO("蓝牙后端：调用 connect()");
   if (::connect(sock, (SOCKADDR *)&remoteAddr, sizeof(remoteAddr)) == SOCKET_ERROR) {
     int err = WSAGetLastError();
+    // 归类错误码，供上层 ClientApp 决定重连策略（停止重试/长退避/正常退避）
+    m_lastErrorCategory = classifyBtError(err);
     LOG_ERR("蓝牙后端：连接失败，错误码: %d", err);
     closesocket(sock);
     m_socket = nullptr;

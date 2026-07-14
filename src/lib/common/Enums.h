@@ -49,7 +49,10 @@ enum class ConnectionRefusal
   IncompatibleVersion,
   AlreadyConnected,
   UnknownClient,
-  ProtocolError
+  ProtocolError,
+  // 蓝牙连接失败子类（由 ClientApp 按错误类别发送，GUI 弹窗友好提示）
+  BluetoothPairingFailed,
+  BluetoothUnavailable
 };
 Q_ENUM_NS(ConnectionRefusal)
 

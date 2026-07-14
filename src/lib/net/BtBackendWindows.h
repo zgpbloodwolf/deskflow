@@ -37,6 +37,12 @@ public:
   bool isConnected() const override;
   bool pollRead(int timeoutMs) override;
 
+  //! 最近一次 connect 失败的错误类别（由 classifyBtError 归类）
+  BtErrorCategory lastErrorCategory() const override
+  {
+    return m_lastErrorCategory;
+  }
+
   // 从已接受的 socket 构造（服务端用）
   explicit BtBackendWindows(void *acceptedSocket);
 
@@ -46,6 +52,7 @@ public:
   void *m_socket = nullptr; // SOCKET 句柄（void* 避免头文件依赖）
   bool m_connected = false;
   bool m_listening = false;
+  BtErrorCategory m_lastErrorCategory = BtErrorCategory::Unknown; // 最近一次 connect 失败的错误类别
 
   // SDP 服务记录句柄（仅监听端持有），用于注销
   void *m_sdpRecordHandle = nullptr;

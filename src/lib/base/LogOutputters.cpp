@@ -52,10 +52,13 @@ void ConsoleLogOutputter::close()
 
 bool ConsoleLogOutputter::write(LogLevel level, const QString &msg)
 {
+  // 始终输出 UTF-8 字节：GUI 的 CoreProcess 通过 QProcess 读取 stdout 并按 UTF-8 解码，
+  // 若用 qPrintable（=toLocal8Bit，中文 Windows 为 GBK）会导致日志面板中文乱码。
+  const auto utf8 = msg.toUtf8();
   if ((level >= LogLevel::Fatal) && (level <= LogLevel::Warning))
-    std::cerr << qPrintable(msg) << std::endl;
+    std::cerr << utf8.constData() << std::endl;
   else
-    std::cout << qPrintable(msg) << std::endl;
+    std::cout << utf8.constData() << std::endl;
   std::cout.flush();
   return true;
 }
