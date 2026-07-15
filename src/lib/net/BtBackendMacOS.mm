@@ -429,6 +429,7 @@ BtBackendMacOS::BtBackendMacOS(void *impl) : m_impl(impl), m_connected(true)
 
 BtBackendMacOS::~BtBackendMacOS()
 {
+  close(); // 确保 RunLoop 线程停止后再释放 impl，避免 use-after-free
   if (m_impl != nullptr) {
     CFRelease(m_impl);
     m_impl = nullptr;
@@ -439,8 +440,36 @@ void BtBackendMacOS::connect(const std::string &btAddress, int channel)
 {
   auto *impl = (__bridge BtBackendImpl *)m_impl;
   NSString *nsAddr = [NSString stringWithUTF8String:btAddress.c_str()];
-  [impl connectToDevice:nsAddr channel:channel];
-  m_connected = impl->m_connected;
+
+  // 启动 RunLoop 线程：openRFCOMMChannelSync 注册的 delegate 回调
+  //（rfcommChannelData: 等）需要注册线程持续运行 RunLoop 才能派发。
+  // EventQueue 主线程运行的是 EventQueue::loop()（非 RunLoop），
+  // 若在主线程注册 delegate，数据回调永远不会触发，客户端收不到服务端数据。
+  m_runLoopThread = std::thread([this, impl, nsAddr, channel]() {
+    @autoreleasepool {
+      [impl connectToDevice:nsAddr channel:channel];
+
+      {
+        std::lock_guard<std::mutex> lk(m_connectMutex);
+        m_connected = impl->m_connected;
+        if (m_connected) {
+          m_runLoop = CFRunLoopGetCurrent();
+        }
+        m_connectDone = true;
+      }
+      m_connectCV.notify_one();
+
+      if (m_connected) {
+        // 持续运行 RunLoop，派发 IOBluetooth 数据回调。
+        // CFRunLoopRun 在 CFRunLoopStop 被调用后退出（见 close()）。
+        CFRunLoopRun();
+      }
+    }
+  });
+
+  // 等待连接完成（openRFCOMMChannelSync 是同步的，连接结果在此可见）
+  std::unique_lock<std::mutex> lk(m_connectMutex);
+  m_connectCV.wait(lk, [this] { return m_connectDone; });
 }
 
 void BtBackendMacOS::listen(int channel)
@@ -470,6 +499,16 @@ int BtBackendMacOS::write(const void *buf, size_t len)
 
 void BtBackendMacOS::close()
 {
+  // 先停止 RunLoop 线程，确保不再有 IOBluetooth 回调访问 impl
+  if (m_runLoopThread.joinable()) {
+    if (m_runLoop != nullptr) {
+      CFRunLoopStop(static_cast<CFRunLoopRef>(m_runLoop));
+      m_runLoop = nullptr;
+    }
+    m_runLoopThread.join();
+  }
+
+  // RunLoop 线程停止后，安全地关闭连接
   auto *impl = (__bridge BtBackendImpl *)m_impl;
   [impl closeConnection];
   m_connected = false;

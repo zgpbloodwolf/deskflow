@@ -35,6 +35,7 @@ public:
   int write(const void *buf, size_t len) override;
   void close() override;
   bool isConnected() const override;
+  bool isListening() const override { return m_listening; }
   bool pollRead(int timeoutMs) override;
 
   //! 最近一次 connect 失败的错误类别（由 classifyBtError 归类）

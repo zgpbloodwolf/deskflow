@@ -65,16 +65,14 @@ static constexpr DWORD kBtRecvTimeoutMs = 5;
 static const GUID kSppServiceGuid = {
     0x00001101, 0x0000, 0x1000, {0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB}};
 
-// 备用：Deskflow 自定义 UUID（避免与 SPP 保留 UUID 冲突时使用）
-// 6e1c3f40-1351-4b8f-9c2a-7c0d4e9b1110
-static const GUID kDeskflowServiceGuid = {
-    0x6e1c3f40, 0x1351, 0x4b8f, {0x9c, 0x2a, 0x7c, 0x0d, 0x4e, 0x9b, 0x11, 0x10}};
-
 // 构造一个最小 SPP 风格的 SDP 服务记录（ServiceRecordHandle + ServiceClassIDList
 // + ProtocolDescriptorList + ServiceName），用于让 Windows 客户端 BT 栈在连接后认为服务合法。
+// 整个属性列表必须被包裹在顶层 SEQUENCE（0x35 + 长度）中——WSASetService 要求 pRecord
+// 是一个完整的 SDP 记录 DATA_ELE，缺少外层 SEQUENCE 会导致 WSAEINVAL (10022)。
 static std::vector<uint8_t> buildSppSdpRecord(uint8_t channel, const std::string &serviceName)
 {
-  std::vector<uint8_t> rec;
+  // 先构建属性列表，最后统一加外层 SEQUENCE 包装
+  std::vector<uint8_t> attrs;
 
   // Attribute 0x0000 ServiceRecordHandle = UINT32(0x00000001)
   // （Windows SDP 注册接口要求记录必须含此属性；具体值由系统在注册时改写）
@@ -82,49 +80,72 @@ static std::vector<uint8_t> buildSppSdpRecord(uint8_t channel, const std::string
       0x09, 0x00, 0x00, // UINT16 attr id 0x0000
       0x0A, 0x00, 0x00, 0x00, 0x01 // UINT32, value = 1
   };
-  rec.insert(rec.end(), std::begin(kAttrRecordHandle), std::end(kAttrRecordHandle));
+  attrs.insert(attrs.end(), std::begin(kAttrRecordHandle), std::end(kAttrRecordHandle));
 
-  // Attribute 0x0001 ServiceClassIDList = SEQ { UUID128(Deskflow custom) }
-  // 使用自定义 UUID 6e1c3f40-1351-4b8f-9c2a-7c0d4e9b1110（避免与 SPP 保留 UUID 注册冲突）
+  // Attribute 0x0001 ServiceClassIDList = SEQ { UUID128(SPP) }
+  // 使用标准 SPP UUID 00001101-0000-1000-8000-00805F9B34FB，与 macOS 端一致；
+  // 客户端用此标准 UUID 查询 SDP 服务，自定义 UUID 会导致客户端找不到服务且 WSASetService 返回 WSAEINVAL。
   static const uint8_t kAttrServiceClassList[] = {
       0x09, 0x00, 0x01, // UINT16 attr id 0x0001
       0x35, 0x11,       // SEQUENCE, length 17
       0x1C,             // UUID128
-      0x6E, 0x1C, 0x3F, 0x40, 0x13, 0x51, 0x4B, 0x8F, 0x9C, 0x2A, 0x7C, 0x0D, 0x4E, 0x9B, 0x11, 0x10};
-  rec.insert(rec.end(), std::begin(kAttrServiceClassList), std::end(kAttrServiceClassList));
+      0x00, 0x00, 0x11, 0x01, 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0x80, 0x5F, 0x9B, 0x34, 0xFB};
+  attrs.insert(attrs.end(), std::begin(kAttrServiceClassList), std::end(kAttrServiceClassList));
 
   // Attribute 0x0004 ProtocolDescriptorList = SEQ { SEQ{L2CAP}, SEQ{RFCOMM, UINT8(channel)} }
-  rec.push_back(0x09);
-  rec.push_back(0x00);
-  rec.push_back(0x04); // UINT16 attr id 0x0004
-  rec.push_back(0x35);
-  rec.push_back(0x0C); // SEQUENCE, length 12
-  rec.push_back(0x35);
-  rec.push_back(0x03);                       // SEQUENCE, length 3
-  rec.push_back(0x19);                       // UUID16
-  rec.push_back(0x01);
-  rec.push_back(0x00); // L2CAP UUID = 0x0100
-  rec.push_back(0x35);
-  rec.push_back(0x05);                       // SEQUENCE, length 5
-  rec.push_back(0x19);                       // UUID16
-  rec.push_back(0x00);
-  rec.push_back(0x03); // RFCOMM UUID = 0x0003
-  rec.push_back(0x08);                       // UINT8
-  rec.push_back(channel);                    // channel
+  attrs.push_back(0x09);
+  attrs.push_back(0x00);
+  attrs.push_back(0x04); // UINT16 attr id 0x0004
+  attrs.push_back(0x35);
+  attrs.push_back(0x0C); // SEQUENCE, length 12
+  attrs.push_back(0x35);
+  attrs.push_back(0x03);                       // SEQUENCE, length 3
+  attrs.push_back(0x19);                       // UUID16
+  attrs.push_back(0x01);
+  attrs.push_back(0x00); // L2CAP UUID = 0x0100
+  attrs.push_back(0x35);
+  attrs.push_back(0x05);                       // SEQUENCE, length 5
+  attrs.push_back(0x19);                       // UUID16
+  attrs.push_back(0x00);
+  attrs.push_back(0x03); // RFCOMM UUID = 0x0003
+  attrs.push_back(0x08);                       // UINT8
+  attrs.push_back(channel);                    // channel
 
   // Attribute 0x0005 BrowseGroupList = SEQ { UUID16(PublicBrowseRoot=0x1002) }
   // （省略：BrowseGroupList 非必需，注册时减少出错面）
 
   // Attribute 0x0100 ServiceName = STRING (length must fit in 1 byte)
-  rec.push_back(0x09);
-  rec.push_back(0x01);
-  rec.push_back(0x00);
+  attrs.push_back(0x09);
+  attrs.push_back(0x01);
+  attrs.push_back(0x00);
   size_t nameLen = serviceName.size();
   if (nameLen > 255)
     nameLen = 255;
-  rec.push_back(0x25); // STRING
-  rec.push_back(static_cast<uint8_t>(nameLen));
-  rec.insert(rec.end(), serviceName.data(), serviceName.data() + nameLen);
+  attrs.push_back(0x25); // STRING
+  attrs.push_back(static_cast<uint8_t>(nameLen));
+  attrs.insert(attrs.end(), serviceName.data(), serviceName.data() + nameLen);
+
+  // 最外层 SEQUENCE 包装。SDP 长度编码：
+  //   长度 < 256:        0x35, <uint8>
+  //   长度 < 65536:      0x35, 0x01, <uint16 BE>
+  //   否则:              0x35, 0x02, <uint32 BE>
+  std::vector<uint8_t> rec;
+  const size_t totalLen = attrs.size();
+  rec.push_back(0x35); // SEQUENCE
+  if (totalLen < 256) {
+    rec.push_back(static_cast<uint8_t>(totalLen));
+  } else if (totalLen < 65536) {
+    rec.push_back(0x01);
+    rec.push_back(static_cast<uint8_t>(totalLen >> 8));
+    rec.push_back(static_cast<uint8_t>(totalLen & 0xFF));
+  } else {
+    rec.push_back(0x02);
+    rec.push_back(static_cast<uint8_t>(totalLen >> 24));
+    rec.push_back(static_cast<uint8_t>(totalLen >> 16));
+    rec.push_back(static_cast<uint8_t>(totalLen >> 8));
+    rec.push_back(static_cast<uint8_t>(totalLen & 0xFF));
+  }
+  rec.insert(rec.end(), attrs.begin(), attrs.end());
 
   return rec;
 }
@@ -260,7 +281,15 @@ std::unique_ptr<BtBackend> BtBackendWindows::accept()
     return nullptr;
   }
 
-  LOG_INFO("蓝牙后端：已接受蓝牙连接");
+  // 打印客户端 MAC 地址，便于排查连接来源
+  {
+    BTH_ADDR bt = clientAddr.btAddr;
+    LOG_INFO(
+        "蓝牙后端：已接受蓝牙连接，客户端 MAC: %02X:%02X:%02X:%02X:%02X:%02X",
+        (unsigned)((bt >> 40) & 0xFF), (unsigned)((bt >> 32) & 0xFF), (unsigned)((bt >> 24) & 0xFF),
+        (unsigned)((bt >> 16) & 0xFF), (unsigned)((bt >> 8) & 0xFF), (unsigned)(bt & 0xFF)
+    );
+  }
   return std::make_unique<BtBackendWindows>(reinterpret_cast<void *>(clientSock));
 }
 
@@ -363,17 +392,32 @@ bool BtBackendWindows::registerSdpService(int channel)
   blob.cbSize = static_cast<ULONG>(sizeof(BTH_SET_SERVICE) + record.size() - 1);
   blob.pBlobData = reinterpret_cast<BYTE *>(bss);
 
+  // CSADDR_INFO 指定服务的本地地址（RFCOMM 通道），供客户端 SDP 查询时获取。
+  // 缺少 lpcsaBuffer 会导致某些客户端（如 macOS IOBluetooth）SDP 查询无法获取通道号，
+  // 进而在连接后因 SDP 验证失败而断开（约 3 秒后 FIN）。
+  SOCKADDR_BTH localBtAddr = {};
+  localBtAddr.addressFamily = AF_BTH;
+  localBtAddr.btAddr = 0; // 绑定到所有蓝牙适配器
+  localBtAddr.port = channel;
+
+  CSADDR_INFO csAddr = {};
+  csAddr.LocalAddr.lpSockaddr = reinterpret_cast<LPSOCKADDR>(&localBtAddr);
+  csAddr.LocalAddr.iSockaddrLength = sizeof(localBtAddr);
+  csAddr.RemoteAddr.lpSockaddr = nullptr;
+  csAddr.RemoteAddr.iSockaddrLength = 0;
+  csAddr.iSocketType = SOCK_STREAM;
+  csAddr.iProtocol = BTHPROTO_RFCOMM;
+
   WSAQUERYSET wsaq = {};
   wsaq.dwSize = sizeof(WSAQUERYSET);
-  wsaq.lpServiceClassId = const_cast<GUID *>(&kDeskflowServiceGuid);
+  wsaq.lpServiceClassId = const_cast<GUID *>(&kSppServiceGuid);
   wsaq.dwNameSpace = NS_BTH;
+  wsaq.dwNumberOfCsAddrs = 1;
+  wsaq.lpcsaBuffer = &csAddr;
   wsaq.lpBlob = &blob;
 
-  if (WSASetService(&wsaq, RNRSERVICE_REGISTER, SERVICE_MULTIPLE) == SOCKET_ERROR) {
-    // 部分机器（如本测试机 Win11 + Intel BT）上 WSASetService 对自构造的 SDP 记录返回
-    // WSAEINVAL，根因未明（struct/记录字节已对照 MSDN 校验）。降级为 DEBUG 避免日志噪音，
-    // 但保留代码以便后续在能复现的机器上进一步定位。
-    LOG_DEBUG("蓝牙后端：注册 SDP 服务记录失败，错误码: %d", WSAGetLastError());
+  if (WSASetService(&wsaq, RNRSERVICE_REGISTER, 0) == SOCKET_ERROR) {
+    LOG_ERR("蓝牙后端：注册 SDP 服务记录失败，错误码: %d", WSAGetLastError());
     return false;
   }
 
@@ -404,7 +448,7 @@ void BtBackendWindows::unregisterSdpService()
 
   WSAQUERYSET wsaq = {};
   wsaq.dwSize = sizeof(WSAQUERYSET);
-  wsaq.lpServiceClassId = const_cast<GUID *>(&kDeskflowServiceGuid);
+  wsaq.lpServiceClassId = const_cast<GUID *>(&kSppServiceGuid);
   wsaq.dwNameSpace = NS_BTH;
   wsaq.lpBlob = &blob;
 

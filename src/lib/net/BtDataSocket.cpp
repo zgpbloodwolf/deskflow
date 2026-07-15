@@ -227,11 +227,13 @@ void BtDataSocket::ioThreadFunc()
       if (m_outputBuffer.getSize() > 0) {
         uint32_t outSize = m_outputBuffer.getSize();
         const void *outData = m_outputBuffer.peek(outSize);
+        LOG_INFO("蓝牙 socket：准备写入 %d 字节", outSize);
         int bytesWritten = m_backend->write(outData, outSize);
         if (bytesWritten < 0) {
           LOG_ERR("蓝牙 socket：写入错误");
           m_connected = false;
         } else {
+          LOG_INFO("蓝牙 socket：已写入 %d 字节", bytesWritten);
           m_outputBuffer.pop(static_cast<uint32_t>(bytesWritten));
           if (m_outputBuffer.getSize() == 0) {
             m_flushed = true;

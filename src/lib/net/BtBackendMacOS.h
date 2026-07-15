@@ -10,7 +10,10 @@
 
 #ifdef __APPLE__
 
+#include <condition_variable>
+#include <mutex>
 #include <string>
+#include <thread>
 
 //! macOS 蓝牙 RFCOMM 后端
 /*!
@@ -45,6 +48,16 @@ private:
   void *m_impl = nullptr;
   bool m_connected = false;
   bool m_listening = false;
+
+  // RunLoop 线程：客户端模式下 IOBluetooth 的 delegate 回调
+  //（rfcommChannelData: 等）需要注册线程持续运行 RunLoop 才能派发。
+  // EventQueue 主线程运行的是 EventQueue::loop()（非 RunLoop），
+  // 因此 connect() 在专门线程上执行并运行 RunLoop。
+  std::thread m_runLoopThread;
+  std::mutex m_connectMutex;
+  std::condition_variable m_connectCV;
+  bool m_connectDone = false;
+  void *m_runLoop = nullptr; // CFRunLoopRef，用 void* 避免头文件依赖
 };
 
 #endif // __APPLE__
