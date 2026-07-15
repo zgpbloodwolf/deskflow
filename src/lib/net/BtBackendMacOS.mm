@@ -136,6 +136,11 @@ std::unique_ptr<BtBackend> createBtBackend()
   [m_channel setDelegate:self];
   m_connected = YES;
 
+  // 诊断：channel 状态
+  LOG_INFO(
+      "蓝牙后端：channel 状态 isOpen=%d delegate=%p", [m_channel isOpen], [m_channel delegate]
+  );
+
   LOG_INFO("蓝牙后端：已连接到 %s", [address UTF8String]);
   return YES;
 }
@@ -373,6 +378,7 @@ std::unique_ptr<BtBackend> createBtBackend()
                      data:(void *)dataPointer
                dataLength:(NSUInteger)dataLength
 {
+  LOG_INFO("蓝牙后端：收到 RFCOMM 数据 %zu 字节", dataLength);
   auto *bytes = static_cast<const uint8_t *>(dataPointer);
 
   // 如果是监听模式且有数据子节点，转发数据给子节点（已接受的连接）
@@ -475,7 +481,9 @@ void BtBackendMacOS::connect(const std::string &btAddress, int channel)
       if (m_connected) {
         // 持续运行 RunLoop（已有保活源不会立即退出），派发 IOBluetooth 数据回调。
         // CFRunLoopRun 在 CFRunLoopStop 被调用后退出（见 close()）。
+        LOG_INFO("蓝牙后端：RunLoop 线程进入 CFRunLoopRun");
         CFRunLoopRun();
+        LOG_INFO("蓝牙后端：RunLoop 线程 CFRunLoopRun 已退出");
       }
     }
   });
