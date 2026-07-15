@@ -67,11 +67,12 @@ std::unique_ptr<BtBackend> createBtBackend()
 - (BOOL)pollRead:(int)timeoutMs;
 
 // IOBluetoothRFCOMMChannelDelegate
+// 注意：签名必须精确匹配 IOBluetoothRFCOMMChannelDelegate 协议
+// （IOBluetoothRFCOMMChannel.h 的 rfcommChannelData:data:length:），
+// 否则 @optional 方法不会被调用，导致收不到数据。
 - (void)rfcommChannelData:(IOBluetoothRFCOMMChannel *)rfcommChannel
-                   device:(IOBluetoothDevice *)device
-                 channelID:(BluetoothRFCOMMChannelID)channelID
                      data:(void *)dataPointer
-               dataLength:(NSUInteger)dataLength;
+                   length:(size_t)dataLength;
 - (void)rfcommChannelClosed:(IOBluetoothRFCOMMChannel *)rfcommChannel;
 - (void)rfcommChannelWriteComplete:(IOBluetoothRFCOMMChannel *)rfcommChannel
                            refCon:(void *)refCon
@@ -127,9 +128,16 @@ std::unique_ptr<BtBackend> createBtBackend()
   IOReturn result = [m_device openRFCOMMChannelSync:&newChannel
                                          withChannelID:channel
                                              delegate:self];
-  if (result != kIOReturnSuccess || newChannel == nil) {
-    LOG_ERR("蓝牙后端：打开 RFCOMM 通道失败，错误码: %d", result);
+  LOG_INFO("蓝牙后端：openRFCOMMChannelSync result=%d newChannel=%p", result, newChannel);
+  // 以 newChannel 是否建立为准：IOBluetooth 可能返回非成功码但 channel 实际已建立
+  // （数据可正常收发）。若严格按 result 判断，会把"已建立但带警告码"的连接误判为
+  // 失败，导致不启动 ioThread、收到的数据无人读取、握手超时。
+  if (newChannel == nil) {
+    LOG_ERR("蓝牙后端：打开 RFCOMM 通道失败，newChannel=nil，错误码: %d", result);
     return NO;
+  }
+  if (result != kIOReturnSuccess) {
+    LOG_WARN("蓝牙后端：openRFCOMM 通道返回非成功码 %d，但 channel 已建立，继续使用", result);
   }
 
   m_channel = newChannel;
@@ -368,11 +376,10 @@ std::unique_ptr<BtBackend> createBtBackend()
 #pragma mark - IOBluetoothRFCOMMChannelDelegate
 
 - (void)rfcommChannelData:(IOBluetoothRFCOMMChannel *)rfcommChannel
-                   device:(IOBluetoothDevice *)device
-                 channelID:(BluetoothRFCOMMChannelID)channelID
                      data:(void *)dataPointer
-               dataLength:(NSUInteger)dataLength
+                   length:(size_t)dataLength
 {
+  LOG_INFO("蓝牙后端：收到 RFCOMM 数据 %zu 字节", dataLength);
   auto *bytes = static_cast<const uint8_t *>(dataPointer);
 
   // 如果是监听模式且有数据子节点，转发数据给子节点（已接受的连接）
