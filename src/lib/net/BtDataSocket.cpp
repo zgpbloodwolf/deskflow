@@ -203,7 +203,6 @@ void BtDataSocket::ioThreadFunc()
     if (m_backend->pollRead(kIoPollTimeoutMs)) {
       int bytesRead = m_backend->read(readBuf.data(), readBuf.size());
       if (bytesRead > 0) {
-        LOG_INFO("蓝牙 socket：ioThread 读到 %d 字节", bytesRead);
         std::lock_guard<std::mutex> lock(m_mutex);
         m_inputBuffer.write(readBuf.data(), bytesRead);
 

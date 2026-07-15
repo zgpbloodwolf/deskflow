@@ -24,3 +24,5 @@
 - 修复 macOS 蓝牙后端 `BtBackendMacOS::close()` 的 `CFRunLoopStop(m_runLoop)` 悬空崩溃：RunLoop 线程退出会释放 `CFRunLoopGetCurrent()` 拿到的 runloop，导致 close 操作野指针。改为对 runloop `CFRetain`/`CFRelease` 显式管理生命周期。
 - 修复 macOS 蓝牙后端 `close()` 的 `[impl closeConnection]` 野指针崩溃：原顺序先停 RunLoop 线程（其 `@autoreleasepool` drain 会释放 connectToDevice 创建的 IOBluetooth 对象）再关闭连接，改为先 `closeConnection`（对象仍有效）再停 RunLoop。
 - macOS 蓝牙后端 connect 的 RunLoop 线程加入 `CFRunLoopSource` 保活源，防止 `CFRunLoopRun()` 因 RunLoop 无源立即退出（使 IOBluetooth 回调得以派发）。
+- 修复 macOS 蓝牙客户端收不到服务端数据：`rfcommChannelData:` delegate 方法签名与 `IOBluetoothRFCOMMChannelDelegate` 协议不匹配（误用 5 参数 `device:channelID:data:dataLength:`，协议为 3 参数 `data:length:`），导致 IOBluetooth 永不调用、数据无法接收。改为匹配协议的签名，数据回调正常派发。
+- 修复 macOS 蓝牙客户端连接被误判失败导致握手超时：`openRFCOMMChannelSync` 在 channel 实际建立时仍可能返回非成功码，原代码严格按返回码判断会误判失败、不启动 ioThread、收到的数据无人读取。改为以 `newChannel` 是否建立为准。

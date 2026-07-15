@@ -128,7 +128,6 @@ std::unique_ptr<BtBackend> createBtBackend()
   IOReturn result = [m_device openRFCOMMChannelSync:&newChannel
                                          withChannelID:channel
                                              delegate:self];
-  LOG_INFO("蓝牙后端：openRFCOMMChannelSync result=%d newChannel=%p", result, newChannel);
   // 以 newChannel 是否建立为准：IOBluetooth 可能返回非成功码但 channel 实际已建立
   // （数据可正常收发）。若严格按 result 判断，会把"已建立但带警告码"的连接误判为
   // 失败，导致不启动 ioThread、收到的数据无人读取、握手超时。
@@ -379,7 +378,6 @@ std::unique_ptr<BtBackend> createBtBackend()
                      data:(void *)dataPointer
                    length:(size_t)dataLength
 {
-  LOG_INFO("蓝牙后端：收到 RFCOMM 数据 %zu 字节", dataLength);
   auto *bytes = static_cast<const uint8_t *>(dataPointer);
 
   // 如果是监听模式且有数据子节点，转发数据给子节点（已接受的连接）
