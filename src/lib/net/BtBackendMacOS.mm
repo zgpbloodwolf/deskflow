@@ -453,14 +453,27 @@ void BtBackendMacOS::connect(const std::string &btAddress, int channel)
         std::lock_guard<std::mutex> lk(m_connectMutex);
         m_connected = impl->m_connected;
         if (m_connected) {
-          m_runLoop = CFRunLoopGetCurrent();
+          CFRunLoopRef rl = CFRunLoopGetCurrent();
+          // 加保活源：CFRunLoopRun 在 RunLoop 无任何源（input/timer/observer）时
+          // 会立即返回，导致线程退出、current runloop 随线程释放（m_runLoop 悬空），
+          // 且 IOBluetooth delegate 回调无法派发（客户端收不到服务端数据）。
+          // 加一个空 source 让 RunLoop 持续运行。
+          CFRunLoopSourceContext ctx = {};
+          ctx.perform = +[](void *) {};
+          m_runLoopSource = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &ctx);
+          if (m_runLoopSource != nullptr) {
+            CFRunLoopAddSource(rl, static_cast<CFRunLoopSourceRef>(m_runLoopSource), kCFRunLoopDefaultMode);
+          }
+          // retain runloop，避免线程退出后 current runloop 被释放导致 close() 悬空崩溃
+          CFRetain(rl);
+          m_runLoop = rl;
         }
         m_connectDone = true;
       }
       m_connectCV.notify_one();
 
       if (m_connected) {
-        // 持续运行 RunLoop，派发 IOBluetooth 数据回调。
+        // 持续运行 RunLoop（已有保活源不会立即退出），派发 IOBluetooth 数据回调。
         // CFRunLoopRun 在 CFRunLoopStop 被调用后退出（见 close()）。
         CFRunLoopRun();
       }
@@ -499,20 +512,32 @@ int BtBackendMacOS::write(const void *buf, size_t len)
 
 void BtBackendMacOS::close()
 {
-  // 先停止 RunLoop 线程，确保不再有 IOBluetooth 回调访问 impl
-  if (m_runLoopThread.joinable()) {
-    if (m_runLoop != nullptr) {
-      CFRunLoopStop(static_cast<CFRunLoopRef>(m_runLoop));
-      m_runLoop = nullptr;
-    }
-    m_runLoopThread.join();
-  }
-
-  // RunLoop 线程停止后，安全地关闭连接
+  // 先关闭蓝牙连接：此时 RunLoop 线程尚未退出，connectToDevice 创建的 IOBluetooth
+  // 对象（m_channel 等）尚未被 RunLoop 线程的 @autoreleasepool drain 释放。
+  // 若先 CFRunLoopStop+join（RunLoop 线程退出会 drain autorelease），这些对象会先
+  // 被释放，再 [impl closeConnection] 访问 m_channel 会野指针崩溃（objc_msgSend）。
   auto *impl = (__bridge BtBackendImpl *)m_impl;
   [impl closeConnection];
   m_connected = false;
   m_listening = false;
+
+  // 关闭连接后再停止 RunLoop 线程，确保不再有 IOBluetooth 回调访问 impl
+  if (m_runLoopThread.joinable()) {
+    if (m_runLoop != nullptr) {
+      // 停止 RunLoop，使 CFRunLoopRun 返回、RunLoop 线程退出
+      CFRunLoopStop(static_cast<CFRunLoopRef>(m_runLoop));
+    }
+    m_runLoopThread.join();
+    // RunLoop 线程已退出，安全清理 RunLoop 资源（对应 connect 中的 Create/Retain）
+    if (m_runLoopSource != nullptr) {
+      CFRelease(m_runLoopSource);
+      m_runLoopSource = nullptr;
+    }
+    if (m_runLoop != nullptr) {
+      CFRelease(m_runLoop);
+      m_runLoop = nullptr;
+    }
+  }
 }
 
 bool BtBackendMacOS::isConnected() const

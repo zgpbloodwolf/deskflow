@@ -57,7 +57,8 @@ private:
   std::mutex m_connectMutex;
   std::condition_variable m_connectCV;
   bool m_connectDone = false;
-  void *m_runLoop = nullptr; // CFRunLoopRef，用 void* 避免头文件依赖
+  void *m_runLoop = nullptr;        // CFRunLoopRef，用 void* 避免头文件依赖
+  void *m_runLoopSource = nullptr;  // CFRunLoopSourceRef，保活源，防止 CFRunLoopRun 立即退出
 };
 
 #endif // __APPLE__
